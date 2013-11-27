@@ -13,9 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Server {
 	
     private final ServerSocket serverSocket;
-
     private static Canvas servercanvas;
-    
     private AtomicInteger numofCustomer = new AtomicInteger(0);
 
     private Server() throws IOException {
@@ -34,25 +32,7 @@ public class Server {
             
             System.out.println("connection ready!");
             
-            Thread thread = new Thread(new Runnable() {
-            	public void run() {
-            		// handle the client
-                    try {
-                        handleConnection(socket);
-                    } catch (IOException e) {
-                        e.printStackTrace(); // but don't terminate serve()
-                    } catch (InterruptedException e) {
-						e.printStackTrace();
-					} finally {
-                        try {
-    						socket.close();
-    			            numofCustomer.decrementAndGet();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-                    }
-            	}
-            });
+            Thread thread = new Thread(new Client());
             numofCustomer.incrementAndGet();
             thread.start();
         }

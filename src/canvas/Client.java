@@ -15,7 +15,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class Client {
+public class Client implements Runnable {
 	public Client() throws FileNotFoundException, IOException, ClassNotFoundException {
 		ObjectInputStream ols = new ObjectInputStream(new FileInputStream("E:\\mitjdw-nickmm-rcha.whiteboard"));
 		
@@ -72,5 +72,28 @@ public class Client {
 		while (true) {
 			out.println(temp.drawLineSegment(lastX, lastY, x, y));
 		}
+	}
+
+	@Override
+	public void run() {
+//		new Runnable() {
+//        	public void run() {
+//        		// handle the client
+//                try {
+//                    handleConnection(socket);
+//                } catch (IOException e) {
+//                    e.printStackTrace(); // but don't terminate serve()
+//                } catch (InterruptedException e) {
+//					e.printStackTrace();
+//				} finally {
+//                    try {
+//						socket.close();
+//			            numofCustomer.decrementAndGet();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//                }
+//        	}
+//		
 	}
 }
