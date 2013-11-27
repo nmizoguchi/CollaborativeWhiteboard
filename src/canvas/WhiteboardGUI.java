@@ -23,7 +23,7 @@ public class WhiteboardGUI extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final Canvas canvas = new Canvas(800, 600);
+	private final Canvas canvas = new Canvas(800, 600, true);
 	private final JMenuBar buttonsMenu = new JMenuBar();
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final ImageIcon eraserIcon;

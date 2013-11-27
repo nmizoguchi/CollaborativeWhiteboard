@@ -18,6 +18,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -36,18 +37,21 @@ public class Canvas extends JPanel {
 		DRAW_LINE,
 		ERASE
 	}
-	
-    // image where the user's drawing is stored
-    private Image drawingBuffer;
     private MODE mode;
     private int brushSize = 3;
+    // image where the user's drawing is stored	
+    private Image drawingBuffer;
+    
+    //On server side, draw something. On client side, send message
+    boolean isServer;
     
     /**
      * Make a canvas.
      * @param width width in pixels
      * @param height height in pixels
+     * @throws IOException 
      */
-    public Canvas(int width, int height) {
+    public Canvas(final int width, final int height, final boolean isServer) {
         this.setPreferredSize(new Dimension(width, height));
         addDrawingController();
         mode = MODE.DRAW_LINE;
@@ -59,6 +63,7 @@ public class Canvas extends JPanel {
     public void setMode(MODE m){
     	mode = m;
     }
+    
     /**
      * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
      */
@@ -77,7 +82,7 @@ public class Canvas extends JPanel {
     /*
      * Make the drawing buffer and draw some starting content for it.
      */
-    private void makeDrawingBuffer() {
+    public void makeDrawingBuffer() {
         drawingBuffer = createImage(getWidth(), getHeight());
         fillWithWhite();
     }
@@ -100,16 +105,24 @@ public class Canvas extends JPanel {
      * Draw a line between two points (x1, y1) and (x2, y2), specified in
      * pixels relative to the upper-left corner of the drawing buffer.
      */
-    private void drawLineSegment(int x1, int y1, int x2, int y2) {
+    String drawLineSegment(int x1, int y1, int x2, int y2) {
         Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
         
         g.setColor(Color.BLACK);
         g.setStroke(new BasicStroke(brushSize));
-        g.drawLine(x1, y1, x2, y2);
+        
+        if(isServer) {
+            g.drawLine(x1, y1, x2, y2);
+        }
+        
+        else {
+        	return "draw x1 y1 x2 y2";
+        }
         
         // IMPORTANT!  every time we draw on the internal drawing buffer, we
         // have to notify Swing to repaint this component on the screen.
         this.repaint();
+		return null;
     }
     
     /*
@@ -125,7 +138,7 @@ public class Canvas extends JPanel {
     /*
      * Add the mouse listener that supports the user's freehand drawing.
      */
-    private void addDrawingController() {
+    public void addDrawingController() {
         DrawingController controller = new DrawingController();
         addMouseListener(controller);
         addMouseMotionListener(controller);
@@ -176,7 +189,5 @@ public class Canvas extends JPanel {
         public void mouseEntered(MouseEvent e) { }
         public void mouseExited(MouseEvent e) { }
     }
-    
-    
-    
+  
 }
