@@ -21,7 +21,22 @@ public class ApplicationServer {
         serverSocket = new ServerSocket(port);
         clients = Collections.synchronizedList(new ArrayList<ClientConnection>());
         whiteboards = Collections.synchronizedList(new ArrayList<WhiteboardModel>());
+        
+        // Add only one board as default
         whiteboards.add(new WhiteboardModel("Default"));
+    }
+    
+    public static void main(String[] args) {
+        int port = 4444; // default port
+
+        ApplicationServer server;
+        try {
+            server = new ApplicationServer(port);
+            server.serve();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -44,7 +59,7 @@ public class ApplicationServer {
             clientHandler.startThreads();
         }
     }
-    
+
     public WhiteboardModel getWhiteboard(String name) throws NoSuchFieldException {
         // Make a copy of the synchronized list, so we don't have problems
         List<WhiteboardModel> copy = new ArrayList<WhiteboardModel>(whiteboards);
@@ -58,17 +73,16 @@ public class ApplicationServer {
         // Not found!
         throw new NoSuchFieldException();
     }
-
-    public static void main(String[] args) {
-        int port = 4444; // default port
-
-        ApplicationServer server;
-        try {
-            server = new ApplicationServer(port);
-            server.serve();
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+    
+    public String getWhiteboardNames() {
+        
+        String names = "";
+        List<WhiteboardModel> copy = new ArrayList<WhiteboardModel>(whiteboards);
+        
+        for(WhiteboardModel board : copy) {
+            names = " " + board.getName();
         }
+        
+        return names.trim();
     }
 }

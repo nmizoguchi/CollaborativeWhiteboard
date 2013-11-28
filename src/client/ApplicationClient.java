@@ -20,7 +20,7 @@ public class ApplicationClient {
     public ApplicationClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
-        whiteboard = new WhiteboardModel();
+        whiteboard = new WhiteboardModel("Default");
         socket = new Socket(serverAddress, port);
         GUI = new WhiteboardGUI(this);
         GUI.setVisible(true);

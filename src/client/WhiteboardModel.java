@@ -9,10 +9,6 @@ public class WhiteboardModel {
     private String name;
     private List<String> actions;
     
-    public WhiteboardModel() {
-        actions = Collections.synchronizedList(new ArrayList<String>());
-    }
-    
     public WhiteboardModel(String name) {
         this.name = name;
         actions = Collections.synchronizedList(new ArrayList<String>());

@@ -15,12 +15,22 @@ public class ClientHandler {
     private final Thread messageHandler;
     private final Thread updateHandler;
     private final Socket socket;
-    private Object broadcastLock = new Object();
 
-    public ClientHandler(ClientConnection client, Socket sock) {
+    private final PrintWriter outputStream;
+    private final BufferedReader inputStream;
+
+    public ClientHandler(ClientConnection client, Socket sock)
+            throws IOException {
 
         this.client = client;
         this.socket = sock;
+
+        // Stream where server receives messages from Clients
+        inputStream = new BufferedReader(new InputStreamReader(
+                socket.getInputStream()));
+
+        // Stream where server sends information to Clients
+        outputStream = new PrintWriter(socket.getOutputStream(), true);
 
         // start a new thread to handle the connection
         messageHandler = new Thread(new Runnable() {
@@ -62,15 +72,8 @@ public class ClientHandler {
      */
     private void handleConnection(Socket socket) throws IOException {
 
-        // Stream where server receives messages from Clients
-        BufferedReader in = new BufferedReader(new InputStreamReader(
-                socket.getInputStream()));
-
-        // Stream where server sends information to Clients
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
         try {
-            for (String line = in.readLine(); line != null; line = in
+            for (String line = inputStream.readLine(); line != null; line = inputStream
                     .readLine()) {
 
                 // Transform the message in tokens so we can analyze them
@@ -81,11 +84,28 @@ public class ClientHandler {
 
                     /*
                      * Makes sure that it is not sending updating information to
-                     * this client anymore by getting the broadcastLock
+                     * this client anymore by getting the outputStream lock
                      */
-                    synchronized (broadcastLock) {
+                    synchronized (outputStream) {
                         String boardName = tokens[1];
-                        client.setActiveModel(boardName);
+                        try {
+                            client.setActiveBoard(boardName);
+                        } catch(NoSuchFieldException e) {
+                            // Treat case where don't find a board!
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (command.equals("getboards")) {
+                    /*
+                     * sends information to the client about which boards are
+                     * available. Requires the output stream to send information
+                     * to the client
+                     */
+                    synchronized (outputStream) {
+                        String boardNames = client.getWhiteboardNames();
+                        outputStream.println("getboards "+boardNames);
                     }
                 }
 
@@ -94,14 +114,13 @@ public class ClientHandler {
                     // Otherwise, it is a command to be routed to all other
                     // clients,
                     // so updates the server model with it
-                    client.getActiveModel().update(line);
+                    client.getActiveBoard().update(line);
                 }
             }
         }
 
         finally {
-            out.close();
-            in.close();
+            inputStream.close();
             socket.close();
         }
     }
@@ -134,37 +153,31 @@ public class ClientHandler {
     public void updateClient(Socket socket) throws IOException,
             InterruptedException {
 
-        // Stream where server sends information to Clients
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
         try {
             while (true) {
-                if (client.getActiveModelVersion() < client.getActiveModel()
+                if (client.getActiveBoardVersion() < client.getActiveBoard()
                         .getVersion()) {
 
                     // Get the lock for broadcasting
-                    synchronized (broadcastLock) {
-                        List<String> toUpdate = client.getActiveModel()
+                    synchronized (outputStream) {
+                        List<String> toUpdate = client.getActiveBoard()
                                 .getActionsToUpdate(
-                                        client.getActiveModelVersion());
-                        client.setActiveModelVersion(client
-                                .getActiveModelVersion() + toUpdate.size());
+                                        client.getActiveBoardVersion());
+                        client.setActiveBoardVersion(client
+                                .getActiveBoardVersion() + toUpdate.size());
                         for (String action : toUpdate) {
-                            out.println(action);
+                            outputStream.println(action);
                         }
                     }
                 }
                 updateHandler.yield();
             }
-        } catch (Exception e) {
-            System.out.println("Should never print this !!");
-            e.printStackTrace();
         }
 
         finally {
-            System.out.println("Should never print this!");
-            out.close();
-            socket.close();
+            System.out
+                    .println("Should never print this, unless is closing the connection!");
+            outputStream.close();
         }
     }
 

@@ -4,22 +4,22 @@ import client.WhiteboardModel;
 
 public class ClientConnection {
     private final ApplicationServer server;
-    private WhiteboardModel activeModel;
-    private int activeModelVersion;
+    private WhiteboardModel activeBoard;
+    private int activeBoardVersion;
     private String name;
     
     public ClientConnection(ApplicationServer server, WhiteboardModel model) {
         this.server = server;
-        this.activeModel = model;
+        this.activeBoard = model;
     }
 
-    public WhiteboardModel getActiveModel() {
-        return activeModel;
+    public WhiteboardModel getActiveBoard() {
+        return activeBoard;
     }
 
-    public void setActiveModel(String name) {
-        this.activeModel = activeModel;
-        this.activeModelVersion = 0;
+    public void setActiveBoard(String name) throws NoSuchFieldException {
+        this.activeBoard = server.getWhiteboard(name);
+        this.activeBoardVersion = 0;
     }
 
     public String getName() {
@@ -30,12 +30,15 @@ public class ClientConnection {
         this.name = name;
     }
 
-    public int getActiveModelVersion() {
-        return activeModelVersion;
-    }
-
-    public void setActiveModelVersion(int activeModelVersion) {
-        this.activeModelVersion = activeModelVersion;
+    public int getActiveBoardVersion() {
+        return activeBoardVersion;
     }
     
+    public void setActiveBoardVersion(int version) {
+        this.activeBoardVersion = version;
+    }
+    
+    public String getWhiteboardNames() {
+        return server.getWhiteboardNames();
+    }
 }
