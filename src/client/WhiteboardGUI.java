@@ -10,11 +10,15 @@ import java.awt.event.ActionListener;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import canvas.Canvas;
 import canvas.CanvasPainter;
@@ -37,6 +41,8 @@ public class WhiteboardGUI extends JFrame {
     private final JMenu brushSizes = new JMenu("brush sizes");
     private final JButton size5 = new JButton("5");
     private final JButton size20 = new JButton("20");
+    private final JButton colorButton = new JButton();
+    private final JColorChooser colorOptions = new JColorChooser();
 
     public WhiteboardGUI(WhiteboardClient client) {
         // creates eraser and drawLine buttons with icons
@@ -53,6 +59,7 @@ public class WhiteboardGUI extends JFrame {
         drawLine.setBackground(Color.WHITE);
         drawRect = new JToggleButton(drawIcon);
         drawRect.setBackground(Color.WHITE);
+        colorButton.setBackground(Color.BLACK);
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(800, 600));
@@ -65,7 +72,21 @@ public class WhiteboardGUI extends JFrame {
         // default selected button
         freehand.setSelected(true);
         // this is for the eraser sizes
-        buttonsMenu.setLayout(new GridLayout(10, 2));
+        buttonsMenu.setLayout(new GridLayout(20, 1));
+        colorOptions.setPreviewPanel(new JPanel());
+        colorButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Color color = JColorChooser.showDialog(colorOptions, "Choose a color", colorOptions.getColor());
+				if (color != null){
+					canvas.setBrushColor(color.getRGB());
+					canvas.setFillColor(color.getRGB());
+					colorButton.setBackground(color);
+				}
+				
+			}
+		});
 
         // listener that sets the brush size
         class sizeListener implements ActionListener {
@@ -117,6 +138,7 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(drawLine);
         buttonsMenu.add(drawRect);
         buttonsMenu.add(brushSizes);
+        buttonsMenu.add(colorButton);
         this.add(canvas, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);
     }

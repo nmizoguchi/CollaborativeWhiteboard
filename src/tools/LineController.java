@@ -19,7 +19,7 @@ public class LineController implements CanvasController {
     private final Canvas canvas;
     private int lastX, lastY;
     
-    private int brushSize, r, g, b;
+    private int brushSize, brushColor;
     
     private Line2D line;
 
@@ -44,15 +44,11 @@ public class LineController implements CanvasController {
         int x = Integer.valueOf(args[3]);
         int y = Integer.valueOf(args[4]);
 
-        // Define Color
-        int r = Integer.valueOf(args[5]);
-        int g = Integer.valueOf(args[6]);
-        int b = Integer.valueOf(args[7]);
 
-        Color color = new Color(r, g, b);
+        Color color = new Color(Integer.valueOf(args[5]));
 
         // Define Brush Size
-        int brush = Integer.valueOf(args[8]);
+        int brush = Integer.valueOf(args[6]);
 
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
@@ -71,11 +67,8 @@ public class LineController implements CanvasController {
         lastY = e.getY();
         
      // Get color
-        Color color = canvas.getBrushColor();
+        brushColor = canvas.getBrushColor();
         
-        r = color.getRed();
-        g = color.getGreen();
-        b = color.getBlue();
         
         // Get brushSize
         
@@ -92,7 +85,7 @@ public class LineController implements CanvasController {
         
         // Sends info to the server
         canvas.mClient.send("drawline " + lastX + " " + lastY + " " + x + " "
-                + y + " " + r + " " + g + " " + b + " " + brushSize);
+                + y + " " + brushColor + " " + brushSize);
         
         canvas.setSurfaceShape(null);
     }

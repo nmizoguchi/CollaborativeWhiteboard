@@ -48,7 +48,6 @@ public class WhiteboardClient {
         }
 
         catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -81,7 +80,6 @@ public class WhiteboardClient {
                     client.listen();
                     client.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }

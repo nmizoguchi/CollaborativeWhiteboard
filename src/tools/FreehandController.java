@@ -16,7 +16,7 @@ public class FreehandController implements CanvasController {
     // draw a line segment from that last point to the point of the next mouse
     // event.
     private final Canvas canvas;
-    private int lastX, lastY;
+    private int brushSize, brushColor, lastX, lastY;
 
     public FreehandController(Canvas canvas) {
         this.canvas = canvas;
@@ -38,16 +38,9 @@ public class FreehandController implements CanvasController {
         int x = Integer.valueOf(args[3]);
         int y = Integer.valueOf(args[4]);
 
-        // Define Color
-        int r = Integer.valueOf(args[5]);
-        int g = Integer.valueOf(args[6]);
-        int b = Integer.valueOf(args[7]);
-        
-        Color color = new Color(r,g,b);
-
         // Define Brush Size
-        int brush = Integer.valueOf(args[8]);
-
+        int brush = Integer.valueOf(args[6]);
+        Color color = new Color(Integer.valueOf(args[5]));
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
         g2.drawLine(lastX, lastY, x, y);
@@ -66,6 +59,8 @@ public class FreehandController implements CanvasController {
     public void mousePressed(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
+        brushSize = canvas.getBrushSize();
+        brushColor = canvas.getBrushColor();
     }
 
     /*
@@ -77,7 +72,7 @@ public class FreehandController implements CanvasController {
 
         // Sends info to the server
         canvas.mClient.send("drawline " + lastX + " " + lastY + " " + x + " "
-                + y + " 10 20 30 5");
+                + y + " " + brushColor + " " + brushSize);
 
         lastX = x;
         lastY = y;

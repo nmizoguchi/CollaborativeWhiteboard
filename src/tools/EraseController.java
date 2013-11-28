@@ -16,7 +16,7 @@ public class EraseController implements CanvasController {
     // draw a line segment from that last point to the point of the next mouse
     // event.
     private final Canvas canvas;
-    private int lastX, lastY;
+    private int brushSize, lastX, lastY;
 
     public EraseController(Canvas canvas) {
         this.canvas = canvas;
@@ -44,6 +44,7 @@ public class EraseController implements CanvasController {
 
         // Define Brush Size
         int brush = Integer.valueOf(args[5]);
+        System.out.println(brush);
 
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
@@ -63,6 +64,7 @@ public class EraseController implements CanvasController {
     public void mousePressed(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
+        brushSize = canvas.getBrushSize();
     }
 
     /*
@@ -73,8 +75,8 @@ public class EraseController implements CanvasController {
         int y = e.getY();
 
         // Sends info to the server
-        canvas.mClient.send("erase " + lastX + " " + lastY + " " + x + " " + y
-                + " 10");
+        canvas.mClient.send("erase " + lastX + " " + lastY + " " + x + " " + y + " "
+                + brushSize);
 
         lastX = x;
         lastY = y;

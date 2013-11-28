@@ -19,8 +19,8 @@ public class RectangleController implements CanvasController {
     private final Canvas canvas;
     private int lastX, lastY;
 
-    private int brushSize, rBrush, gBrush, bBrush;
-    private int hasFill, rFill, gFill, bFill;
+    private int brushSize, brushColor;
+    private int hasFill, fillColor;
 
     private Rectangle2D rectangle;
 
@@ -44,34 +44,20 @@ public class RectangleController implements CanvasController {
         int y = Integer.valueOf(args[2]);
         int width = Integer.valueOf(args[3]) - x;
         int height = Integer.valueOf(args[4]) - y;
-
-        // Define Color
-        int r = Integer.valueOf(args[5]);
-        int g = Integer.valueOf(args[6]);
-        int b = Integer.valueOf(args[7]);
-
-        Color brushColor = new Color(r, g, b);
+        
+        //Define brushColor
+        int colorInt = Integer.valueOf(args[5]);
 
         // Define Brush Size
-        int brush = Integer.valueOf(args[8]);
+        int brush = Integer.valueOf(args[6]);
         
-        // Define Color
-        r = Integer.valueOf(args[9]);
-        g = Integer.valueOf(args[10]);
-        b = Integer.valueOf(args[11]);
 
-        Color fillColor = new Color(r,g,b);
-        
         // Define hasFill
-        int hasFill = Integer.valueOf(args[12]);
+        int hasFillInt = Integer.valueOf(args[7]);
         
         // Draw
-        g2.setColor(brushColor);
+        g2.setColor(new Color(colorInt));
         g2.setStroke(new BasicStroke(brush));
-        if(hasFill == 1) {
-            g2.setColor(fillColor);
-//            g2.fill();
-        }
         g2.drawRect(x, y, width, height);
 
         // IMPORTANT! every time we draw on the internal drawing buffer, we
@@ -87,22 +73,15 @@ public class RectangleController implements CanvasController {
         lastY = e.getY();
 
         // Get brush color
-        Color color = canvas.getBrushColor();
+        brushColor = canvas.getBrushColor();
 
-        rBrush = color.getRed();
-        gBrush = color.getGreen();
-        bBrush = color.getBlue();
 
         // Get brushSize
 
         brushSize = canvas.getBrushSize();
 
         // Get brush color
-        color = canvas.getFillColor();
-
-        rFill = color.getRed();
-        gFill = color.getGreen();
-        bFill = color.getBlue();
+//        color = canvas.getFillColor();
 
         // Check if it has fill
         if (canvas.hasFill()) {
@@ -111,7 +90,7 @@ public class RectangleController implements CanvasController {
             hasFill = 0;
         }
 
-        rectangle.setRect(lastX, lastY, 0, 0);
+        rectangle.setFrame(lastX, lastY, 0, 0);
         canvas.setSurfaceShape(rectangle);
     }
 
@@ -122,9 +101,8 @@ public class RectangleController implements CanvasController {
 
         // Sends info to the server
         canvas.mClient.send("drawrect " + lastX + " " + lastY + " " + x + " "
-                + y + " " + rBrush + " " + gBrush + " " + bBrush + " "
-                + brushSize + " " + rFill + " " + gFill + " " + bFill + " "
-                + hasFill);
+                + y + " " + brushColor + " "
+                + brushSize + " " + hasFill + " " + fillColor);
 
         canvas.setSurfaceShape(null);
     }
@@ -135,7 +113,7 @@ public class RectangleController implements CanvasController {
 
         int width = x - lastX;
         int height = y - lastY;
-        rectangle.setRect(lastX, lastY, width, height);
+        rectangle.setFrame(lastX, lastY, width, height);
         canvas.repaint();
     }
 

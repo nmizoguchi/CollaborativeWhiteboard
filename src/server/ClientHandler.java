@@ -102,9 +102,9 @@ public class ClientHandler {
     private String[] handleRequest(String input) {
         String regex =
                 "(update -?\\d+)|"
-                + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
+                + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
                 + "(erase -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
-                + "(drawrect -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
+                + "(drawrect -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
                 + "(help)|(bye)";
         if (!input.matches(regex)) {
             // invalid input
