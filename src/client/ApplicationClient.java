@@ -10,14 +10,14 @@ import java.net.UnknownHostException;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class WhiteboardClient {
+public class ApplicationClient {
 
     private static WhiteboardGUI GUI;
     private final WhiteboardModel whiteboard;
     private final Socket socket;
     public final int FPS = 25;
     
-    public WhiteboardClient(String serverAddress, int port)
+    public ApplicationClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
         whiteboard = new WhiteboardModel();
@@ -68,7 +68,7 @@ public class WhiteboardClient {
 
         String server = JOptionPane.showInputDialog("Server IP:");
         
-        final WhiteboardClient client = new WhiteboardClient(server, 4444);
+        final ApplicationClient client = new ApplicationClient(server, 4444);
 
         // Creates the listening thread, that receives messages from updates of
         // the model

@@ -11,16 +11,15 @@ import client.WhiteboardModel;
 
 public class ClientHandler {
 
-    private final WhiteboardModel model;
+    private final ClientConnection client;
     private final Thread messageHandler;
     private final Thread updateHandler;
     private final Socket socket;
-    private int currentVersion;
+    private Object broadcastLock = new Object();
 
-    public ClientHandler(WhiteboardModel model, Socket sock) {
+    public ClientHandler(ClientConnection client, Socket sock) {
 
-        currentVersion = 0;
-        this.model = model;
+        this.client = client;
         this.socket = sock;
 
         // start a new thread to handle the connection
@@ -75,12 +74,28 @@ public class ClientHandler {
                     .readLine()) {
 
                 // Transform the message in tokens so we can analyze them
-                String[] outputTokens = handleRequest(line);
-                String command = outputTokens[0];
+                String[] tokens = handleRequest(line);
+                String command = tokens[0];
 
-                // Treat correctly the model itself.
-                model.update(line);
-                System.out.println(line);
+                if (command.equals("changeboard")) {
+
+                    /*
+                     * Makes sure that it is not sending updating information to
+                     * this client anymore by getting the broadcastLock
+                     */
+                    synchronized (broadcastLock) {
+                        String boardName = tokens[1];
+                        client.setActiveModel(boardName);
+                    }
+                }
+
+                else {
+
+                    // Otherwise, it is a command to be routed to all other
+                    // clients,
+                    // so updates the server model with it
+                    client.getActiveModel().update(line);
+                }
             }
         }
 
@@ -100,8 +115,7 @@ public class ClientHandler {
      * @return message to client
      */
     private String[] handleRequest(String input) {
-        String regex =
-                "(update -?\\d+)|"
+        String regex = "(update -?\\d+)|"
                 + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
                 + "(erase -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
                 + "(drawrect -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
@@ -117,19 +131,27 @@ public class ClientHandler {
         return tokens;
     }
 
-    public void updateClient(Socket socket) throws IOException, InterruptedException {
+    public void updateClient(Socket socket) throws IOException,
+            InterruptedException {
 
         // Stream where server sends information to Clients
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
         try {
             while (true) {
-                if(currentVersion < model.getVersion()) {
+                if (client.getActiveModelVersion() < client.getActiveModel()
+                        .getVersion()) {
 
-                    List<String> toUpdate = model.getActionsToUpdate(currentVersion);
-                    currentVersion += toUpdate.size();                    
-                    for(String action : toUpdate) {
-                        out.println(action);
+                    // Get the lock for broadcasting
+                    synchronized (broadcastLock) {
+                        List<String> toUpdate = client.getActiveModel()
+                                .getActionsToUpdate(
+                                        client.getActiveModelVersion());
+                        client.setActiveModelVersion(client
+                                .getActiveModelVersion() + toUpdate.size());
+                        for (String action : toUpdate) {
+                            out.println(action);
+                        }
                     }
                 }
                 updateHandler.yield();
@@ -145,7 +167,7 @@ public class ClientHandler {
             socket.close();
         }
     }
-    
+
     public void startThreads() {
         messageHandler.start();
         updateHandler.start();

@@ -9,18 +9,19 @@ import java.util.List;
 
 import client.WhiteboardModel;
 
-public class WhiteboardServer {
+public class ApplicationServer {
     // It should have a model of the whiteboard attached to it.
 
     private final ServerSocket serverSocket;
-    private final WhiteboardModel model;
-    private final List<ClientHandler> clients; 
+    private final List<WhiteboardModel> whiteboards;
+    private final List<ClientConnection> clients; 
 
-    public WhiteboardServer(int port) throws IOException {
+    public ApplicationServer(int port) throws IOException {
         
         serverSocket = new ServerSocket(port);
-        clients = Collections.synchronizedList(new ArrayList<ClientHandler>());
-        model = new WhiteboardModel();
+        clients = Collections.synchronizedList(new ArrayList<ClientConnection>());
+        whiteboards = Collections.synchronizedList(new ArrayList<WhiteboardModel>());
+        whiteboards.add(new WhiteboardModel("Default"));
     }
 
     /**
@@ -37,18 +38,33 @@ public class WhiteboardServer {
             final Socket socket = serverSocket.accept();
 
             // Start thread
-            ClientHandler client = new ClientHandler(model, socket);
+            ClientConnection client = new ClientConnection(this,whiteboards.get(0));
+            ClientHandler clientHandler = new ClientHandler(client,socket);
             clients.add(client);
-            client.startThreads();
+            clientHandler.startThreads();
         }
+    }
+    
+    public WhiteboardModel getWhiteboard(String name) throws NoSuchFieldException {
+        // Make a copy of the synchronized list, so we don't have problems
+        List<WhiteboardModel> copy = new ArrayList<WhiteboardModel>(whiteboards);
+        
+        for(WhiteboardModel board : copy) {
+            if(name.equals(board.getName())) {
+                return board;
+            }
+        }
+        
+        // Not found!
+        throw new NoSuchFieldException();
     }
 
     public static void main(String[] args) {
         int port = 4444; // default port
 
-        WhiteboardServer server;
+        ApplicationServer server;
         try {
-            server = new WhiteboardServer(port);
+            server = new ApplicationServer(port);
             server.serve();
         } catch (IOException e) {
             // TODO Auto-generated catch block

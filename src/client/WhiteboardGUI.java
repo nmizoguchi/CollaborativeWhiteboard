@@ -44,7 +44,7 @@ public class WhiteboardGUI extends JFrame {
     private final JButton colorButton = new JButton();
     private final JColorChooser colorOptions = new JColorChooser();
 
-    public WhiteboardGUI(WhiteboardClient client) {
+    public WhiteboardGUI(ApplicationClient client) {
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
         eraserIcon = new ImageIcon(new ImageIcon("images/eraser.gif")
