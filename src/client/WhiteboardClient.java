@@ -12,18 +12,18 @@ import javax.swing.SwingUtilities;
 
 public class WhiteboardClient {
 
-    private static WhiteboardGUI board;
-    private final WhiteboardModel model;
+    private static WhiteboardGUI GUI;
+    private final WhiteboardModel whiteboard;
     private final Socket socket;
     public final int FPS = 25;
     
     public WhiteboardClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
-        model = new WhiteboardModel();
+        whiteboard = new WhiteboardModel();
         socket = new Socket(serverAddress, port);
-        board = new WhiteboardGUI(this);
-        board.setVisible(true);
+        GUI = new WhiteboardGUI(this);
+        GUI.setVisible(true);
     }
 
     public void listen() throws IOException {
@@ -33,8 +33,8 @@ public class WhiteboardClient {
                 socket.getInputStream()));
 
         while ((command = inputStream.readLine()) != null) {
-            board.updateModelView(command);
-            model.update(command);
+            GUI.updateModelView(command);
+            whiteboard.update(command);
         }
     }
 
@@ -58,7 +58,7 @@ public class WhiteboardClient {
     }
 
     public WhiteboardModel getWhiteboardModel() {
-        return this.model;
+        return this.whiteboard;
     }
 
     /*

@@ -17,11 +17,11 @@ public class ClientHandler {
     private final Socket socket;
     private int currentVersion;
 
-    public ClientHandler(WhiteboardModel model, Socket serverSocket) {
+    public ClientHandler(WhiteboardModel model, Socket sock) {
 
         currentVersion = 0;
         this.model = model;
-        this.socket = serverSocket;
+        this.socket = sock;
 
         // start a new thread to handle the connection
         messageHandler = new Thread(new Runnable() {
@@ -51,9 +51,6 @@ public class ClientHandler {
                 }
             }
         });
-
-        messageHandler.start();
-        updateHandler.start();
     }
 
     /**
@@ -81,23 +78,8 @@ public class ClientHandler {
                 String[] outputTokens = handleRequest(line);
                 String command = outputTokens[0];
 
-                // Check if it is a request to retrieve updates
-                if (command.equals("update")) {
-
-                    int clientVersion = Integer.valueOf(outputTokens[1]);
-
-                    for (int i = clientVersion + 1; i < model.getVersion(); i++) {
-                        // Get all shapes, returning them to the user.
-                        out.println(model.getAction(i));
-                        System.out.println("Sent updates to the client.");
-                    }
-                }
-
-                else {
-                    // Treat correctly the model itself.
-                    model.update(line);
-                    System.out.println(model.getVersion());
-                }
+                // Treat correctly the model itself.
+                model.update(line);
             }
         }
 
@@ -137,17 +119,29 @@ public class ClientHandler {
         try {
             while (true) {
                 if(currentVersion < model.getVersion()) {
+
                     List<String> toUpdate = model.getActionsToUpdate(currentVersion);
+                    currentVersion += toUpdate.size();                    
                     for(String action : toUpdate) {
                         out.println(action);
                     }
                 }
+                updateHandler.yield();
             }
+        } catch (Exception e) {
+            System.out.println("Should never print this !!");
+            e.printStackTrace();
         }
 
         finally {
+            System.out.println("Should never print this!");
             out.close();
             socket.close();
         }
+    }
+    
+    public void startThreads() {
+        messageHandler.start();
+        updateHandler.start();
     }
 }

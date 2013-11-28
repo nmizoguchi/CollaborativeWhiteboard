@@ -11,18 +11,17 @@ import canvas.Canvas;
 /*
  * DrawingController handles the user's freehand drawing.
  */
-public class EraseController implements CanvasController {
+public class FreehandController implements CanvasController {
     // store the coordinates of the last mouse event, so we can
     // draw a line segment from that last point to the point of the next mouse
     // event.
     private final Canvas canvas;
     private int lastX, lastY;
 
-    public EraseController(Canvas canvas) {
+    public FreehandController(Canvas canvas) {
         this.canvas = canvas;
     }
     
-
     @Override
     public void paint(String[] args) {
         /*
@@ -40,10 +39,14 @@ public class EraseController implements CanvasController {
         int y = Integer.valueOf(args[4]);
 
         // Define Color
-        Color color = Color.WHITE;
+        int r = Integer.valueOf(args[5]);
+        int g = Integer.valueOf(args[6]);
+        int b = Integer.valueOf(args[7]);
+        
+        Color color = new Color(r,g,b);
 
         // Define Brush Size
-        int brush = Integer.valueOf(args[5]);
+        int brush = Integer.valueOf(args[8]);
 
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
@@ -56,7 +59,7 @@ public class EraseController implements CanvasController {
         // have to notify Swing to repaint this component on the screen.
         canvas.repaint();
     }
-
+    
     /*
      * When mouse button is pressed down, start drawing.
      */
@@ -73,8 +76,8 @@ public class EraseController implements CanvasController {
         int y = e.getY();
 
         // Sends info to the server
-        canvas.mClient.send("erase " + lastX + " " + lastY + " " + x + " " + y
-                + " 10");
+        canvas.mClient.send("drawline " + lastX + " " + lastY + " " + x + " "
+                + y + " 10 20 30 5");
 
         lastX = x;
         lastY = y;

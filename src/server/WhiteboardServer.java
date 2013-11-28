@@ -17,9 +17,9 @@ public class WhiteboardServer {
     private final List<ClientHandler> clients; 
 
     public WhiteboardServer(int port) throws IOException {
+        
         serverSocket = new ServerSocket(port);
         clients = Collections.synchronizedList(new ArrayList<ClientHandler>());
-        
         model = new WhiteboardModel();
     }
 
@@ -39,6 +39,7 @@ public class WhiteboardServer {
             // Start thread
             ClientHandler client = new ClientHandler(model, socket);
             clients.add(client);
+            client.startThreads();
         }
     }
 

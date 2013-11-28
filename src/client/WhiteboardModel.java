@@ -5,12 +5,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class WhiteboardModel {
-    
-    private int version;
+
     private List<String> actions;
     
     public WhiteboardModel() {
-        version = 0;
         actions = Collections.synchronizedList(new ArrayList<String>());
     }
     
@@ -40,16 +38,16 @@ public class WhiteboardModel {
      * @return
      */
     public synchronized List<String> getActionsToUpdate(int clientVersion) {
-        List<String> updates;
         
-        if(clientVersion < version) {
-            updates = actions.subList(clientVersion+1, version);
+        List<String> updates = new ArrayList<String>();
+        
+        if(clientVersion < getVersion()) {
             
-            assert(version == clientVersion + updates.size());
+            updates = new ArrayList<String>(actions.subList(clientVersion, getVersion()));
             
-            return updates;
+            assert(getVersion() == clientVersion + updates.size());
         }
         
-        return new ArrayList();
+        return updates;
     }
 }

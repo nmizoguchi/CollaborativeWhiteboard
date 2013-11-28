@@ -6,14 +6,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Shape;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JPanel;
-import javax.tools.Tool;
 
 import tools.CanvasController;
-import tools.EraseController;
-import tools.LineController;
+import tools.EraseTool;
+import tools.FreehandTool;
+import tools.LineTool;
+import tools.Tool;
 import client.WhiteboardClient;
 
 /**
@@ -23,14 +26,17 @@ import client.WhiteboardClient;
 public class Canvas extends JPanel {
 
     public WhiteboardClient mClient;
-    private List<Tool> mTools;
     private CanvasController activeController;
+    private List<Tool> mTools;
 
     // image where the user's drawing is stored
+    private Shape surfaceShape;
     private Image drawingBuffer;
     private int brushSize = 3;
-    
+    private Color brushColor = Color.BLACK;
+
     private MODE editorMode;
+
     /**
      * Make a canvas.
      * 
@@ -42,49 +48,45 @@ public class Canvas extends JPanel {
     public Canvas(int width, int height, WhiteboardClient client) {
         this.setPreferredSize(new Dimension(width, height));
         this.mClient = client;
-        
-      // initializeTools();
-      LineController controller = new LineController(this);
-      addMouseListener(controller);
-      addMouseMotionListener(controller);
-        
-        setMode(MODE.DRAW_LINE);
-        // note: we can't call makeDrawingBuffer here, because it only
-        // works *after* this canvas has been added to a window. Have to
-        // wait until paintComponent() is first called.
-    }
 
-    public void setMode(MODE m) {
+        this.mTools = new ArrayList<Tool>();
+        initializeTools();
 
-        System.out.println("Changing to Mode: " + m);
-
-        removeMouseListener(activeController);
-        removeMouseMotionListener(activeController);
-        
-        editorMode = m;
-        switch (editorMode) {
-        case DRAW_LINE:
-            activeController = new LineController(this);
-            break;
-        case ERASE:
-            activeController = new EraseController(this);
-            break;
-        default:
-            activeController = new LineController(this);
-        }
-        
+        // Set mode to FREEHAND by default
+        editorMode = MODE.FREEHAND;
+        activeController = mTools.get(MODE.FREEHAND.ordinal()).getController();
         addMouseListener(activeController);
         addMouseMotionListener(activeController);
     }
-    
+
     public enum MODE {
-        DRAW_LINE, ERASE
+        FREEHAND, ERASE, LINE
     }
-    
-//    public void initializeTools() {
-//        mTools.add(MODE.DRAW_LINE, new LineTool());
-//        mTools.add(MODE.ERASE, new EraseTool());
-//    }
+
+    public void initializeTools() {
+        mTools.add(MODE.FREEHAND.ordinal(), new FreehandTool(this));
+        mTools.add(MODE.ERASE.ordinal(), new EraseTool(this));
+        mTools.add(MODE.LINE.ordinal(), new LineTool(this));
+    }
+
+    public void execute(String command) {
+
+        String[] tokens = command.split(" ");
+        String cmd = tokens[0];
+
+        MODE action = MODE.FREEHAND;
+
+        if (cmd.equals("freehand"))
+            action = MODE.FREEHAND;
+
+        if (cmd.equals("erase"))
+            action = MODE.ERASE;
+
+        if (cmd.equals("drawline"))
+            action = MODE.LINE;
+
+        mTools.get(action.ordinal()).getController().paint(tokens);
+    }
 
     /**
      * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
@@ -99,6 +101,27 @@ public class Canvas extends JPanel {
 
         // Copy the drawing buffer to the screen.
         g.drawImage(drawingBuffer, 0, 0, null);
+
+        // If there is some shape being drawn only on client-side, show it
+        if (surfaceShape != null) {
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setColor(brushColor);
+            g2.setStroke(new BasicStroke(brushSize));
+            g2.draw(surfaceShape);
+        }
+    }
+
+    public void setMode(MODE m) {
+
+        removeMouseListener(activeController);
+        removeMouseMotionListener(activeController);
+
+        editorMode = m;
+        Tool currentTool = mTools.get(m.ordinal());
+        activeController = currentTool.getController();
+
+        addMouseListener(activeController);
+        addMouseMotionListener(activeController);
     }
 
     /*
@@ -123,79 +146,35 @@ public class Canvas extends JPanel {
         this.repaint();
     }
 
-    /*
-     * Draw a line between two points (x1, y1) and (x2, y2), specified in pixels
-     * relative to the upper-left corner of the drawing buffer.
-     */
-    private void drawLineSegment(int x1, int y1, int x2, int y2) {
-        Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
-
-        g.setColor(Color.BLACK);
-        g.setStroke(new BasicStroke(brushSize));
-        g.drawLine(x1, y1, x2, y2);
-
-        // IMPORTANT! every time we draw on the internal drawing buffer, we
-        // have to notify Swing to repaint this component on the screen.
-        this.repaint();
-    }
-
-    /*
-     * erases
-     */
-    private void erase(int x1, int y1, int x2, int y2) {
-        Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
-        g.setColor(Color.WHITE);
-        g.setStroke(new BasicStroke(brushSize));
-        g.drawLine(x1, y1, x2, y2);
-        this.repaint();
+    public Image getBuffer() {
+        return drawingBuffer;
     }
 
     public void changeMode(MODE m) {
         editorMode = m;
     }
 
+    public Shape getSurfaceShape() {
+        return surfaceShape;
+    }
+
+    public void setSurfaceShape(Shape surfaceShape) {
+        this.surfaceShape = surfaceShape;
+    }
+
     public void setBrushSize(int b) {
         brushSize = b;
     }
 
-    public void execute(String command) {
+    public int getBrushSize() {
+        return brushSize;
+    }
 
-        String[] tokens = command.split(" ");
+    public Color getBrushColor() {
+        return brushColor;
+    }
 
-        String cmd = tokens[0];
-
-        if (cmd.equals("drawline")) {
-
-            // Get points
-            int lastX = Integer.valueOf(tokens[1]);
-            int lastY = Integer.valueOf(tokens[2]);
-            int x = Integer.valueOf(tokens[3]);
-            int y = Integer.valueOf(tokens[4]);
-
-            // Define Color
-            int r = Integer.valueOf(tokens[5]);
-            int g = Integer.valueOf(tokens[6]);
-            int b = Integer.valueOf(tokens[7]);
-            Color color = new Color(r, g, b);
-
-            // Define Brush Size
-            int brush = Integer.valueOf(tokens[8]);
-
-            this.drawLineSegment(lastX, lastY, x, y);
-        }
-
-        if (cmd.equals("erase")) {
-            
-            // Get points
-            int lastX = Integer.valueOf(tokens[1]);
-            int lastY = Integer.valueOf(tokens[2]);
-            int x = Integer.valueOf(tokens[3]);
-            int y = Integer.valueOf(tokens[4]);
-
-            // Define Brush Size
-            int brush = Integer.valueOf(tokens[5]);
-
-            this.erase(lastX, lastY, x, y);
-        }
+    public void setBrushColor(Color brushColor) {
+        this.brushColor = brushColor;
     }
 }

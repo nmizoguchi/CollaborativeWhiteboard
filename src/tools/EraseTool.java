@@ -7,13 +7,13 @@ import java.awt.Image;
 
 import canvas.Canvas;
 
-public class LineTool implements Tool {
+public class EraseTool implements Tool {
 
-    public final String name = "Draw Line";
+    public final String name = "Erase";
     public final CanvasController controller;
 
-    public LineTool(Canvas canvas) {
-        this.controller = new LineController(canvas);
+    public EraseTool(Canvas canvas) {
+        this.controller = new EraseController(canvas);
     }
 
     @Override
