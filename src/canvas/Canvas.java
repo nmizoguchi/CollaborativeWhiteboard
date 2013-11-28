@@ -16,6 +16,7 @@ import tools.CanvasController;
 import tools.EraseTool;
 import tools.FreehandTool;
 import tools.LineTool;
+import tools.RectangleTool;
 import tools.Tool;
 import client.WhiteboardClient;
 
@@ -34,6 +35,8 @@ public class Canvas extends JPanel {
     private Image drawingBuffer;
     private int brushSize = 3;
     private Color brushColor = Color.BLACK;
+    private boolean hasFill = true;
+    private Color fillColor = Color.RED;
 
     private MODE editorMode;
 
@@ -60,13 +63,14 @@ public class Canvas extends JPanel {
     }
 
     public enum MODE {
-        FREEHAND, ERASE, LINE
+        FREEHAND, ERASE, LINE, RECTANGLE
     }
 
     public void initializeTools() {
         mTools.add(MODE.FREEHAND.ordinal(), new FreehandTool(this));
         mTools.add(MODE.ERASE.ordinal(), new EraseTool(this));
         mTools.add(MODE.LINE.ordinal(), new LineTool(this));
+        mTools.add(MODE.RECTANGLE.ordinal(), new RectangleTool(this));
     }
 
     public void execute(String command) {
@@ -79,11 +83,14 @@ public class Canvas extends JPanel {
         if (cmd.equals("freehand"))
             action = MODE.FREEHAND;
 
-        if (cmd.equals("erase"))
+        else if (cmd.equals("erase"))
             action = MODE.ERASE;
 
-        if (cmd.equals("drawline"))
+        else if (cmd.equals("drawline"))
             action = MODE.LINE;
+        
+        else if (cmd.equals("drawrect"))
+            action = MODE.RECTANGLE;
 
         mTools.get(action.ordinal()).getController().paint(tokens);
     }
@@ -107,8 +114,28 @@ public class Canvas extends JPanel {
             Graphics2D g2 = (Graphics2D) g;
             g2.setColor(brushColor);
             g2.setStroke(new BasicStroke(brushSize));
+            if(hasFill) {
+                g2.setColor(fillColor);
+                g2.fill(surfaceShape);
+            }
             g2.draw(surfaceShape);
         }
+    }
+
+    public boolean hasFill() {
+        return hasFill;
+    }
+
+    public void setHasFill(boolean hasFill) {
+        this.hasFill = hasFill;
+    }
+
+    public Color getFillColor() {
+        return fillColor;
+    }
+
+    public void setFillColor(Color fillColor) {
+        this.fillColor = fillColor;
     }
 
     public void setMode(MODE m) {

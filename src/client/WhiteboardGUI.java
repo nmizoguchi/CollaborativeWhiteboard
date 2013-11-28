@@ -33,6 +33,7 @@ public class WhiteboardGUI extends JFrame {
     private final JToggleButton eraser;
     private final JToggleButton freehand;
     private final JToggleButton drawLine;
+    private final JToggleButton drawRect;
     private final JMenu brushSizes = new JMenu("brush sizes");
     private final JButton size5 = new JButton("5");
     private final JButton size20 = new JButton("20");
@@ -50,7 +51,9 @@ public class WhiteboardGUI extends JFrame {
         freehand.setBackground(Color.WHITE);
         drawLine = new JToggleButton(drawIcon);
         drawLine.setBackground(Color.WHITE);
-
+        drawRect = new JToggleButton(drawIcon);
+        drawRect.setBackground(Color.WHITE);
+        
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(800, 600));
 
@@ -58,6 +61,7 @@ public class WhiteboardGUI extends JFrame {
         buttonGroup.add(eraser);
         buttonGroup.add(freehand);
         buttonGroup.add(drawLine);
+        buttonGroup.add(drawRect);
         // default selected button
         freehand.setSelected(true);
         // this is for the eraser sizes
@@ -100,11 +104,18 @@ public class WhiteboardGUI extends JFrame {
                 canvas.setMode(Canvas.MODE.LINE);
             }
         });
+        drawRect.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                canvas.setMode(Canvas.MODE.RECTANGLE);
+            }
+        });
 
         // layout
         buttonsMenu.add(eraser);
         buttonsMenu.add(freehand);
         buttonsMenu.add(drawLine);
+        buttonsMenu.add(drawRect);
         buttonsMenu.add(brushSizes);
         this.add(canvas, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);

@@ -80,6 +80,7 @@ public class ClientHandler {
 
                 // Treat correctly the model itself.
                 model.update(line);
+                System.out.println(line);
             }
         }
 
@@ -99,10 +100,15 @@ public class ClientHandler {
      * @return message to client
      */
     private String[] handleRequest(String input) {
-        String regex = "(update -?\\d+)|(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
-                + "(erase -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|(help)|(bye)";
+        String regex =
+                "(update -?\\d+)|"
+                + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
+                + "(erase -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
+                + "(drawrect -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
+                + "(help)|(bye)";
         if (!input.matches(regex)) {
             // invalid input
+            System.out.println(input);
             throw new UnsupportedOperationException();
         }
 
