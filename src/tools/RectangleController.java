@@ -42,8 +42,8 @@ public class RectangleController implements CanvasController {
         // Get points
         int x = Integer.valueOf(args[1]);
         int y = Integer.valueOf(args[2]);
-        int width = Integer.valueOf(args[3]);
-        int height = Integer.valueOf(args[4]);
+        int width = Integer.valueOf(args[3]) - x;
+        int height = Integer.valueOf(args[4]) - y;
 
         // Define Color
         int r = Integer.valueOf(args[5]);
