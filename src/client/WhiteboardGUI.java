@@ -1,4 +1,4 @@
-package canvas;
+package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -16,14 +16,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import canvas.Canvas.MODE;
+import canvas.Canvas;
+import canvas.CanvasPainter;
 
 public class WhiteboardGUI extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final Canvas canvas = new Canvas(800, 600, true);
+	
+	private final Canvas canvas;
 	private final JMenuBar buttonsMenu = new JMenuBar();
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final ImageIcon eraserIcon;
@@ -34,8 +36,9 @@ public class WhiteboardGUI extends JFrame {
 	private final JButton size5 = new JButton("5");
 	private final JButton size20 = new JButton("20");
 	
-	public WhiteboardGUI() {
+	public WhiteboardGUI(WhiteboardClient client) {
 		//creates eraser and drawLine buttons with icons
+	    canvas = new Canvas(800, 600,client);
 		eraserIcon =  new ImageIcon(new ImageIcon("images/eraser.gif").getImage().getScaledInstance(50, 50, 100));
 		drawIcon = new ImageIcon(new ImageIcon("images/brush.png").getImage().getScaledInstance(50, 50, 100));
 		eraser = new JToggleButton(eraserIcon);
@@ -74,13 +77,13 @@ public class WhiteboardGUI extends JFrame {
 		eraser.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				canvas.setMode(MODE.ERASE);
+				canvas.setMode(Canvas.MODE.ERASE);
 			}
 		});
 		drawLine.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				canvas.setMode(MODE.DRAW_LINE);
+				canvas.setMode(Canvas.MODE.DRAW_LINE);
 			}
 		});
 
@@ -90,20 +93,10 @@ public class WhiteboardGUI extends JFrame {
 		buttonsMenu.add(brushSizes);
 		this.add(canvas, BorderLayout.CENTER);
 		this.add(buttonsMenu, BorderLayout.WEST);
-		
 	}
-
-    /*
-     * Main program. Make a window containing a Canvas.
-     */
-    public static void main(String[] args) {
-
-    	// set up the UI (on the event-handling thread)
-    	SwingUtilities.invokeLater(new Runnable() {
-    		public void run() {
-    			WhiteboardGUI board = new WhiteboardGUI();
-    			board.setVisible(true);
-    		}
-    	});
-    }
+	
+	public void updateModelView(String command) {
+	 // set up the UI (on the event-handling thread)
+        SwingUtilities.invokeLater(new CanvasPainter(canvas,command));
+	}
 }
