@@ -1,6 +1,5 @@
 package client;
 
-import java.awt.Shape;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

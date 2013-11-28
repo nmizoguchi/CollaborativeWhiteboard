@@ -1,4 +1,4 @@
-package canvas;
+package tools;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -7,18 +7,19 @@ import java.awt.event.MouseMotionListener;
 import javax.swing.SwingUtilities;
 
 import client.WhiteboardGUI;
+import canvas.Canvas;
 import canvas.Canvas.MODE;
 
 /*
  * DrawingController handles the user's freehand drawing.
  */
-public class EraseController implements CanvasController {
+public class LineController implements CanvasController {
     // store the coordinates of the last mouse event, so we can
     // draw a line segment from that last point to the point of the next mouse event.
     private final Canvas canvas;
     private int lastX, lastY; 
 
-    public EraseController(Canvas canvas) {
+    public LineController(Canvas canvas) {
         this.canvas = canvas;
     }
     
@@ -39,7 +40,7 @@ public class EraseController implements CanvasController {
         int y = e.getY();
 
         // Sends info to the server
-        canvas.client.send("erase "+lastX+" "+lastY+" "+x+" "+y+" 10");
+        canvas.mClient.send("drawline "+lastX+" "+lastY+" "+x+" "+y+" 10 20 30 5");
         
         lastX = x;
         lastY = y;

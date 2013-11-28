@@ -1,4 +1,4 @@
-package canvas;
+package tools;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;

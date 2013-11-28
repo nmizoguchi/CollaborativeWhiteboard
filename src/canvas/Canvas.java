@@ -6,13 +6,15 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.io.IOException;
-import java.net.UnknownHostException;
+import java.util.List;
 
 import javax.swing.JPanel;
+import javax.tools.Tool;
 
+import tools.CanvasController;
+import tools.EraseController;
+import tools.LineController;
 import client.WhiteboardClient;
-import client.WhiteboardModel;
 
 /**
  * Canvas represents a drawing surface that allows the user to draw on it
@@ -20,18 +22,15 @@ import client.WhiteboardModel;
  */
 public class Canvas extends JPanel {
 
-    public enum MODE {
-        DRAW_LINE, ERASE
-    }
-
-    public WhiteboardClient client;
+    public WhiteboardClient mClient;
+    private List<Tool> mTools;
+    private CanvasController activeController;
 
     // image where the user's drawing is stored
     private Image drawingBuffer;
-    private MODE mode;
     private int brushSize = 3;
-    private CanvasController controller;
-
+    
+    private MODE editorMode;
     /**
      * Make a canvas.
      * 
@@ -42,8 +41,13 @@ public class Canvas extends JPanel {
      */
     public Canvas(int width, int height, WhiteboardClient client) {
         this.setPreferredSize(new Dimension(width, height));
-        this.client = client;
-        addDrawingController();
+        this.mClient = client;
+        
+      // initializeTools();
+      LineController controller = new LineController(this);
+      addMouseListener(controller);
+      addMouseMotionListener(controller);
+        
         setMode(MODE.DRAW_LINE);
         // note: we can't call makeDrawingBuffer here, because it only
         // works *after* this canvas has been added to a window. Have to
@@ -54,24 +58,33 @@ public class Canvas extends JPanel {
 
         System.out.println("Changing to Mode: " + m);
 
-        removeMouseListener(controller);
-        removeMouseMotionListener(controller);
+        removeMouseListener(activeController);
+        removeMouseMotionListener(activeController);
         
-        mode = m;
-        switch (mode) {
+        editorMode = m;
+        switch (editorMode) {
         case DRAW_LINE:
-            controller = new DrawingController(this);
+            activeController = new LineController(this);
             break;
         case ERASE:
-            controller = new EraseController(this);
+            activeController = new EraseController(this);
             break;
         default:
-            controller = new DrawingController(this);
+            activeController = new LineController(this);
         }
         
-        addMouseListener(controller);
-        addMouseMotionListener(controller);
+        addMouseListener(activeController);
+        addMouseMotionListener(activeController);
     }
+    
+    public enum MODE {
+        DRAW_LINE, ERASE
+    }
+    
+//    public void initializeTools() {
+//        mTools.add(MODE.DRAW_LINE, new LineTool());
+//        mTools.add(MODE.ERASE, new EraseTool());
+//    }
 
     /**
      * @see javax.swing.JComponent#paintComponent(java.awt.Graphics)
@@ -137,17 +150,8 @@ public class Canvas extends JPanel {
         this.repaint();
     }
 
-    /*
-     * Add the mouse listener that supports the user's freehand drawing.
-     */
-    private void addDrawingController() {
-        DrawingController controller = new DrawingController(this);
-        addMouseListener(controller);
-        addMouseMotionListener(controller);
-    }
-
     public void changeMode(MODE m) {
-        mode = m;
+        editorMode = m;
     }
 
     public void setBrushSize(int b) {

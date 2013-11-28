@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 public class WhiteboardClient {
@@ -66,7 +67,9 @@ public class WhiteboardClient {
     public static void main(String[] args) throws UnknownHostException,
             IOException {
 
-        final WhiteboardClient client = new WhiteboardClient("localhost", 4444);
+        String server = JOptionPane.showInputDialog("Server IP:");
+        
+        final WhiteboardClient client = new WhiteboardClient(server, 4444);
 
         // Creates the listening thread, that receives messages from updates of
         // the model
@@ -85,26 +88,5 @@ public class WhiteboardClient {
         });
 
         listenerThread.start();
-
-        Thread updaterThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                while (true) {
-                    try {
-                        client.send("update "
-                                + client.getWhiteboardModel().getVersion());
-                        synchronized(this) {
-                            wait(1000/client.FPS);
-                        }
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-
-        updaterThread.start();
     }
 }
