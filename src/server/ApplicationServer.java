@@ -7,23 +7,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import client.WhiteboardModel;
+import client.Whiteboard;
 
 public class ApplicationServer {
     // It should have a model of the whiteboard attached to it.
 
     private final ServerSocket serverSocket;
-    private final List<WhiteboardModel> whiteboards;
+    private final List<Whiteboard> whiteboards;
     private final List<ClientConnection> clients; 
 
     public ApplicationServer(int port) throws IOException {
         
         serverSocket = new ServerSocket(port);
         clients = Collections.synchronizedList(new ArrayList<ClientConnection>());
-        whiteboards = Collections.synchronizedList(new ArrayList<WhiteboardModel>());
+        whiteboards = Collections.synchronizedList(new ArrayList<Whiteboard>());
         
         // Add only one board as default
-        whiteboards.add(new WhiteboardModel("Default"));
+        whiteboards.add(new Whiteboard("Default"));
     }
     
     public static void main(String[] args) {
@@ -60,11 +60,11 @@ public class ApplicationServer {
         }
     }
 
-    public WhiteboardModel getWhiteboard(String name) throws NoSuchFieldException {
+    public Whiteboard getWhiteboard(String name) throws NoSuchFieldException {
         // Make a copy of the synchronized list, so we don't have problems
-        List<WhiteboardModel> copy = new ArrayList<WhiteboardModel>(whiteboards);
+        List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);
         
-        for(WhiteboardModel board : copy) {
+        for(Whiteboard board : copy) {
             if(name.equals(board.getName())) {
                 return board;
             }
@@ -77,9 +77,9 @@ public class ApplicationServer {
     public String getWhiteboardNames() {
         
         String names = "";
-        List<WhiteboardModel> copy = new ArrayList<WhiteboardModel>(whiteboards);
+        List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);
         
-        for(WhiteboardModel board : copy) {
+        for(Whiteboard board : copy) {
             names = " " + board.getName();
         }
         

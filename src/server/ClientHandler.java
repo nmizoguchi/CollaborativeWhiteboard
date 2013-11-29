@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
 
-import client.WhiteboardModel;
+import client.Whiteboard;
 
 public class ClientHandler {
 

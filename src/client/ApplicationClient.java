@@ -13,14 +13,14 @@ import javax.swing.SwingUtilities;
 public class ApplicationClient {
 
     private static WhiteboardGUI GUI;
-    private final WhiteboardModel whiteboard;
+    private final Whiteboard whiteboard;
     private final Socket socket;
     public final int FPS = 25;
     
     public ApplicationClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
-        whiteboard = new WhiteboardModel("Default");
+        whiteboard = new Whiteboard("Default");
         socket = new Socket(serverAddress, port);
         GUI = new WhiteboardGUI(this);
         GUI.setVisible(true);
@@ -56,7 +56,7 @@ public class ApplicationClient {
         socket.close();
     }
 
-    public WhiteboardModel getWhiteboardModel() {
+    public Whiteboard getWhiteboardModel() {
         return this.whiteboard;
     }
 

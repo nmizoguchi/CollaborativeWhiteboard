@@ -1,19 +1,19 @@
 package server;
 
-import client.WhiteboardModel;
+import client.Whiteboard;
 
 public class ClientConnection {
     private final ApplicationServer server;
-    private WhiteboardModel activeBoard;
+    private Whiteboard activeBoard;
     private int activeBoardVersion;
     private String name;
     
-    public ClientConnection(ApplicationServer server, WhiteboardModel model) {
+    public ClientConnection(ApplicationServer server, Whiteboard model) {
         this.server = server;
         this.activeBoard = model;
     }
 
-    public WhiteboardModel getActiveBoard() {
+    public Whiteboard getActiveBoard() {
         return activeBoard;
     }
 
