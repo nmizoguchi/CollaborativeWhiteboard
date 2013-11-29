@@ -85,23 +85,23 @@ public class Whiteboard {
      * @return a list of all actions (in correct order) that are not yet in the
      *         client version of the model
      */
-    public synchronized List<String> getActionsToUpdate(int clientVersion) {
-
-        /*
-         * This method has to be threadsafe so we can use it to improve
-         * performance in the ClientHandler
-         */
-        List<String> updates = new ArrayList<String>();
-
-        if (clientVersion < getVersion()) {
-
-            //TODO: This is not threadsafe!
-            updates = new ArrayList<String>(actions.subList(clientVersion,
-                    getVersion()));
-
-            assert (getVersion() == clientVersion + updates.size());
-        }
-
-        return updates;
-    }
+//    public synchronized List<String> getActionsToUpdate(int clientVersion) {
+//
+//        /*
+//         * This method has to be threadsafe so we can use it to improve
+//         * performance in the ClientHandler
+//         */
+//        List<String> updates = new ArrayList<String>();
+//
+//        if (clientVersion < getVersion()) {
+//
+//            //TODO: This is not threadsafe!
+//            updates = new ArrayList<String>(actions.subList(clientVersion,
+//                    getVersion()));
+//
+//            assert (getVersion() == clientVersion + updates.size());
+//        }
+//
+//        return updates;
+//    }
 }

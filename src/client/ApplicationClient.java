@@ -56,10 +56,6 @@ public class ApplicationClient {
         socket.close();
     }
 
-    public Whiteboard getWhiteboardModel() {
-        return this.whiteboard;
-    }
-
     /*
      * Main program. Make a window containing a Canvas.
      */

@@ -50,7 +50,6 @@ public class RectangleController implements CanvasController {
 
         // Define Brush Size
         int brush = Integer.valueOf(args[6]);
-        
 
         // Define hasFill
         int hasFillInt = Integer.valueOf(args[7]);
@@ -98,12 +97,11 @@ public class RectangleController implements CanvasController {
         // Get position
         int x = e.getX();
         int y = e.getY();
-
+        
         // Sends info to the server
         canvas.mClient.send("drawrect " + lastX + " " + lastY + " " + x + " "
                 + y + " " + brushColor + " "
                 + brushSize + " " + hasFill + " " + fillColor);
-
         canvas.setSurfaceShape(null);
     }
 

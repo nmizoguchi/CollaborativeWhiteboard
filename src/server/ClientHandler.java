@@ -150,7 +150,7 @@ public class ClientHandler {
         return tokens;
     }
 
-    public void updateClient(Socket socket) throws IOException,
+    private void updateClient(Socket socket) throws IOException,
             InterruptedException {
 
         try {

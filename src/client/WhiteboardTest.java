@@ -39,14 +39,5 @@ public class WhiteboardTest {
         board.update("erase 1 2 3 4 5");
         assertEquals(2, board.getVersion());
         assertEquals("erase 1 2 3 4 5", board.getAction(1));
-
-        List<String> updates = board.getActionsToUpdate(0);
-        assertEquals(2, updates.size());
-        assertEquals("erase 0 1 2 3 4", updates.get(0));
-        assertEquals("erase 1 2 3 4 5", updates.get(1));
-
-        updates = board.getActionsToUpdate(1);
-        assertEquals(1, updates.size());
-        assertEquals("erase 1 2 3 4 5", updates.get(0));
     }
 }
