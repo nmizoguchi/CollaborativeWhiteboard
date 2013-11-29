@@ -74,7 +74,7 @@ public class ApplicationServer {
         throw new NoSuchFieldException();
     }
     
-    public String getWhiteboardNames() {
+    public synchronized String getWhiteboardNames() {
         
         String names = "";
         List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);

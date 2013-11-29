@@ -90,7 +90,7 @@ public class ClientHandler {
                         String boardName = tokens[1];
                         try {
                             client.setActiveBoard(boardName);
-                        } catch(NoSuchFieldException e) {
+                        } catch (NoSuchFieldException e) {
                             // Treat case where don't find a board!
                             e.printStackTrace();
                         }
@@ -105,7 +105,7 @@ public class ClientHandler {
                      */
                     synchronized (outputStream) {
                         String boardNames = client.getWhiteboardNames();
-                        outputStream.println("getboards "+boardNames);
+                        outputStream.println("getboards " + boardNames);
                     }
                 }
 
@@ -155,19 +155,14 @@ public class ClientHandler {
 
         try {
             while (true) {
-                if (client.getActiveBoardVersion() < client.getActiveBoard()
+                if (client.getClientBoardVersion() < client.getActiveBoard()
                         .getVersion()) {
 
                     // Get the lock for broadcasting
                     synchronized (outputStream) {
-                        List<String> toUpdate = client.getActiveBoard()
-                                .getActionsToUpdate(
-                                        client.getActiveBoardVersion());
-                        client.setActiveBoardVersion(client
-                                .getActiveBoardVersion() + toUpdate.size());
-                        for (String action : toUpdate) {
-                            outputStream.println(action);
-                        }
+                        Whiteboard active = client.getActiveBoard();
+                        outputStream.println(active.getAction(client.getClientBoardVersion()));
+                        client.setClientBoardVersion(client.getClientBoardVersion()+1);
                     }
                 }
                 updateHandler.yield();

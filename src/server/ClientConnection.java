@@ -5,7 +5,7 @@ import client.Whiteboard;
 public class ClientConnection {
     private final ApplicationServer server;
     private Whiteboard activeBoard;
-    private int activeBoardVersion;
+    private int clientBoardVersion;
     private String name;
     
     public ClientConnection(ApplicationServer server, Whiteboard model) {
@@ -19,7 +19,7 @@ public class ClientConnection {
 
     public void setActiveBoard(String name) throws NoSuchFieldException {
         this.activeBoard = server.getWhiteboard(name);
-        this.activeBoardVersion = 0;
+        this.clientBoardVersion = 0;
     }
 
     public String getName() {
@@ -30,12 +30,12 @@ public class ClientConnection {
         this.name = name;
     }
 
-    public int getActiveBoardVersion() {
-        return activeBoardVersion;
+    public int getClientBoardVersion() {
+        return clientBoardVersion;
     }
     
-    public void setActiveBoardVersion(int version) {
-        this.activeBoardVersion = version;
+    public void setClientBoardVersion(int version) {
+        this.clientBoardVersion = version;
     }
     
     public String getWhiteboardNames() {

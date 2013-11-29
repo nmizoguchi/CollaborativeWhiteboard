@@ -87,10 +87,15 @@ public class Whiteboard {
      */
     public synchronized List<String> getActionsToUpdate(int clientVersion) {
 
+        /*
+         * This method has to be threadsafe so we can use it to improve
+         * performance in the ClientHandler
+         */
         List<String> updates = new ArrayList<String>();
 
         if (clientVersion < getVersion()) {
 
+            //TODO: This is not threadsafe!
             updates = new ArrayList<String>(actions.subList(clientVersion,
                     getVersion()));
 
