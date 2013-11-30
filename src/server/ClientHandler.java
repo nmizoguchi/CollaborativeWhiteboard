@@ -88,12 +88,7 @@ public class ClientHandler {
                      */
                     synchronized (outputStream) {
                         String boardName = tokens[1];
-                        try {
-                            client.setActiveBoard(boardName);
-                        } catch (NoSuchFieldException e) {
-                            // Treat case where don't find a board!
-                            e.printStackTrace();
-                        }
+                        client.setActiveBoard(boardName);
                     }
                 }
 

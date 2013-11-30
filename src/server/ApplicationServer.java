@@ -14,18 +14,18 @@ public class ApplicationServer {
 
     private final ServerSocket serverSocket;
     private final List<Whiteboard> whiteboards;
-    private final List<ClientConnection> clients; 
+    private final List<ClientConnection> clients;
 
     public ApplicationServer(int port) throws IOException {
-        
+
         serverSocket = new ServerSocket(port);
-        clients = Collections.synchronizedList(new ArrayList<ClientConnection>());
+        clients = Collections
+                .synchronizedList(new ArrayList<ClientConnection>());
         whiteboards = Collections.synchronizedList(new ArrayList<Whiteboard>());
-        
         // Add only one board as default
         whiteboards.add(new Whiteboard("Default"));
     }
-    
+
     public static void main(String[] args) {
         int port = 4444; // default port
 
@@ -53,36 +53,49 @@ public class ApplicationServer {
             final Socket socket = serverSocket.accept();
 
             // Start thread
-            ClientConnection client = new ClientConnection(this,whiteboards.get(0));
-            ClientHandler clientHandler = new ClientHandler(client,socket);
+            ClientConnection client = new ClientConnection(this);
+            ClientHandler clientHandler = new ClientHandler(client, socket);
             clients.add(client);
             clientHandler.startThreads();
         }
     }
 
-    public Whiteboard getWhiteboard(String name) throws NoSuchFieldException {
+    public Whiteboard getWhiteboard(String name) {
+        
+        // name should not contain spaces.
+        if(name.split(" ").length > 1) {
+            throw new IllegalArgumentException("Should not contain spaces");
+        }
+        
         // Make a copy of the synchronized list, so we don't have problems
         List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);
-        
-        for(Whiteboard board : copy) {
-            if(name.equals(board.getName())) {
+
+        for (Whiteboard board : copy) {
+            if (name.equals(board.getName())) {
                 return board;
             }
         }
-        
-        // Not found!
-        throw new NoSuchFieldException();
+
+        // Not found! Create a new Whiteboard.
+        Whiteboard board = new Whiteboard(name);
+        whiteboards.add(board);
+
+        return board;
     }
-    
+
     public synchronized String getWhiteboardNames() {
-        
+
         String names = "";
         List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);
-        
-        for(Whiteboard board : copy) {
-            names = " " + board.getName();
+
+        for (Whiteboard board : copy) {
+            names = names + " " + board.getName();
         }
-        
+
         return names.trim();
+    }
+
+    public void close() throws IOException {
+        serverSocket.close();
     }
 }
