@@ -95,11 +95,11 @@ public class ClientConnectionTest {
         ClientConnection client = new ClientConnection(server);
 
         // Tests first state, where there is no username yet.
-        assertEquals("", client.getUserame());
+        assertEquals("", client.getUser().getName());
 
         // Sets username
         client.setUsername("6.005-Student");
-        assertEquals("6.005-Student", client.getUserame());
+        assertEquals("6.005-Student", client.getUser().getName());
     }
     
     @Test(expected = IllegalArgumentException.class)
@@ -111,10 +111,10 @@ public class ClientConnectionTest {
         ClientConnection client = new ClientConnection(server);
 
         // Tests first state, where there is no username yet.
-        assertEquals("", client.getUserame());
+        assertEquals("", client.getUsername());
 
         // Sets username
-        client.setUsername("6.005 Student");
+        client.setUsername("6.005 Instructor");
     }
 
     @Test

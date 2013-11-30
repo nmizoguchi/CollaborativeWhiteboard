@@ -17,13 +17,16 @@ public class Protocol {
         // drawrect x1 y1 x2 y2 brushColor brushSize fillColor hasFill
         // changeboard boardName
         // cleanboard boardName
+        // newuser username
+        // updateuser oldUsername newUsername
         //
         // Commands sent from the client (to the server):
         // getboards
+        // initialize username
         // 
         // Commands sent from the server (to the client):
         // getboards name1 name2 name3 ...
-        // 
+        // disconnecteduser username
         String regex = ""
                 + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
                 + "(erase -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
@@ -31,6 +34,10 @@ public class Protocol {
                 + "(changeboard [^\\s]+)|"
                 + "(cleanboard [^\\s]+)|"
                 + "(getboards( [^\\s]+)*)|"
+                + "(initialize [^\\s]+)|"
+                + "(newuser [^\\s]+)|"
+                + "(updateuser [^\\s]+ [^\\s]+)|"
+                + "(disconnecteduser [^\\s]+)|"
                 + "(help)|(bye)";
 
         if (!input.matches(regex)) {

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import client.OnlineUser;
 import client.Whiteboard;
 
 public class ApplicationServer {
@@ -52,21 +53,39 @@ public class ApplicationServer {
             // block until a client connects
             final Socket socket = serverSocket.accept();
 
-            // Start thread
             ClientConnection client = new ClientConnection(this);
-            ClientHandler clientHandler = new ClientHandler(client, socket);
+
+            List<OnlineUser> onlineUsers = new ArrayList<OnlineUser>();
+
+            // synchronized(clients) { There is no need! But to be safe maybe
+            // it's good
+            for (ClientConnection connection : clients) {
+                onlineUsers.add(connection.getUser());
+            }
+
+            // This initialization was made so all threads can start after
+            // everything was set up
+            ClientHandler clientHandler = new ClientHandler(client, socket,
+                    onlineUsers);
+            client.addHandler(clientHandler);
             clients.add(client);
+
+            // Start thread
             clientHandler.startThreads();
         }
     }
 
+    public List<ClientConnection> getClients() {
+        return clients;
+    }
+
     public Whiteboard getWhiteboard(String name) {
-        
+
         // name should not contain spaces.
-        if(name.split(" ").length > 1) {
+        if (name.split(" ").length > 1) {
             throw new IllegalArgumentException("Should not contain spaces");
         }
-        
+
         // Make a copy of the synchronized list, so we don't have problems
         List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);
 
@@ -93,6 +112,28 @@ public class ApplicationServer {
         }
 
         return names.trim();
+    }
+
+    public void clientHasConnected(ClientConnection connection) {
+        String currentUsername = connection.getUsername();
+        synchronized (clients) {
+            for (ClientConnection client : clients) {
+                client.invokeLater("newuser " + currentUsername);
+            }
+        }
+    }
+    
+    public void clientHasDisconnected(ClientConnection connection) {
+        
+        String currentUsername = connection.getUsername();
+        System.out.println("Connected users before: "+clients.size());
+        clients.remove(connection);
+        System.out.println("Connected users after: "+clients.size());
+        synchronized (clients) {
+            for (ClientConnection client : clients) {
+                client.invokeLater("disconnecteduser " + currentUsername);
+            }
+        }
     }
 
     public void close() throws IOException {

@@ -8,6 +8,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import Protocol.Protocol;
 
 public class ApplicationClient {
 
@@ -15,7 +18,7 @@ public class ApplicationClient {
     private final Whiteboard whiteboard;
     private final Socket socket;
     private final OnlineUserListModel activeUsers;
-    
+
     public ApplicationClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
@@ -33,8 +36,24 @@ public class ApplicationClient {
                 socket.getInputStream()));
 
         while ((command = inputStream.readLine()) != null) {
-            GUI.updateModelView(command);
-            whiteboard.update(command);
+            
+            System.out.println(command);
+            String[] tokens = Protocol.CheckAndFormat(command);
+            
+            if (tokens[0].equals("newuser")) {
+                SwingUtilities.invokeLater(new ExecuteNewuser(activeUsers,
+                        tokens[1]));
+            }
+            
+            else if (tokens[0].equals("disconnecteduser")) {
+                OnlineUser user = new OnlineUser(tokens[1]);
+                SwingUtilities.invokeLater(new ExecuteDisconnecteduser(activeUsers, user));
+            }
+            
+            else {
+                GUI.updateModelView(command);
+                whiteboard.update(command);
+            }
         }
     }
 
@@ -63,8 +82,13 @@ public class ApplicationClient {
             IOException {
 
         String server = JOptionPane.showInputDialog("Server IP:");
-        
         final ApplicationClient client = new ApplicationClient(server, 4444);
+
+        // Need to initialize username before running listen method.
+
+        String username = JOptionPane.showInputDialog("Username:");
+        
+        client.send("initialize " + username);
 
         // Creates the listening thread, that receives messages from updates of
         // the model

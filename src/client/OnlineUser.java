@@ -1,14 +1,34 @@
 package client;
 
+import server.ClientConnection;
+
 public class OnlineUser {
+
     private String name;
-    private String ip;
-    
+
     public OnlineUser(String name) {
         this.name = name;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
+    }
+
+    public synchronized void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof OnlineUser)) {
+            return false;
+        }
+
+        OnlineUser that = (OnlineUser) o;
+
+        if (!name.equals(that.name))
+            return false;
+
+        return true;
     }
 }
