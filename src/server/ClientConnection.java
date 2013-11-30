@@ -49,8 +49,10 @@ public class ClientConnection {
      * 
      * @param name
      *            a String with no spaces.
+     * @throws IllegalArgumentException
+     *             if there are spaces in the name argument.
      */
-    public void setActiveBoard(String name) {
+    public void setActiveBoard(String name) throws IllegalArgumentException {
         this.activeBoard = server.getWhiteboard(name);
         this.clientBoardVersion = 0;
     }
@@ -67,8 +69,9 @@ public class ClientConnection {
      * 
      * @param name
      *            Requires that the argument doesn't have spaces.
+     * @throws IllegalArgumentException if the name has spaces.
      */
-    public void setUsername(String name) {
+    public void setUsername(String name) throws IllegalArgumentException {
         if (name.split(" ").length > 1) {
             throw new IllegalArgumentException("Username cannot have spaces.");
         }

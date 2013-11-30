@@ -2,6 +2,7 @@ package client;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -12,13 +13,14 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import canvas.Canvas;
 import canvas.CanvasPainter;
@@ -43,8 +45,12 @@ public class WhiteboardGUI extends JFrame {
     private final JButton size20 = new JButton("20");
     private final JButton colorButton = new JButton();
     private final JColorChooser colorOptions = new JColorChooser();
+    private final JList onlineUserList;
+    private final JScrollPane listScroller;
+    private final OnlineUserListModel activeUsersData;
 
     public WhiteboardGUI(ApplicationClient client) {
+        /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
         eraserIcon = new ImageIcon(new ImageIcon("images/eraser.gif")
@@ -61,19 +67,33 @@ public class WhiteboardGUI extends JFrame {
         drawRect.setBackground(Color.WHITE);
         colorButton.setBackground(Color.BLACK);
         
+        activeUsersData = client.getActiveUsers();
+        onlineUserList = new JList(activeUsersData);
+        
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(800, 600));
 
+        /********** Initialize buttonGroup **********/
         // buttonGroup ensures that only one of the buttons is selected
         buttonGroup.add(eraser);
         buttonGroup.add(freehand);
         buttonGroup.add(drawLine);
         buttonGroup.add(drawRect);
+        
         // default selected button
         freehand.setSelected(true);
+        
         // this is for the eraser sizes
         buttonsMenu.setLayout(new GridLayout(20, 1));
         colorOptions.setPreviewPanel(new JPanel());
+        
+        onlineUserList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        onlineUserList.setLayoutOrientation(JList.VERTICAL);
+        onlineUserList.setVisibleRowCount(-1);
+        listScroller = new JScrollPane(onlineUserList);
+        listScroller.setPreferredSize(new Dimension(200, 80));
+        
+        /********** Initialize listeners **********/
         colorButton.addActionListener(new ActionListener() {
 			
 			@Override
@@ -132,7 +152,7 @@ public class WhiteboardGUI extends JFrame {
             }
         });
 
-        // layout
+        /********** Initialize Layout **********/
         buttonsMenu.add(eraser);
         buttonsMenu.add(freehand);
         buttonsMenu.add(drawLine);
@@ -141,6 +161,7 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(colorButton);
         this.add(canvas, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);
+        this.add(listScroller, BorderLayout.EAST);
     }
 
     public void updateModelView(String command) {

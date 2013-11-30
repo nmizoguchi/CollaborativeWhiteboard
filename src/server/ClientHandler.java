@@ -12,11 +12,24 @@ import java.util.concurrent.LinkedBlockingQueue;
 import Protocol.Protocol;
 import client.Whiteboard;
 
+/**
+ * Handles the connection of the client. Each ClientHandler handles exactly one
+ * ClientConnection. It has two threads: One responsible for receiving and
+ * handling the client's messages, and other responsible for sending information
+ * to the clients.
+ * 
+ * @author Nicholas M. Mizoguchi
+ * 
+ */
 public class ClientHandler {
+    
+    /*
+     * 
+     */
 
     private final ClientConnection client;
-    private final Thread messageHandler;
-    private final Thread updateHandler;
+    private final Thread incomingHandler;
+    private final Thread outgoingHandler;
     private final Socket socket;
 
     private final PrintWriter outputStream;
@@ -39,12 +52,12 @@ public class ClientHandler {
         outputStream = new PrintWriter(socket.getOutputStream(), true);
 
         // start a new thread to handle the connection
-        messageHandler = new Thread(new Runnable() {
+        incomingHandler = new Thread(new Runnable() {
             public void run() {
                 // the client socket object is now owned by this thread,
                 // and mustn't be touched again in the main thread
                 try {
-                    handleConnection(socket);
+                    handleIncomingMessages(socket);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -52,12 +65,12 @@ public class ClientHandler {
         });
 
         // start a new thread to handle the connection
-        updateHandler = new Thread(new Runnable() {
+        outgoingHandler = new Thread(new Runnable() {
             public void run() {
                 // the client socket object is now owned by this thread,
                 // and mustn't be touched again in the main thread
                 try {
-                    updateClient(socket);
+                    handleOutgoingMessages(socket);
                 } catch (IOException e) {
                     e.printStackTrace();
                 } catch (InterruptedException e) {
@@ -76,7 +89,7 @@ public class ClientHandler {
      * @throws IOException
      *             if connection has an error or terminates unexpectedly
      */
-    private void handleConnection(Socket socket) throws IOException {
+    private void handleIncomingMessages(Socket socket) throws IOException {
 
         try {
             for (String line = inputStream.readLine(); line != null; line = inputStream
@@ -100,7 +113,7 @@ public class ClientHandler {
                 if (command.equals("getboards")) {
                     /*
                      * sends information to the client about which boards are
-                     * available. Delegates the action of sending messages to
+                     * available. Delegates the action of sending the message to
                      * the other thread by using the outputQueue.
                      */
                     String boardNames = client.getWhiteboardNames();
@@ -125,7 +138,7 @@ public class ClientHandler {
         }
     }
 
-    private void updateClient(Socket socket) throws IOException,
+    private void handleOutgoingMessages(Socket socket) throws IOException,
             InterruptedException {
 
         try {
@@ -149,7 +162,7 @@ public class ClientHandler {
                 }
 
                 // Let other threads work
-                updateHandler.yield();
+                outgoingHandler.yield();
             }
         }
 
@@ -161,7 +174,7 @@ public class ClientHandler {
     }
 
     public void startThreads() {
-        messageHandler.start();
-        updateHandler.start();
+        incomingHandler.start();
+        outgoingHandler.start();
     }
 }

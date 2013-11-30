@@ -8,19 +8,19 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 
 public class ApplicationClient {
 
     private static WhiteboardGUI GUI;
     private final Whiteboard whiteboard;
     private final Socket socket;
-    public final int FPS = 25;
+    private final OnlineUserListModel activeUsers;
     
     public ApplicationClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
         whiteboard = new Whiteboard("Default");
+        activeUsers = new OnlineUserListModel();
         socket = new Socket(serverAddress, port);
         GUI = new WhiteboardGUI(this);
         GUI.setVisible(true);
@@ -82,5 +82,9 @@ public class ApplicationClient {
         });
 
         listenerThread.start();
+    }
+
+    public OnlineUserListModel getActiveUsers() {
+        return activeUsers;
     }
 }
