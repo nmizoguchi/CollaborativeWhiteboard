@@ -1,17 +1,23 @@
 package client;
 
+import java.util.List;
+
 public class ExecuteWhiteboards implements Runnable {
     
-    private final String username;
-    private final OnlineUserListModel users;
+    private final List<String> names;
+    private final WhiteboardListModel whiteboards;
     
-    public ExecuteWhiteboards(OnlineUserListModel users, String username) {
-        this.username = username;
-        this.users = users;
+    public ExecuteWhiteboards(WhiteboardListModel whiteboards, List<String> names) {
+        this.names = names;
+        this.whiteboards = whiteboards;
     }
 
     @Override
     public void run() {
-        users.addElement(new OnlineUser(username));
+        for(String name : names) {
+            if( !whiteboards.contains(name) ) {
+                whiteboards.addElement(name);
+            }
+        }
     }
 }

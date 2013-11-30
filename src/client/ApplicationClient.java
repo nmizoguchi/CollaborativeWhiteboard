@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -18,12 +20,19 @@ public class ApplicationClient {
     private Whiteboard whiteboard;
     private final Socket socket;
     private final OnlineUserListModel activeUsers;
+    private final WhiteboardListModel activeWhiteboards;
+
+    public WhiteboardListModel getActiveWhiteboards() {
+        return activeWhiteboards;
+    }
 
     public ApplicationClient(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
         whiteboard = new Whiteboard("Default");
         activeUsers = new OnlineUserListModel();
+        activeWhiteboards = new WhiteboardListModel();
+//        activeBoardNames.add("Default");
         socket = new Socket(serverAddress, port);
         GUI = new WhiteboardGUI(this);
         GUI.setVisible(true);
@@ -51,7 +60,12 @@ public class ApplicationClient {
             }
 
             else if (tokens[0].equals("whiteboards")) {
-                // TODO: PASSES TO THE GUI TO UPDATE
+                List<String> activeBoardNames = new ArrayList();
+                for(int i = 1; i < tokens.length; i++) {
+                    activeBoardNames.add(tokens[i]);
+                }
+                SwingUtilities.invokeLater(new ExecuteWhiteboards(
+                        activeWhiteboards, activeBoardNames));
             }
 
             else if (tokens[0].equals("changeboard")) {

@@ -21,6 +21,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import canvas.Canvas;
 import canvas.CanvasPainter;
@@ -46,9 +50,12 @@ public class WhiteboardGUI extends JFrame {
     private final JButton colorButton = new JButton();
     private final JColorChooser colorOptions = new JColorChooser();
     private final JList onlineUserList;
-    private final JScrollPane listScroller;
+    private final JList whiteboardsList;
+    private final JScrollPane onlineUserScroller;
+    private final JScrollPane whiteboardsScroller;
     private final OnlineUserListModel activeUsersData;
-
+    private final WhiteboardListModel activeWhiteboardsData;
+    
     public WhiteboardGUI(ApplicationClient client) {
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
@@ -68,7 +75,10 @@ public class WhiteboardGUI extends JFrame {
         colorButton.setBackground(Color.BLACK);
         
         activeUsersData = client.getActiveUsers();
+        activeWhiteboardsData = client.getActiveWhiteboards();
+        
         onlineUserList = new JList(activeUsersData);
+        whiteboardsList = new JList(activeWhiteboardsData);
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(800, 600));
@@ -90,8 +100,14 @@ public class WhiteboardGUI extends JFrame {
         onlineUserList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         onlineUserList.setLayoutOrientation(JList.VERTICAL);
         onlineUserList.setVisibleRowCount(-1);
-        listScroller = new JScrollPane(onlineUserList);
-        listScroller.setPreferredSize(new Dimension(200, 80));
+        onlineUserScroller = new JScrollPane(onlineUserList);
+        onlineUserScroller.setPreferredSize(new Dimension(200, 80));
+        
+        whiteboardsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+        whiteboardsList.setLayoutOrientation(JList.VERTICAL);
+        whiteboardsList.setVisibleRowCount(-1);
+        whiteboardsScroller = new JScrollPane(whiteboardsList);
+        whiteboardsScroller.setPreferredSize(new Dimension(200, 80));
         
         /********** Initialize listeners **********/
         colorButton.addActionListener(new ActionListener() {
@@ -161,7 +177,22 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(colorButton);
         this.add(canvas, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);
-        this.add(listScroller, BorderLayout.EAST);
+        this.add(onlineUserScroller, BorderLayout.EAST);
+        this.add(whiteboardsScroller, BorderLayout.NORTH);
+        
+//        whiteboardsList.addListSelectionListener(new ListSelectionListener() {
+//            
+//            @Override
+//            public void valueChanged(ListSelectionEvent e) {
+//
+//                ListSelectionModel m = (ListSelectionModel)e.getSource();
+//                for(int i = e.getFirstIndex(); i < e.getLastIndex(); i++) {
+//                    if(m.isSelectedIndex(i)) {
+//                        System.out.println("changeboard ");
+//                    }
+//                }
+//            }
+//        });
     }
 
     public void updateModelView(String command) {
