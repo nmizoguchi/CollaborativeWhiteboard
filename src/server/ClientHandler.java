@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.List;
 
+import Protocol.Protocol;
 import client.Whiteboard;
 
 public class ClientHandler {
@@ -77,11 +77,10 @@ public class ClientHandler {
                     .readLine()) {
 
                 // Transform the message in tokens so we can analyze them
-                String[] tokens = handleRequest(line);
+                String[] tokens = Protocol.CheckAndFormat(line);
                 String command = tokens[0];
 
                 if (command.equals("changeboard")) {
-
                     /*
                      * Makes sure that it is not sending updating information to
                      * this client anymore by getting the outputStream lock
@@ -105,10 +104,12 @@ public class ClientHandler {
                 }
 
                 else {
-
-                    // Otherwise, it is a command to be routed to all other
-                    // clients,
-                    // so updates the server model with it
+                    /*
+                     * Otherwise, it is a command to be routed to all other
+                     * clients, so updates the server model with it. The thread
+                     * that is responsible for running updateClient will handle
+                     * it.
+                     */
                     client.getActiveBoard().update(line);
                 }
             }
@@ -118,31 +119,6 @@ public class ClientHandler {
             inputStream.close();
             socket.close();
         }
-    }
-
-    /**
-     * Handler for client input, performing requested operations and returning
-     * an output message.
-     * 
-     * @param input
-     *            message from client
-     * @return message to client
-     */
-    private String[] handleRequest(String input) {
-        String regex = "(update -?\\d+)|"
-                + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
-                + "(erase -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
-                + "(drawrect -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
-                + "(help)|(bye)";
-        if (!input.matches(regex)) {
-            // invalid input
-            System.out.println(input);
-            throw new UnsupportedOperationException();
-        }
-
-        String[] tokens = input.split(" ");
-
-        return tokens;
     }
 
     private void updateClient(Socket socket) throws IOException,
@@ -156,8 +132,10 @@ public class ClientHandler {
                     // Get the lock for broadcasting
                     synchronized (outputStream) {
                         Whiteboard active = client.getActiveBoard();
-                        outputStream.println(active.getAction(client.getClientBoardVersion()));
-                        client.setClientBoardVersion(client.getClientBoardVersion()+1);
+                        outputStream.println(active.getAction(client
+                                .getClientBoardVersion()));
+                        client.setClientBoardVersion(client
+                                .getClientBoardVersion() + 1);
                     }
                 }
                 updateHandler.yield();

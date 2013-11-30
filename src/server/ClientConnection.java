@@ -33,7 +33,7 @@ public class ClientConnection {
         this.server = server;
         this.activeBoard = server.getWhiteboard("Default");
         this.username = "";
-        this.clientBoardVersion = activeBoard.getVersion();
+        this.clientBoardVersion = 0;
     }
 
     /**

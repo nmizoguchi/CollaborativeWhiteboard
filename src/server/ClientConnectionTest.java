@@ -71,8 +71,6 @@ public class ClientConnectionTest {
         String[] namesArray = client.getWhiteboardNames().split(" ");
         List<String> names = Arrays.asList(namesArray);
 
-        System.out.println(names);
-
         assertTrue(names.contains("Default"));
         assertTrue(names.contains("NewBoard"));
         assertTrue(names.contains("OtherNewBoard"));
