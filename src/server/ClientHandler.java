@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.NoSuchElementException;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import Protocol.Protocol;
 import client.Whiteboard;
@@ -18,12 +21,15 @@ public class ClientHandler {
 
     private final PrintWriter outputStream;
     private final BufferedReader inputStream;
+    private final Queue<String> outputQueue;
 
     public ClientHandler(ClientConnection client, Socket sock)
             throws IOException {
 
         this.client = client;
         this.socket = sock;
+
+        this.outputQueue = new LinkedBlockingQueue<String>();
 
         // Stream where server receives messages from Clients
         inputStream = new BufferedReader(new InputStreamReader(
@@ -94,13 +100,11 @@ public class ClientHandler {
                 if (command.equals("getboards")) {
                     /*
                      * sends information to the client about which boards are
-                     * available. Requires the output stream to send information
-                     * to the client
+                     * available. Delegates the action of sending messages to
+                     * the other thread by using the outputQueue.
                      */
-                    synchronized (outputStream) {
-                        String boardNames = client.getWhiteboardNames();
-                        outputStream.println("getboards " + boardNames);
-                    }
+                    String boardNames = client.getWhiteboardNames();
+                    outputQueue.add("getboards " + boardNames);
                 }
 
                 else {
@@ -126,18 +130,25 @@ public class ClientHandler {
 
         try {
             while (true) {
+
+                // Sends updates regarding changes in the board.
                 if (client.getClientBoardVersion() < client.getActiveBoard()
                         .getVersion()) {
-
-                    // Get the lock for broadcasting
-                    synchronized (outputStream) {
-                        Whiteboard active = client.getActiveBoard();
-                        outputStream.println(active.getAction(client
-                                .getClientBoardVersion()));
-                        client.setClientBoardVersion(client
-                                .getClientBoardVersion() + 1);
-                    }
+                    Whiteboard active = client.getActiveBoard();
+                    outputStream.println(active.getAction(client
+                            .getClientBoardVersion()));
+                    client.setClientBoardVersion(client.getClientBoardVersion() + 1);
                 }
+
+                // Checks if there is another kind of message to send to the
+                // client.
+                try {
+                    String message = outputQueue.remove();
+                } catch (NoSuchElementException e) {
+                    // Do nothing
+                }
+
+                // Let other threads work
                 updateHandler.yield();
             }
         }

@@ -10,7 +10,7 @@ import canvas.Canvas;
 public class EraseTool implements Tool {
 
     public final String name = "Erase";
-    public final CanvasController controller;
+    public final ToolController controller;
 
     public EraseTool(Canvas canvas) {
         this.controller = new EraseController(canvas);
@@ -22,7 +22,7 @@ public class EraseTool implements Tool {
     }
 
     @Override
-    public CanvasController getController() {
+    public ToolController getController() {
         return controller;
     }
 

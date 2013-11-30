@@ -12,7 +12,7 @@ import canvas.Canvas;
 /*
  * DrawingController handles the user's freehand drawing.
  */
-public class RectangleController implements CanvasController {
+public class RectangleController implements ToolController {
     // store the coordinates of the last mouse event, so we can
     // draw a line segment from that last point to the point of the next mouse
     // event.

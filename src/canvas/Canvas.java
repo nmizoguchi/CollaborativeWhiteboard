@@ -12,7 +12,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import tools.CanvasController;
+import tools.ToolController;
 import tools.EraseTool;
 import tools.FreehandTool;
 import tools.LineTool;
@@ -27,7 +27,7 @@ import client.ApplicationClient;
 public class Canvas extends JPanel {
 
     public ApplicationClient mClient;
-    private CanvasController activeController;
+    private ToolController activeController;
     private List<Tool> mTools;
 
     // image where the user's drawing is stored

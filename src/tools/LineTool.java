@@ -10,7 +10,7 @@ import canvas.Canvas;
 public class LineTool implements Tool {
 
     public final String name = "Draw Line";
-    public final CanvasController controller;
+    public final ToolController controller;
 
     public LineTool(Canvas canvas) {
         this.controller = new LineController(canvas);
@@ -22,7 +22,7 @@ public class LineTool implements Tool {
     }
 
     @Override
-    public CanvasController getController() {
+    public ToolController getController() {
         return controller;
     }
 

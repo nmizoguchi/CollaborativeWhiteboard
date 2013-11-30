@@ -5,7 +5,7 @@ import canvas.Canvas;
 public class FreehandTool implements Tool {
 
     public final String name = "Freehand Drawing";
-    public final CanvasController controller;
+    public final ToolController controller;
 
     public FreehandTool(Canvas canvas) {
         this.controller = new FreehandController(canvas);
@@ -17,7 +17,7 @@ public class FreehandTool implements Tool {
     }
 
     @Override
-    public CanvasController getController() {
+    public ToolController getController() {
         return controller;
     }
 

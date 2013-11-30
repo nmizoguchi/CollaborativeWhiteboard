@@ -5,7 +5,7 @@ import canvas.Canvas;
 public class RectangleTool implements Tool {
 
     public final String name = "Draw Rectangle";
-    public final CanvasController controller;
+    public final ToolController controller;
 
     public RectangleTool(Canvas canvas) {
         this.controller = new RectangleController(canvas);
@@ -17,7 +17,7 @@ public class RectangleTool implements Tool {
     }
 
     @Override
-    public CanvasController getController() {
+    public ToolController getController() {
         return controller;
     }
 
