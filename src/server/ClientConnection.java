@@ -1,5 +1,8 @@
 package server;
 
+import java.io.IOException;
+
+import client.OnlineUser;
 import client.Whiteboard;
 
 /**
@@ -18,9 +21,10 @@ public class ClientConnection {
      */
 
     private final ApplicationServer server;
+    private final OnlineUser user;
+    private ClientHandler handler;
     private Whiteboard activeBoard;
     private int clientBoardVersion;
-    private String username;
 
     /**
      * Constructor. Receives which server it is working for, and also the active
@@ -32,14 +36,14 @@ public class ClientConnection {
     public ClientConnection(ApplicationServer server) {
         this.server = server;
         this.activeBoard = server.getWhiteboard("Default");
-        this.username = "";
+        this.user = new OnlineUser("");
         this.clientBoardVersion = 0;
     }
 
     /**
      * @return the client's active board.
      */
-    public Whiteboard getActiveBoard() {
+    public synchronized Whiteboard getActiveBoard() {
         return activeBoard;
     }
 
@@ -52,7 +56,7 @@ public class ClientConnection {
      * @throws IllegalArgumentException
      *             if there are spaces in the name argument.
      */
-    public void setActiveBoard(String name) throws IllegalArgumentException {
+    public synchronized void setActiveBoard(String name) throws IllegalArgumentException {
         this.activeBoard = server.getWhiteboard(name);
         this.clientBoardVersion = 0;
     }
@@ -60,8 +64,12 @@ public class ClientConnection {
     /**
      * @return the client's username.
      */
-    public String getUserame() {
-        return username;
+    public String getUsername() {
+        return user.getName();
+    }
+
+    public OnlineUser getUser() {
+        return user;
     }
 
     /**
@@ -69,13 +77,15 @@ public class ClientConnection {
      * 
      * @param name
      *            Requires that the argument doesn't have spaces.
-     * @throws IllegalArgumentException if the name has spaces.
+     * @throws IllegalArgumentException
+     *             if the name has spaces.
      */
     public void setUsername(String name) throws IllegalArgumentException {
         if (name.split(" ").length > 1) {
             throw new IllegalArgumentException("Username cannot have spaces.");
         }
-        this.username = name;
+
+        user.setName(name);
     }
 
     /**
@@ -83,7 +93,7 @@ public class ClientConnection {
      * 
      * @return the last version sent to the client of the active board.
      */
-    public int getClientBoardVersion() {
+    public synchronized int getClientBoardVersion() {
         return clientBoardVersion;
     }
 
@@ -94,7 +104,7 @@ public class ClientConnection {
      * @param version
      *            the value of the new version.
      */
-    public void setClientBoardVersion(int version) {
+    public synchronized void setClientBoardVersion(int version) {
         this.clientBoardVersion = version;
     }
 
@@ -107,5 +117,37 @@ public class ClientConnection {
      */
     public String getWhiteboardNames() {
         return server.getWhiteboardNames();
+    }
+
+    public void initialize(String username) {
+        this.user.setName(username);
+        server.clientHasConnected(this);
+    }
+
+    public void addHandler(ClientHandler handler) {
+        this.handler = handler;
+    }
+
+    public void invokeLater(String message) {
+        handler.invokeLater(message);
+    }
+
+    public void closingConnection() {
+        System.out.println("Username: " + user.getName() + " has disconnected");
+        server.clientHasDisconnected(this);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof ClientConnection)) {
+            return false;
+        }
+        
+        ClientConnection that = (ClientConnection) o;
+
+        if(!user.equals(that.user))
+            return false;
+        
+        return true;
     }
 }
