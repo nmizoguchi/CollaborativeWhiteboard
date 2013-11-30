@@ -21,11 +21,11 @@ public class Protocol {
         // updateuser oldUsername newUsername
         //
         // Commands sent from the client (to the server):
-        // getboards
+        //
         // initialize username
         // 
         // Commands sent from the server (to the client):
-        // getboards name1 name2 name3 ...
+        // whiteboards name1 name2 name3 ...
         // disconnecteduser username
         String regex = ""
                 + "(drawline -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
@@ -33,7 +33,7 @@ public class Protocol {
                 + "(drawrect -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+ -?\\d+)|"
                 + "(changeboard [^\\s]+)|"
                 + "(cleanboard [^\\s]+)|"
-                + "(getboards( [^\\s]+)*)|"
+                + "(whiteboards( [^\\s]+)*)|"
                 + "(initialize [^\\s]+)|"
                 + "(newuser [^\\s]+)|"
                 + "(updateuser [^\\s]+ [^\\s]+)|"

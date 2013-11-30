@@ -14,8 +14,8 @@ import Protocol.Protocol;
 
 public class ApplicationClient {
 
-    private static WhiteboardGUI GUI;
-    private final Whiteboard whiteboard;
+    private final WhiteboardGUI GUI;
+    private Whiteboard whiteboard;
     private final Socket socket;
     private final OnlineUserListModel activeUsers;
 
@@ -36,20 +36,30 @@ public class ApplicationClient {
                 socket.getInputStream()));
 
         while ((command = inputStream.readLine()) != null) {
-            
-            System.out.println(command);
+
             String[] tokens = Protocol.CheckAndFormat(command);
-            
+
             if (tokens[0].equals("newuser")) {
                 SwingUtilities.invokeLater(new ExecuteNewuser(activeUsers,
                         tokens[1]));
             }
-            
+
             else if (tokens[0].equals("disconnecteduser")) {
                 OnlineUser user = new OnlineUser(tokens[1]);
-                SwingUtilities.invokeLater(new ExecuteDisconnecteduser(activeUsers, user));
+                SwingUtilities.invokeLater(new ExecuteDisconnecteduser(
+                        activeUsers, user));
             }
-            
+
+            else if (tokens[0].equals("whiteboards")) {
+                // TODO: PASSES TO THE GUI TO UPDATE
+            }
+
+            else if (tokens[0].equals("changeboard")) {
+                // TODO: PASSES TO THE GUI SO IT CAN RESET THE BOARD! IF TREAT
+                // HERE, IS NOT GONNA GET ANOTHER MESSAGE. IS CONSISTENT
+                whiteboard = new Whiteboard(tokens[1]);
+            }
+
             else {
                 GUI.updateModelView(command);
                 whiteboard.update(command);
@@ -87,7 +97,7 @@ public class ApplicationClient {
         // Need to initialize username before running listen method.
 
         String username = JOptionPane.showInputDialog("Username:");
-        
+
         client.send("initialize " + username);
 
         // Creates the listening thread, that receives messages from updates of

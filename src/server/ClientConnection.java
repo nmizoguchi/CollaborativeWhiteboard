@@ -43,7 +43,7 @@ public class ClientConnection {
     /**
      * @return the client's active board.
      */
-    public Whiteboard getActiveBoard() {
+    public synchronized Whiteboard getActiveBoard() {
         return activeBoard;
     }
 
@@ -56,7 +56,7 @@ public class ClientConnection {
      * @throws IllegalArgumentException
      *             if there are spaces in the name argument.
      */
-    public void setActiveBoard(String name) throws IllegalArgumentException {
+    public synchronized void setActiveBoard(String name) throws IllegalArgumentException {
         this.activeBoard = server.getWhiteboard(name);
         this.clientBoardVersion = 0;
     }
@@ -93,7 +93,7 @@ public class ClientConnection {
      * 
      * @return the last version sent to the client of the active board.
      */
-    public int getClientBoardVersion() {
+    public synchronized int getClientBoardVersion() {
         return clientBoardVersion;
     }
 
@@ -104,7 +104,7 @@ public class ClientConnection {
      * @param version
      *            the value of the new version.
      */
-    public void setClientBoardVersion(int version) {
+    public synchronized void setClientBoardVersion(int version) {
         this.clientBoardVersion = version;
     }
 

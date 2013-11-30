@@ -96,8 +96,25 @@ public class ApplicationServer {
         }
 
         // Not found! Create a new Whiteboard.
+        Whiteboard board = createWhiteboard(name);
+
+        return board;
+    }
+
+    private Whiteboard createWhiteboard(String name) {
+
         Whiteboard board = new Whiteboard(name);
         whiteboards.add(board);
+        synchronized (whiteboards) {
+            
+            String names = getWhiteboardNames();
+            synchronized (clients) {
+                
+                for (ClientConnection client : clients) {
+                    client.invokeLater("whiteboards " + names);
+                }
+            }
+        }
 
         return board;
     }
@@ -105,10 +122,11 @@ public class ApplicationServer {
     public synchronized String getWhiteboardNames() {
 
         String names = "";
-        List<Whiteboard> copy = new ArrayList<Whiteboard>(whiteboards);
 
-        for (Whiteboard board : copy) {
-            names = names + " " + board.getName();
+        synchronized (whiteboards) {
+            for (Whiteboard board : whiteboards) {
+                names = names + " " + board.getName();
+            }
         }
 
         return names.trim();
@@ -122,13 +140,12 @@ public class ApplicationServer {
             }
         }
     }
-    
+
     public void clientHasDisconnected(ClientConnection connection) {
-        
-        String currentUsername = connection.getUsername();
-        System.out.println("Connected users before: "+clients.size());
+
+        String currentUsername = connection.getUsername();        
         clients.remove(connection);
-        System.out.println("Connected users after: "+clients.size());
+        
         synchronized (clients) {
             for (ClientConnection client : clients) {
                 client.invokeLater("disconnecteduser " + currentUsername);
@@ -140,3 +157,5 @@ public class ApplicationServer {
         serverSocket.close();
     }
 }
+
+// ONLY THIS CLASS USES InvokeLater!

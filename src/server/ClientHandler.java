@@ -107,6 +107,8 @@ public class ClientHandler {
                      * Initializes a connection. Sets username of the user too.
                      */
                     client.initialize(tokens[1]);
+                    String boardNames = client.getWhiteboardNames();
+                    outputQueue.add("whiteboards " + boardNames);
                 }
 
                 else if (command.equals("changeboard")) {
@@ -120,14 +122,14 @@ public class ClientHandler {
                     }
                 }
 
-                else if (command.equals("getboards")) {
+                else if (command.equals("whiteboards")) {
                     /*
                      * sends information to the client about which boards are
                      * available. Delegates the action of sending the message to
                      * the other thread by using the outputQueue.
                      */
                     String boardNames = client.getWhiteboardNames();
-                    outputQueue.add("getboards " + boardNames);
+                    outputQueue.add("whiteboards " + boardNames);
                 }
 
                 else {
