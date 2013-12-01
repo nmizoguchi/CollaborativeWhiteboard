@@ -4,7 +4,13 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
 
 import canvas.Canvas;
 
@@ -18,8 +24,23 @@ public class EraseController implements ToolController {
     private final Canvas canvas;
     private int brushSize, lastX, lastY;
 
-    public EraseController(Canvas canvas) {
-        this.canvas = canvas;
+    public EraseController(Canvas c) {
+        this.canvas = c;
+        Action decrement = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                canvas.setBrushSize(canvas.getBrushSize() - 1);
+            }
+        };
+        Action increment = new AbstractAction(){
+        	public void actionPerformed(ActionEvent e) {
+        		int lastSize = canvas.getBrushSize();
+        		canvas.setBrushSize(lastSize + 1);
+        	}
+        };
+        canvas.getInputMap().put(KeyStroke.getKeyStroke(), "decrement");
+        canvas.getInputMap().put(KeyStroke.getKeyStroke(KeyStroke.VK_CLOSE_BRACKET), "increment");
+        canvas.getActionMap().put("decrement", decrement);
+        canvas.getActionMap().put("increment", increment);
     }
     
 

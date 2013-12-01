@@ -7,11 +7,17 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
 
+import tools.SizeChangeListener;
 import tools.ToolController;
 import tools.EraseTool;
 import tools.FreehandTool;
@@ -60,6 +66,9 @@ public class Canvas extends JPanel {
         activeController = mTools.get(MODE.FREEHAND.ordinal()).getController();
         addMouseListener(activeController);
         addMouseMotionListener(activeController);
+        
+        
+        
     }
 
     public enum MODE {
@@ -149,6 +158,7 @@ public class Canvas extends JPanel {
 
         addMouseListener(activeController);
         addMouseMotionListener(activeController);
+        addKeyListener(new SizeChangeListener(this));
     }
 
     /*

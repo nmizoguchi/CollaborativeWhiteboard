@@ -122,4 +122,5 @@ public class RectangleController implements ToolController {
 
     public void mouseExited(MouseEvent e) {
     }
+    
 }
