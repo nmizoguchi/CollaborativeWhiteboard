@@ -19,7 +19,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import client.ApplicationClient;
-import client.ExecuteChangeboard;
+import client.RunnableChangeboard;
 import client.gui.canvas.Canvas;
 import client.gui.canvas.CanvasPainter;
 
@@ -185,7 +185,7 @@ public class WhiteboardGUI extends JFrame {
     }
     
     public void changeWhiteboard(String boardName) {
-        SwingUtilities.invokeLater(new ExecuteChangeboard(canvas,boardName));
+        SwingUtilities.invokeLater(new RunnableChangeboard(canvas,boardName));
     }
 
     public ApplicationClient getClient() {

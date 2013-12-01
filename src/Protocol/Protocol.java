@@ -98,8 +98,18 @@ public class Protocol {
         return action;
     }
 
-    public String getArguments(int index) {
+    public String getArgument(int index) {
         return arguments[index];
+    }
+    
+    public String getArguments() {
+        
+        String args = "";
+        for(String arg : arguments) {
+            args = args + " " + arg;
+        }
+        
+        return args.trim();
     }
     
     public String getPaintAction() {

@@ -14,25 +14,32 @@ public class User {
         this.setName(username);
         this.ipAddress = "0.0.0.0";
     }
+    
+    public User(String uid, String username) {
 
-    public UUID getUid() {
+        this.uid = UUID.fromString(uid);
+        this.setName(username);
+        this.ipAddress = "0.0.0.0";
+    }
+
+    public synchronized UUID getUid() {
         return uid;
     }
 
-    public String getName() {
+    public synchronized String getName() {
         return name;
     }
 
-    public void setName(String username) {
+    public synchronized void setName(String username) {
         this.name = username;
     }
 
-    public String getIpAddress() {
+    public synchronized String getIpAddress() {
         return ipAddress;
     }
     
     @Override
-    public boolean equals(Object o) {
+    public synchronized boolean equals(Object o) {
         if( !( o instanceof User)) {
             return false;
         }
@@ -46,7 +53,12 @@ public class User {
     }
     
     @Override
-    public int hashCode() {
+    public synchronized int hashCode() {
         return uid.hashCode();
+    }
+    
+    @Override
+    public synchronized String toString() {
+        return this.getUid() + " " + this.getName();
     }
 }

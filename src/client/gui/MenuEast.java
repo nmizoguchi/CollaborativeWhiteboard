@@ -11,14 +11,12 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Protocol.Protocol;
-import client.OnlineUserListModel;
+import client.UserListModel;
 import client.WhiteboardListModel;
 
 public class MenuEast extends JPanel {
@@ -29,7 +27,7 @@ public class MenuEast extends JPanel {
     private final JList whiteboardsList;
     private final JScrollPane onlineUserScroller;
     private final JScrollPane whiteboardsScroller;
-    private final OnlineUserListModel activeUsersData;
+    private final UserListModel activeUsersData;
     private final WhiteboardListModel activeWhiteboardsData;
     private final JButton createBoardButton;
 

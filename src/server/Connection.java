@@ -1,6 +1,7 @@
 package server;
 
-import server.controllers.ConnectionMessageScheduler;
+import java.util.UUID;
+
 import shared.models.User;
 import shared.models.Whiteboard;
 import Protocol.Protocol;
@@ -15,13 +16,14 @@ import Protocol.Protocol;
  */
 public class Connection {
 
-    private final ConnectionMessageScheduler scheduler;
+    private final UUID uid;
+    private ConnectionOutputHandler scheduler;
     private User user;
     private Whiteboard activeWhiteboard;
     private int lastSentVersion;
-    
-    public Connection(Whiteboard activeWhiteboard, ConnectionMessageScheduler scheduler) {
-        this.scheduler = scheduler;
+
+    public Connection(Whiteboard activeWhiteboard) {
+        this.uid = UUID.randomUUID();
         this.activeWhiteboard = activeWhiteboard;
         this.lastSentVersion = lastSentVersion;
     }
@@ -29,11 +31,19 @@ public class Connection {
     public User getUser() {
         return user;
     }
-    
+
     public void setUser(User user) {
         this.user = user;
     }
-    
+
+    public boolean isInitialized() {
+        return user != null;
+    }
+
+    public void addConnectionOutputHandler(ConnectionOutputHandler handler) {
+        this.scheduler = handler;
+    }
+
     public synchronized Whiteboard getActiveWhiteboard() {
         return activeWhiteboard;
     }
@@ -43,19 +53,44 @@ public class Connection {
         this.activeWhiteboard = activeWhiteboard;
         this.lastSentVersion = lastSentVersion;
 
-        String message = Protocol.CreateServerMessage("changeboard", activeWhiteboard.getName());
+        String message = Protocol.CreateServerMessage("changeboard",
+                activeWhiteboard.getName());
         scheduler.scheduleMessage(message);
     }
 
     public synchronized void sendClientWhiteboardUpdate() {
-        
-        if(this.lastSentVersion < activeWhiteboard.getVersion()) {
-            scheduler.scheduleMessage(activeWhiteboard.getAction(lastSentVersion));
+
+        if (this.lastSentVersion < activeWhiteboard.getVersion()) {
+            scheduler.scheduleMessage(activeWhiteboard
+                    .getAction(lastSentVersion));
             lastSentVersion += 1;
         }
     }
-    
+
     public synchronized void updateActiveWhiteboard(String action) {
         activeWhiteboard.update(action);
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    @Override
+    public synchronized boolean equals(Object o) {
+        if (!(o instanceof Connection)) {
+            return false;
+        }
+
+        Connection that = (Connection) o;
+        if (!that.getUid().equals(uid)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public synchronized int hashCode() {
+        return uid.hashCode();
     }
 }

@@ -1,18 +1,15 @@
-package server.controllers;
+package server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import server.Connection;
-import server.ServerApplication;
-
-public class NewConnectionHandler implements Runnable {
+public class ServerConnectionHandler implements Runnable {
 
     private final ServerApplication server;
     private final ServerSocket serverSocket;
 
-    public NewConnectionHandler(ServerApplication server, int port) throws IOException {
+    public ServerConnectionHandler(ServerApplication server, int port) throws IOException {
 
         this.server = server;
         serverSocket = new ServerSocket(port);
@@ -31,12 +28,13 @@ public class NewConnectionHandler implements Runnable {
         try {
             while (true) {
                 // block until a client connects
-                final Socket socket = serverSocket.accept();
-
+                Socket socket;
+                socket = serverSocket.accept();
+                Connection connection = new Connection(
+                        server.getWhiteboard("Default"));
                 ConnectionController controller = new ConnectionController(
                         server, socket);
-                Connection connection = new Connection(
-                        server.getWhiteboard("Default"), controller);
+                connection.addConnectionOutputHandler(controller);
 
                 // Add the connection to the collection of connections on the
                 // Server
@@ -46,7 +44,8 @@ public class NewConnectionHandler implements Runnable {
                 controller.startThreads();
             }
         } catch (IOException e) {
-
+            // TODO: Problem with serving. Stops server.
+            e.printStackTrace();
         }
     }
 }

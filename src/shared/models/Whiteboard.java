@@ -19,8 +19,8 @@ public class Whiteboard {
      * actions.
      */
 
-    private String name;
-    protected List<String> actions;
+    private final String name;
+    protected final List<String> actions;
 
     /**
      * Constructor method.
@@ -73,35 +73,4 @@ public class Whiteboard {
     public void update(String action) {
         actions.add(action);
     }
-
-    /**
-     * Gives the client a list of all the actions that are new compared to its
-     * version. This method is thread-safe since it requests the object lock
-     * (monitor pattern idea, but only for this method), and the rep. invariant
-     * is valid at all times.
-     * 
-     * @param clientVersion
-     *            the version of the Client requesting actions to update itself
-     * @return a list of all actions (in correct order) that are not yet in the
-     *         client version of the model
-     */
-//    public synchronized List<String> getActionsToUpdate(int clientVersion) {
-//
-//        /*
-//         * This method has to be threadsafe so we can use it to improve
-//         * performance in the ClientHandler
-//         */
-//        List<String> updates = new ArrayList<String>();
-//
-//        if (clientVersion < getVersion()) {
-//
-//            //TODO: This is not threadsafe!
-//            updates = new ArrayList<String>(actions.subList(clientVersion,
-//                    getVersion()));
-//
-//            assert (getVersion() == clientVersion + updates.size());
-//        }
-//
-//        return updates;
-//    }
 }

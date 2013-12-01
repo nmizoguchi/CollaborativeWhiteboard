@@ -24,7 +24,7 @@ public class ApplicationClient {
     private Whiteboard whiteboard;
     private final User user;
     private final Socket socket;
-    private final OnlineUserListModel activeUsers;
+    private final UserListModel activeUsers;
     private final WhiteboardListModel activeWhiteboards;
 
     public WhiteboardListModel getActiveWhiteboards() {
@@ -36,7 +36,7 @@ public class ApplicationClient {
 
         whiteboard = new Whiteboard("Default");
         user = new User("");
-        activeUsers = new OnlineUserListModel();
+        activeUsers = new UserListModel();
         activeWhiteboards = new WhiteboardListModel();
 //        activeBoardNames.add("Default");
         socket = new Socket(serverAddress, port);
@@ -58,20 +58,20 @@ public class ApplicationClient {
             String action = message.getAction();
 
             if (action.equals("newuser")) {
-                SwingUtilities.invokeLater(new ExecuteNewuser(activeUsers,
-                        message.getArguments(0)));
+                User user = new User(message.getArgument(0), message.getArgument(1));
+                SwingUtilities.invokeLater(new RunnableNewuser(activeUsers, user));
             }
 
             else if (action.equals("disconnecteduser")) {
-                OnlineUser user = new OnlineUser(message.getArguments(0));
-                SwingUtilities.invokeLater(new ExecuteDisconnecteduser(
+                User user = new User(message.getArgument(0), message.getArgument(1));
+                SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                         activeUsers, user));
             }
 
             else if (action.equals("whiteboards")) {
                 List<String> activeBoardNames = new ArrayList<String>();
                 for(int i = 0; i < message.getArgumentsSize(); i++) {
-                    activeBoardNames.add(message.getArguments(i));
+                    activeBoardNames.add(message.getArgument(i));
                 }
                 SwingUtilities.invokeLater(new CanvasChangeWhiteboard(
                         activeWhiteboards, activeBoardNames));
@@ -80,7 +80,7 @@ public class ApplicationClient {
             else if (action.equals("changeboard")) {
                 // TODO: PASSES TO THE GUI SO IT CAN RESET THE BOARD! IF TREAT
                 // HERE, IS NOT GONNA GET ANOTHER MESSAGE. IS CONSISTENT
-                GUI.changeWhiteboard(message.getArguments(0));
+                GUI.changeWhiteboard(message.getArgument(0));
                 
             }
 
@@ -122,7 +122,8 @@ public class ApplicationClient {
 
         String username = JOptionPane.showInputDialog("Username:");
 
-        client.send(Protocol.CreateMessage(client.getUser(), "initialize", username));
+        client.getUser().setName(username);
+        client.send(Protocol.CreateMessage(client.getUser(), "initialize", client.getUser().toString()));
 
         // Creates the listening thread, that receives messages from updates of
         // the model
@@ -146,7 +147,7 @@ public class ApplicationClient {
         return user;
     }
 
-    public OnlineUserListModel getActiveUsers() {
+    public UserListModel getActiveUsers() {
         return activeUsers;
     }
     
