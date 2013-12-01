@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;

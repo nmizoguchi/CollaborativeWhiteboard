@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.1.4" icons="true" automaticImage="PNG" always-add-relationships="false" generalizations="true" 
   realizations="true" associations="true" dependencies="false" nesting-relationships="true">  
-  <class id="1" language="java" name="client.ApplicationClient" project="whiteboard" 
-    file="/whiteboard/src/client/ApplicationClient.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="1" language="java" name="client.ClientApplication" project="whiteboard" 
+    file="/whiteboard/src/client/ClientApplication.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="224" width="175" x="39" y="-2"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="client.Whiteboard" project="whiteboard" 
-    file="/whiteboard/src/client/Whiteboard.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="shared.models.Whiteboard" project="whiteboard" 
+    file="/whiteboard/src/shared/models/Whiteboard.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="124" y="362"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="client.WhiteboardGUI" project="whiteboard" 
-    file="/whiteboard/src/client/WhiteboardGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="client.gui.WhiteboardGUI" project="whiteboard" 
+    file="/whiteboard/src/client/gui/WhiteboardGUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="400" y="110"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -28,8 +28,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="canvas.Canvas" project="whiteboard" file="/whiteboard/src/canvas/Canvas.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="client.gui.canvas.Canvas" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/Canvas.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="404" y="495"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="canvas.CanvasPainter" project="whiteboard" 
-    file="/whiteboard/src/canvas/CanvasPainter.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="client.gui.canvas.CanvasPainter" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/CanvasPainter.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="681" y="292"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -46,8 +46,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="6" language="java" name="tools.Tool" project="whiteboard" file="/whiteboard/src/tools/Tool.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="6" language="java" name="client.gui.canvas.tools.Tool" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/tools/Tool.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="677" y="494"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -55,8 +55,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="7" language="java" name="tools.ToolController" project="whiteboard" 
-    file="/whiteboard/src/tools/ToolController.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="7" language="java" name="client.gui.canvas.tools.ToolController" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/tools/ToolController.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="677" y="644"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

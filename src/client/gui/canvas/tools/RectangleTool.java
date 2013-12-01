@@ -1,6 +1,6 @@
-package tools;
+package client.gui.canvas.tools;
 
-import canvas.Canvas;
+import client.gui.canvas.Canvas;
 
 public class RectangleTool implements Tool {
 

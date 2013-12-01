@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -8,11 +8,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
+<<<<<<< HEAD:src/tools/EraseController.java
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import canvas.Canvas;
+=======
+import Protocol.Protocol;
+import client.gui.canvas.Canvas;
+>>>>>>> 3425202e03f6f826c7856ece2655bb0bb7d05bd6:src/client/gui/canvas/tools/EraseController.java
 
 /*
  * DrawingController handles the user's freehand drawing.
@@ -42,7 +47,6 @@ public class EraseController implements ToolController {
         canvas.getActionMap().put("decrement", decrement);
         canvas.getActionMap().put("increment", increment);
     }
-    
 
     @Override
     public void paint(String[] args) {
@@ -95,8 +99,10 @@ public class EraseController implements ToolController {
         int y = e.getY();
 
         // Sends info to the server
-        canvas.mClient.send("erase " + lastX + " " + lastY + " " + x + " " + y + " "
-                + brushSize);
+        String arguments = lastX + " " + lastY + " " + x + " " + y + " "
+                + brushSize;
+        String message = Protocol.CreateMessage(canvas.mClient.getUser(),"erase",arguments);
+        canvas.mClient.send(message);
 
         lastX = x;
         lastY = y;

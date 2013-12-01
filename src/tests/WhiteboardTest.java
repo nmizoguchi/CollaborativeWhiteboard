@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.junit.Test;
 
-import client.Whiteboard;
+import shared.models.Whiteboard;
 
 public class WhiteboardTest {
 

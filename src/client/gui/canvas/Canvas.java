@@ -1,4 +1,4 @@
-package canvas;
+package client.gui.canvas;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -6,25 +6,14 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Shape;
-import java.awt.event.ActionEvent;
-import java.util.ArrayList;
 import java.util.List;
+import java.awt.Shape;
+import java.util.ArrayList;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.KeyStroke;
 
-import tools.SizeChangeListener;
-import tools.ToolController;
-import tools.EraseTool;
-import tools.FreehandTool;
-import tools.LineTool;
-import tools.RectangleTool;
-import tools.Tool;
-import client.ApplicationClient;
+import client.ClientApplication;
+import client.gui.canvas.tools.*;
 
 /**
  * Canvas represents a drawing surface that allows the user to draw on it
@@ -32,7 +21,7 @@ import client.ApplicationClient;
  */
 public class Canvas extends JPanel {
 
-    public ApplicationClient mClient;
+    public ClientApplication mClient;
     private ToolController activeController;
     private List<Tool> mTools;
 
@@ -54,7 +43,7 @@ public class Canvas extends JPanel {
      * @param height
      *            height in pixels
      */
-    public Canvas(int width, int height, ApplicationClient client) {
+    public Canvas(int width, int height, ClientApplication client) {
         this.setPreferredSize(new Dimension(width, height));
         this.mClient = client;
 
@@ -158,7 +147,6 @@ public class Canvas extends JPanel {
 
         addMouseListener(activeController);
         addMouseMotionListener(activeController);
-        addKeyListener(new SizeChangeListener(this));
     }
 
     /*
@@ -166,13 +154,13 @@ public class Canvas extends JPanel {
      */
     private void makeDrawingBuffer() {
         drawingBuffer = createImage(getWidth(), getHeight());
-        fillWithWhite();
+        clearScreen();
     }
 
     /*
      * Make the drawing buffer entirely white.
      */
-    private void fillWithWhite() {
+    public void clearScreen() {
         final Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
 
         g.setColor(Color.WHITE);

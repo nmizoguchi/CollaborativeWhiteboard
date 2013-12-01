@@ -12,25 +12,31 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import shared.models.User;
+import shared.models.Whiteboard;
 import Protocol.Protocol;
+import client.gui.WhiteboardGUI;
+import client.gui.canvas.CanvasChangeWhiteboard;
 
-public class ApplicationClient {
+public class ClientApplication {
 
     private final WhiteboardGUI GUI;
     private Whiteboard whiteboard;
+    private final User user;
     private final Socket socket;
-    private final OnlineUserListModel activeUsers;
+    private final UserListModel activeUsers;
     private final WhiteboardListModel activeWhiteboards;
 
     public WhiteboardListModel getActiveWhiteboards() {
         return activeWhiteboards;
     }
 
-    public ApplicationClient(String serverAddress, int port)
+    public ClientApplication(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
+        user = new User("");
         whiteboard = new Whiteboard("Default");
-        activeUsers = new OnlineUserListModel();
+        activeUsers = new UserListModel();
         activeWhiteboards = new WhiteboardListModel();
 //        activeBoardNames.add("Default");
         socket = new Socket(serverAddress, port);
@@ -44,34 +50,39 @@ public class ApplicationClient {
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
 
+        
         while ((command = inputStream.readLine()) != null) {
 
-            String[] tokens = Protocol.CheckAndFormat(command);
+            Protocol message = Protocol.ForClient(command);
 
-            if (tokens[0].equals("newuser")) {
-                SwingUtilities.invokeLater(new ExecuteNewuser(activeUsers,
-                        tokens[1]));
+            String action = message.getAction();
+
+            if (action.equals("newuser")) {
+                User user = new User(message.getArgument(0), message.getArgument(1));
+                SwingUtilities.invokeLater(new RunnableNewuser(activeUsers, user));
             }
 
-            else if (tokens[0].equals("disconnecteduser")) {
-                OnlineUser user = new OnlineUser(tokens[1]);
-                SwingUtilities.invokeLater(new ExecuteDisconnecteduser(
+            else if (action.equals("disconnecteduser")) {
+                User user = new User(message.getArgument(0), message.getArgument(1));
+                SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                         activeUsers, user));
             }
 
-            else if (tokens[0].equals("whiteboards")) {
-                List<String> activeBoardNames = new ArrayList();
-                for(int i = 1; i < tokens.length; i++) {
-                    activeBoardNames.add(tokens[i]);
+            else if (action.equals("whiteboards")) {
+                List<String> activeBoardNames = new ArrayList<String>();
+                for(int i = 0; i < message.getArgumentsSize(); i++) {
+                    activeBoardNames.add(message.getArgument(i));
                 }
-                SwingUtilities.invokeLater(new ExecuteWhiteboards(
+                SwingUtilities.invokeLater(new CanvasChangeWhiteboard(
                         activeWhiteboards, activeBoardNames));
             }
 
-            else if (tokens[0].equals("changeboard")) {
-                // TODO: PASSES TO THE GUI SO IT CAN RESET THE BOARD! IF TREAT
-                // HERE, IS NOT GONNA GET ANOTHER MESSAGE. IS CONSISTENT
-                whiteboard = new Whiteboard(tokens[1]);
+            else if (action.equals("changeboard")) {
+                GUI.changeWhiteboard(message.getArgument(0));   
+            }
+            
+            else if (action.equals("chat")) {
+                SwingUtilities.invokeLater(new RunnableChat(GUI,message.getArguments()));
             }
 
             else {
@@ -106,13 +117,14 @@ public class ApplicationClient {
             IOException {
 
         String server = JOptionPane.showInputDialog("Server IP:");
-        final ApplicationClient client = new ApplicationClient(server, 4444);
+        final ClientApplication client = new ClientApplication(server, 4444);
 
         // Need to initialize username before running listen method.
 
         String username = JOptionPane.showInputDialog("Username:");
 
-        client.send("initialize " + username);
+        client.getUser().setName(username);
+        client.send(Protocol.CreateMessage(client.getUser(), "initialize", client.getUser().toString()));
 
         // Creates the listening thread, that receives messages from updates of
         // the model
@@ -132,7 +144,15 @@ public class ApplicationClient {
         listenerThread.start();
     }
 
-    public OnlineUserListModel getActiveUsers() {
+    public User getUser() {
+        return user;
+    }
+
+    public UserListModel getActiveUsers() {
         return activeUsers;
+    }
+    
+    public void changeWhiteboard(String name) {
+        this.whiteboard = new Whiteboard(name);
     }
 }
