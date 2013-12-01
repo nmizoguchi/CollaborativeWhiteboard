@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import shared.models.User;
 import shared.models.Whiteboard;
@@ -78,36 +79,45 @@ public class ServerApplication implements ConnectionListener {
 
         Protocol message = Protocol.ForServer(input);
         String command = message.getAction();
-
+       
         if (command.equals("initialize")) {
             /*
              * Initializes a connection. Sets username of the user too.
              */
 
             // Makes sure that won't lose a client that is connecting by...
-            // TODO:
-            synchronized (connectionMap) {
-                User newUser = new User(message.getArgument(0),
-                        message.getArgument(1));
-                currentConnection.setUser(newUser);
+        	synchronized (connectionMap) {
+        		User newUser;
+        		if (message.getArgumentsSize() == 2){
+        			newUser = new User(message.getArgument(0),
+        					message.getArgument(1));
+        		} else {
+        			//If user selects 'OK' without entering a username
+        			//then they will receive an automatically generated username with the format of:
+        			//Anonymous[random double from 0-10000]
+        			newUser = new User(message.getArgument(0), "Anonymous" + Math.random()*10000);
+        		}
+        		currentConnection.setUser(newUser);
 
-                // Broadcasts to everyone that this client connected.
-                String broadcast = Protocol.CreateServerMessage("newuser",
-                        currentConnection.getUser().toString());
-                broadcastMessage(broadcast);
+        		// Broadcasts to everyone that this client connected.
+        		String broadcast = Protocol.CreateServerMessage("newuser",
+        				currentConnection.getUser().toString());
+        		broadcastMessage(broadcast);
 
-                for (Connection conn : connectionMap.values()) {
-                    // Get initialized connections and that are not the same as
-                    // the caller
-                    if (conn.isInitialized()
-                            && !conn.getUser().equals(
-                                    currentConnection.getUser())) {
-                        String sendUser = Protocol.CreateServerMessage(
-                                "newuser", conn.getUser().toString());
-                        callerController.scheduleMessage(sendUser);
-                    }
-                }
-            }
+        		for (Connection conn : connectionMap.values()) {
+        			// Get initialized connections and that are not the same as
+        			// the caller
+        			if (conn.isInitialized()
+        					&& !conn.getUser().equals(
+        							currentConnection.getUser())) {
+        				String sendUser = Protocol.CreateServerMessage(
+        						"newuser", conn.getUser().toString());
+        				callerController.scheduleMessage(sendUser);
+        			}
+        		}
+        	}
+        
+            
 
             // Send the updated list of boards to the new client
             String names = getWhiteboardNames();
@@ -121,8 +131,11 @@ public class ServerApplication implements ConnectionListener {
              * Makes sure that it is not sending updating information to this
              * client anymore by getting the outputStream lock
              */
-            Whiteboard board = getWhiteboard(message.getArgument(0));
-            currentConnection.setActiveWhiteboard(board, 0);
+        	if (message.getArgumentsSize() != 0){
+        		//new board will be made if the user enters a board name
+        		Whiteboard board = getWhiteboard(message.getArgument(0));
+        		currentConnection.setActiveWhiteboard(board, 0);
+        	}
         }
 
         else if (command.equals("whiteboards")) {
@@ -203,11 +216,17 @@ public class ServerApplication implements ConnectionListener {
             Connection connection = connectionMap.get(controller);
             connectionMap.remove(controller);
             // TODO: Stop threads somehow?
+            try{
+            if (connection.getUser().toString() != null){
             String message = Protocol.CreateServerMessage("disconnecteduser",
                     connection.getUser().toString());
             broadcastMessage(message);
+            
+            //TODO: put this message on the chat message in GUI
             System.out.println(connection.getUser().getName()
                     + " has disconnected from the server.");
+            }
+            }catch (NullPointerException n){}
         }
     }
 }

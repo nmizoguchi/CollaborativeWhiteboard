@@ -1,5 +1,6 @@
 package client;
 
+import server.ServerApplication;
 import shared.models.User;
 
 public class RunnableDisconnecteduser implements Runnable {

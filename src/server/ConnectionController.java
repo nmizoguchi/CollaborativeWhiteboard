@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -95,17 +96,15 @@ public class ConnectionController implements ConnectionOutputHandler {
      */
     private void handleIncomingMessages() {
         try {
-            for (String line = inputStream.readLine(); line != null; line = inputStream
-                    .readLine()) {
-
+//        	while (true){
+        	for (String line = inputStream.readLine(); line != null; line = inputStream.readLine()){
+        		
                 listener.onMessageReceived(this, line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
             try {
                 inputStream.close();
             } catch (IOException e1) {
-                e1.printStackTrace();
             }
         }
 

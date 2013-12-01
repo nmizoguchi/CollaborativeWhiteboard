@@ -73,16 +73,22 @@ public class MenuEast extends JPanel {
 
         createBoardButton.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = JOptionPane.showInputDialog("Board name:");
-                String message = Protocol.CreateMessage(gui.getClient()
-                        .getUser(), "changeboard", name);
-                gui.getClient().send(message);
-            }
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		try{
+        			String name = JOptionPane.showInputDialog("Board name:");
+        			//if user selects cancel or does not enter a name, nothing will happen and the dialog will close
+        			if (name != null){
+        				String message = Protocol.CreateMessage(gui.getClient()
+        						.getUser(), "changeboard", name);
+        				gui.getClient().send(message);
+        			} 
+        		}catch (NullPointerException n) {}
+
+        	}
         });
 
-        this.setLayout(new GridLayout(6, 1));
+        this.setLayout(new GridLayout(10, 1));
         this.add(new JLabel("Online users"));
         this.add(onlineUserScroller);
         this.add(new JLabel("Available Boards"));

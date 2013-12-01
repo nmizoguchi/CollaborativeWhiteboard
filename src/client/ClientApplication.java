@@ -114,29 +114,31 @@ public class ClientApplication {
      * Main program. Make a window containing a Canvas.
      */
     public static void main(String[] args) throws UnknownHostException,
-            IOException {
+    IOException {
 
-        String server = JOptionPane.showInputDialog("Server IP:");
-        final ClientApplication client = new ClientApplication(server, 4444);
+    	String server = JOptionPane.showInputDialog("Server IP:");
+    	final ClientApplication client = new ClientApplication(server, 4444);
 
-        // Need to initialize username before running listen method.
+    	// Need to initialize username before running listen method.
+    	String username = JOptionPane.showInputDialog("Username:");
+    	//Username dialog will continue to pop-up if the user clicks cancel
+    	while (username == null){
+    		username = JOptionPane.showInputDialog("Username:");
+    	}
+    	client.getUser().setName(username);
+    	client.send(Protocol.CreateMessage(client.getUser(), "initialize", client.getUser().toString()));
 
-        String username = JOptionPane.showInputDialog("Username:");
+    	// Creates the listening thread, that receives messages from updates of
+    	// the model
+    	Thread listenerThread = new Thread(new Runnable() {
 
-        client.getUser().setName(username);
-        client.send(Protocol.CreateMessage(client.getUser(), "initialize", client.getUser().toString()));
-
-        // Creates the listening thread, that receives messages from updates of
-        // the model
-        Thread listenerThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    client.listen();
-                    client.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+    		@Override
+    		public void run() {
+    			try {
+    				client.listen();
+    				client.close();
+    			} catch (IOException e) {
+    				e.printStackTrace();
                 }
             }
         });

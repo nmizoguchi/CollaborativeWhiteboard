@@ -16,15 +16,12 @@ import javax.swing.JColorChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-<<<<<<< HEAD:src/client/WhiteboardGUI.java
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-=======
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
->>>>>>> 3425202e03f6f826c7856ece2655bb0bb7d05bd6:src/client/gui/WhiteboardGUI.java
 import javax.swing.SwingUtilities;
 
 import client.ClientApplication;
@@ -97,7 +94,7 @@ public class WhiteboardGUI extends JFrame {
         colorButton.setToolTipText("Click to select color");
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setBounds(new Rectangle(800, 600));
+        this.setBounds(new Rectangle(1200, 600));
 
         /********** Initialize buttonGroup **********/
         // buttonGroup ensures that only one of the buttons is selected
@@ -184,9 +181,6 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(colorButton);
         this.add(canvas, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);
-<<<<<<< HEAD:src/client/WhiteboardGUI.java
-        this.add(onlineUserScroller, BorderLayout.EAST);
-        this.add(whiteboardsScroller, BorderLayout.BEFORE_FIRST_LINE);
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
@@ -206,9 +200,7 @@ public class WhiteboardGUI extends JFrame {
 //                }
 //            }
 //        });
-=======
-        this.add(menuEast, BorderLayout.EAST);
->>>>>>> 3425202e03f6f826c7856ece2655bb0bb7d05bd6:src/client/gui/WhiteboardGUI.java
+        this.add(menuEast, BorderLayout.LINE_END);
     }
 
     public void updateModelView(String command) {
@@ -217,7 +209,7 @@ public class WhiteboardGUI extends JFrame {
     }
     
     public void changeWhiteboard(String boardName) {
-        SwingUtilities.invokeLater(new RunnableChangeboard(canvas,boardName));
+        SwingUtilities.invokeLater(new RunnableChangeboard(canvas, boardName));
     }
     
     public void addChatMessage(String user, String message) {

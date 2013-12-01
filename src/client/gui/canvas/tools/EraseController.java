@@ -4,20 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
-<<<<<<< HEAD:src/tools/EraseController.java
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.KeyStroke;
-
-import canvas.Canvas;
-=======
 import Protocol.Protocol;
 import client.gui.canvas.Canvas;
->>>>>>> 3425202e03f6f826c7856ece2655bb0bb7d05bd6:src/client/gui/canvas/tools/EraseController.java
 
 /*
  * DrawingController handles the user's freehand drawing.
@@ -31,21 +21,6 @@ public class EraseController implements ToolController {
 
     public EraseController(Canvas c) {
         this.canvas = c;
-        Action decrement = new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                canvas.setBrushSize(canvas.getBrushSize() - 1);
-            }
-        };
-        Action increment = new AbstractAction(){
-        	public void actionPerformed(ActionEvent e) {
-        		int lastSize = canvas.getBrushSize();
-        		canvas.setBrushSize(lastSize + 1);
-        	}
-        };
-        canvas.getInputMap().put(KeyStroke.getKeyStroke(), "decrement");
-        canvas.getInputMap().put(KeyStroke.getKeyStroke(KeyStroke.VK_CLOSE_BRACKET), "increment");
-        canvas.getActionMap().put("decrement", decrement);
-        canvas.getActionMap().put("increment", increment);
     }
 
     @Override
