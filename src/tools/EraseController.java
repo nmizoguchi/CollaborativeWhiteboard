@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
+import Protocol.Protocol;
 import client.gui.canvas.Canvas;
 
 /*
@@ -21,7 +22,6 @@ public class EraseController implements ToolController {
     public EraseController(Canvas canvas) {
         this.canvas = canvas;
     }
-    
 
     @Override
     public void paint(String[] args) {
@@ -74,8 +74,10 @@ public class EraseController implements ToolController {
         int y = e.getY();
 
         // Sends info to the server
-        canvas.mClient.send("erase " + lastX + " " + lastY + " " + x + " " + y + " "
-                + brushSize);
+        String arguments = lastX + " " + lastY + " " + x + " " + y + " "
+                + brushSize;
+        String message = Protocol.CreateMessage(canvas.mClient.getUser(),"erase",arguments);
+        canvas.mClient.send(message);
 
         lastX = x;
         lastY = y;

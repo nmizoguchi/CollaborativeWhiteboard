@@ -17,6 +17,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import Protocol.Protocol;
 import client.OnlineUserListModel;
 import client.WhiteboardListModel;
 
@@ -61,9 +62,10 @@ public class MenuEast extends JPanel {
             public void valueChanged(ListSelectionEvent le) {
                 int idx = whiteboardsList.getSelectedIndex();
                 if (idx != -1 && !le.getValueIsAdjusting()) {
-                    gui.getClient().send(
-                            "changeboard "
-                                    + activeWhiteboardsData.getElementAt(idx));
+                    String message = Protocol.CreateMessage(gui.getClient()
+                            .getUser(), "changeboard", activeWhiteboardsData
+                            .getElementAt(idx));
+                    gui.getClient().send(message);
                 }
             }
         });
@@ -73,7 +75,9 @@ public class MenuEast extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String name = JOptionPane.showInputDialog("Board name:");
-                gui.getClient().send("changeboard " + name);
+                String message = Protocol.CreateMessage(gui.getClient()
+                        .getUser(), "changeboard", name);
+                gui.getClient().send(message);
             }
         });
 

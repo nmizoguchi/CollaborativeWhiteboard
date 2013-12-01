@@ -6,6 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
+import Protocol.Protocol;
 import client.gui.canvas.Canvas;
 
 /*
@@ -21,7 +22,7 @@ public class FreehandController implements ToolController {
     public FreehandController(Canvas canvas) {
         this.canvas = canvas;
     }
-    
+
     @Override
     public void paint(String[] args) {
         /*
@@ -52,7 +53,7 @@ public class FreehandController implements ToolController {
         // have to notify Swing to repaint this component on the screen.
         canvas.repaint();
     }
-    
+
     /*
      * When mouse button is pressed down, start drawing.
      */
@@ -71,8 +72,11 @@ public class FreehandController implements ToolController {
         int y = e.getY();
 
         // Sends info to the server
-        canvas.mClient.send("drawline " + lastX + " " + lastY + " " + x + " "
-                + y + " " + brushColor + " " + brushSize);
+        String arguments = lastX + " " + lastY + " " + x + " " + y + " "
+                + brushColor + " " + brushSize;
+        String message = Protocol.CreateMessage(canvas.mClient.getUser(),
+                "drawline", arguments);
+        canvas.mClient.send(message);
 
         lastX = x;
         lastY = y;

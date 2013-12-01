@@ -12,14 +12,17 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import shared.models.User;
+import shared.models.Whiteboard;
+import Protocol.Protocol;
 import client.gui.WhiteboardGUI;
 import client.gui.canvas.CanvasChangeWhiteboard;
-import Protocol.Protocol;
 
 public class ApplicationClient {
 
     private final WhiteboardGUI GUI;
     private Whiteboard whiteboard;
+    private final User user;
     private final Socket socket;
     private final OnlineUserListModel activeUsers;
     private final WhiteboardListModel activeWhiteboards;
@@ -32,6 +35,7 @@ public class ApplicationClient {
             throws UnknownHostException, IOException {
 
         whiteboard = new Whiteboard("Default");
+        user = new User("");
         activeUsers = new OnlineUserListModel();
         activeWhiteboards = new WhiteboardListModel();
 //        activeBoardNames.add("Default");
@@ -46,34 +50,37 @@ public class ApplicationClient {
         BufferedReader inputStream = new BufferedReader(new InputStreamReader(
                 socket.getInputStream()));
 
+        
         while ((command = inputStream.readLine()) != null) {
 
-            String[] tokens = Protocol.CheckAndFormat(command);
+            Protocol message = Protocol.ForClient(command);
 
-            if (tokens[0].equals("newuser")) {
+            String action = message.getAction();
+
+            if (action.equals("newuser")) {
                 SwingUtilities.invokeLater(new ExecuteNewuser(activeUsers,
-                        tokens[1]));
+                        message.getArguments(0)));
             }
 
-            else if (tokens[0].equals("disconnecteduser")) {
-                OnlineUser user = new OnlineUser(tokens[1]);
+            else if (action.equals("disconnecteduser")) {
+                OnlineUser user = new OnlineUser(message.getArguments(0));
                 SwingUtilities.invokeLater(new ExecuteDisconnecteduser(
                         activeUsers, user));
             }
 
-            else if (tokens[0].equals("whiteboards")) {
+            else if (action.equals("whiteboards")) {
                 List<String> activeBoardNames = new ArrayList<String>();
-                for(int i = 1; i < tokens.length; i++) {
-                    activeBoardNames.add(tokens[i]);
+                for(int i = 0; i < message.getArgumentsSize(); i++) {
+                    activeBoardNames.add(message.getArguments(i));
                 }
                 SwingUtilities.invokeLater(new CanvasChangeWhiteboard(
                         activeWhiteboards, activeBoardNames));
             }
 
-            else if (tokens[0].equals("changeboard")) {
+            else if (action.equals("changeboard")) {
                 // TODO: PASSES TO THE GUI SO IT CAN RESET THE BOARD! IF TREAT
                 // HERE, IS NOT GONNA GET ANOTHER MESSAGE. IS CONSISTENT
-                GUI.changeWhiteboard(tokens[1]);
+                GUI.changeWhiteboard(message.getArguments(0));
                 
             }
 
@@ -115,7 +122,7 @@ public class ApplicationClient {
 
         String username = JOptionPane.showInputDialog("Username:");
 
-        client.send("initialize " + username);
+        client.send(Protocol.CreateMessage(client.getUser(), "initialize", username));
 
         // Creates the listening thread, that receives messages from updates of
         // the model
@@ -133,6 +140,10 @@ public class ApplicationClient {
         });
 
         listenerThread.start();
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public OnlineUserListModel getActiveUsers() {

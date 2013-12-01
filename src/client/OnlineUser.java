@@ -1,6 +1,6 @@
 package client;
 
-import server.ClientConnection;
+import server.Connection;
 
 public class OnlineUser {
 

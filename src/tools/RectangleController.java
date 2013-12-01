@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
+import Protocol.Protocol;
 import client.gui.canvas.Canvas;
 
 /*
@@ -83,9 +84,13 @@ public class RectangleController implements ToolController {
      * Sends information to the server and resets the canvas surface shape from 'rectangle' to 'null'
      */
     public void mouseReleased(MouseEvent e) {
-        canvas.mClient.send("drawrect " + lastX + " " + lastY + " " + e.getX() + " "
+        
+        String arguments = lastX + " " + lastY + " " + e.getX() + " "
                 + e.getY() + " " + brushColor + " "
-                + brushSize + " " + hasFill + " " + fillColor);
+                + brushSize + " " + hasFill + " " + fillColor;
+        String message = Protocol.CreateMessage(canvas.mClient.getUser(),"drawrect",arguments);
+        canvas.mClient.send(message);
+        
         canvas.setSurfaceShape(null);
     }
 

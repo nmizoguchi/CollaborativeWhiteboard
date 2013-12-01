@@ -7,6 +7,7 @@ import java.awt.Image;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Line2D;
 
+import Protocol.Protocol;
 import client.gui.canvas.Canvas;
 
 /*
@@ -18,9 +19,9 @@ public class LineController implements ToolController {
     // event.
     private final Canvas canvas;
     private int lastX, lastY;
-    
+
     private int brushSize, brushColor;
-    
+
     private Line2D line;
 
     public LineController(Canvas canvas) {
@@ -44,7 +45,6 @@ public class LineController implements ToolController {
         int x = Integer.valueOf(args[3]);
         int y = Integer.valueOf(args[4]);
 
-
         Color color = new Color(Integer.valueOf(args[5]));
 
         // Define Brush Size
@@ -53,7 +53,7 @@ public class LineController implements ToolController {
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
         g2.drawLine(lastX, lastY, x, y);
-        
+
         // IMPORTANT! every time we draw on the internal drawing buffer, we
         // have to notify Swing to repaint this component on the screen.
         canvas.repaint();
@@ -65,15 +65,14 @@ public class LineController implements ToolController {
     public void mousePressed(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
-        
-     // Get color
+
+        // Get color
         brushColor = canvas.getBrushColor();
-        
-        
+
         // Get brushSize
-        
+
         brushSize = canvas.getBrushSize();
-        
+
         line.setLine(lastX, lastY, lastX, lastY);
         canvas.setSurfaceShape(line);
     }
@@ -82,14 +81,16 @@ public class LineController implements ToolController {
         // Get position
         int x = e.getX();
         int y = e.getY();
-        
+
         // Sends info to the server
-        canvas.mClient.send("drawline " + lastX + " " + lastY + " " + x + " "
-                + y + " " + brushColor + " " + brushSize);
-        
+        String arguments = lastX + " " + lastY + " " + x + " " + y + " "
+                + brushColor + " " + brushSize;
+        String message = Protocol.CreateMessage(canvas.mClient.getUser(),
+                "drawline", arguments);
+        canvas.mClient.send(message);
+
         canvas.setSurfaceShape(null);
     }
-
 
     public void mouseDragged(MouseEvent e) {
         line.setLine(lastX, lastY, e.getX(), e.getY());
