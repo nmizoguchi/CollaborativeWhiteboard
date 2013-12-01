@@ -135,6 +135,15 @@ public class ServerApplication implements ConnectionListener {
             callerController.scheduleMessage(command + boardNames);
         }
 
+        else if (command.equals("chat")) {
+            /*
+             * Broadcasts the message to all clients, so everyone knows about
+             * the message.
+             */
+            String chatMessage = Protocol.CreateServerMessage(command, message.getArguments());
+            broadcastMessage(chatMessage);
+        }
+
         else {
             /*
              * Otherwise, it is a command to be routed to all other clients, so

@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
-import client.ApplicationClient;
+import client.ClientApplication;
 import client.RunnableChangeboard;
 import client.gui.canvas.Canvas;
 import client.gui.canvas.CanvasPainter;
@@ -29,7 +29,7 @@ public class WhiteboardGUI extends JFrame {
 	 */
     private static final long serialVersionUID = 1L;
 
-    private final ApplicationClient client;
+    private final ClientApplication client;
     private final Canvas canvas;
     private final JMenuBar buttonsMenu = new JMenuBar();
     private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -48,7 +48,7 @@ public class WhiteboardGUI extends JFrame {
     private final JColorChooser colorOptions = new JColorChooser();
     private final MenuEast menuEast;
 
-    public WhiteboardGUI(ApplicationClient client) {
+    public WhiteboardGUI(ClientApplication client) {
         
         this.client = client;
         
@@ -187,8 +187,12 @@ public class WhiteboardGUI extends JFrame {
     public void changeWhiteboard(String boardName) {
         SwingUtilities.invokeLater(new RunnableChangeboard(canvas,boardName));
     }
+    
+    public void addChatMessage(String user, String message) {
+        menuEast.addMessage(user, message);
+    }
 
-    public ApplicationClient getClient() {
+    public ClientApplication getClient() {
         return client;
     }
 }

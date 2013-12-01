@@ -30,10 +30,13 @@ public class MenuEast extends JPanel {
     private final UserListModel activeUsersData;
     private final WhiteboardListModel activeWhiteboardsData;
     private final JButton createBoardButton;
-
+    private final ChatView chatView;
+    
     public MenuEast(final WhiteboardGUI userInterface) {
 
         this.gui = userInterface;
+        
+        chatView = new ChatView();
 
         activeUsersData = gui.getClient().getActiveUsers();
         activeWhiteboardsData = gui.getClient().getActiveWhiteboards();
@@ -79,11 +82,16 @@ public class MenuEast extends JPanel {
             }
         });
 
-        this.setLayout(new GridLayout(5, 1));
+        this.setLayout(new GridLayout(6, 1));
         this.add(new JLabel("Online users"));
         this.add(onlineUserScroller);
         this.add(new JLabel("Available Boards"));
         this.add(whiteboardsScroller);
         this.add(createBoardButton);
+        this.add(chatView);
+    }
+    
+    public void addMessage(String user, String message) {
+        chatView.addMessage(user, message);
     }
 }

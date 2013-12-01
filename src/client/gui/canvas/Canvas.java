@@ -18,7 +18,7 @@ import tools.FreehandTool;
 import tools.LineTool;
 import tools.RectangleTool;
 import tools.Tool;
-import client.ApplicationClient;
+import client.ClientApplication;
 
 /**
  * Canvas represents a drawing surface that allows the user to draw on it
@@ -26,7 +26,7 @@ import client.ApplicationClient;
  */
 public class Canvas extends JPanel {
 
-    public ApplicationClient mClient;
+    public ClientApplication mClient;
     private ToolController activeController;
     private List<Tool> mTools;
 
@@ -48,7 +48,7 @@ public class Canvas extends JPanel {
      * @param height
      *            height in pixels
      */
-    public Canvas(int width, int height, ApplicationClient client) {
+    public Canvas(int width, int height, ClientApplication client) {
         this.setPreferredSize(new Dimension(width, height));
         this.mClient = client;
 

@@ -18,7 +18,7 @@ import Protocol.Protocol;
 import client.gui.WhiteboardGUI;
 import client.gui.canvas.CanvasChangeWhiteboard;
 
-public class ApplicationClient {
+public class ClientApplication {
 
     private final WhiteboardGUI GUI;
     private Whiteboard whiteboard;
@@ -31,11 +31,11 @@ public class ApplicationClient {
         return activeWhiteboards;
     }
 
-    public ApplicationClient(String serverAddress, int port)
+    public ClientApplication(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
-        whiteboard = new Whiteboard("Default");
         user = new User("");
+        whiteboard = new Whiteboard("Default");
         activeUsers = new UserListModel();
         activeWhiteboards = new WhiteboardListModel();
 //        activeBoardNames.add("Default");
@@ -78,10 +78,11 @@ public class ApplicationClient {
             }
 
             else if (action.equals("changeboard")) {
-                // TODO: PASSES TO THE GUI SO IT CAN RESET THE BOARD! IF TREAT
-                // HERE, IS NOT GONNA GET ANOTHER MESSAGE. IS CONSISTENT
-                GUI.changeWhiteboard(message.getArgument(0));
-                
+                GUI.changeWhiteboard(message.getArgument(0));   
+            }
+            
+            else if (action.equals("chat")) {
+                SwingUtilities.invokeLater(new RunnableChat(GUI,message.getArguments()));
             }
 
             else {
@@ -116,7 +117,7 @@ public class ApplicationClient {
             IOException {
 
         String server = JOptionPane.showInputDialog("Server IP:");
-        final ApplicationClient client = new ApplicationClient(server, 4444);
+        final ClientApplication client = new ClientApplication(server, 4444);
 
         // Need to initialize username before running listen method.
 
