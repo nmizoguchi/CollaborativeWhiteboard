@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,14 +12,14 @@ import client.gui.canvas.Canvas;
 /*
  * DrawingController handles the user's freehand drawing.
  */
-public class FreehandController implements ToolController {
+public class EraseController implements ToolController {
     // store the coordinates of the last mouse event, so we can
     // draw a line segment from that last point to the point of the next mouse
     // event.
     private final Canvas canvas;
-    private int brushSize, brushColor, lastX, lastY;
+    private int brushSize, lastX, lastY;
 
-    public FreehandController(Canvas canvas) {
+    public EraseController(Canvas canvas) {
         this.canvas = canvas;
     }
 
@@ -39,11 +39,14 @@ public class FreehandController implements ToolController {
         int x = Integer.valueOf(args[3]);
         int y = Integer.valueOf(args[4]);
 
+        // Define Color
+        Color color = Color.WHITE;
+
         // Define Brush Size
-        int brush = Integer.valueOf(args[6]);
-        Color color = new Color(Integer.valueOf(args[5]));
+        int brushSizeInt = Integer.valueOf(args[5]);
+
         g2.setColor(color);
-        g2.setStroke(new BasicStroke(brush));
+        g2.setStroke(new BasicStroke(brushSizeInt));
         g2.drawLine(lastX, lastY, x, y);
 
         lastX = x;
@@ -61,7 +64,6 @@ public class FreehandController implements ToolController {
         lastX = e.getX();
         lastY = e.getY();
         brushSize = canvas.getBrushSize();
-        brushColor = canvas.getBrushColor();
     }
 
     /*
@@ -73,9 +75,8 @@ public class FreehandController implements ToolController {
 
         // Sends info to the server
         String arguments = lastX + " " + lastY + " " + x + " " + y + " "
-                + brushColor + " " + brushSize;
-        String message = Protocol.CreateMessage(canvas.mClient.getUser(),
-                "drawline", arguments);
+                + brushSize;
+        String message = Protocol.CreateMessage(canvas.mClient.getUser(),"erase",arguments);
         canvas.mClient.send(message);
 
         lastX = x;

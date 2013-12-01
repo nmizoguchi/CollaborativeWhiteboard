@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 public interface Tool {
     

@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 import client.gui.canvas.Canvas;
 

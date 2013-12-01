@@ -1,11 +1,10 @@
-package tools;
+package client.gui.canvas.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
-import java.awt.geom.Line2D;
 
 import Protocol.Protocol;
 import client.gui.canvas.Canvas;
@@ -13,20 +12,15 @@ import client.gui.canvas.Canvas;
 /*
  * DrawingController handles the user's freehand drawing.
  */
-public class LineController implements ToolController {
+public class FreehandController implements ToolController {
     // store the coordinates of the last mouse event, so we can
     // draw a line segment from that last point to the point of the next mouse
     // event.
     private final Canvas canvas;
-    private int lastX, lastY;
+    private int brushSize, brushColor, lastX, lastY;
 
-    private int brushSize, brushColor;
-
-    private Line2D line;
-
-    public LineController(Canvas canvas) {
+    public FreehandController(Canvas canvas) {
         this.canvas = canvas;
-        this.line = new Line2D.Double();
     }
 
     @Override
@@ -45,14 +39,15 @@ public class LineController implements ToolController {
         int x = Integer.valueOf(args[3]);
         int y = Integer.valueOf(args[4]);
 
-        Color color = new Color(Integer.valueOf(args[5]));
-
         // Define Brush Size
         int brush = Integer.valueOf(args[6]);
-
+        Color color = new Color(Integer.valueOf(args[5]));
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
         g2.drawLine(lastX, lastY, x, y);
+
+        lastX = x;
+        lastY = y;
 
         // IMPORTANT! every time we draw on the internal drawing buffer, we
         // have to notify Swing to repaint this component on the screen.
@@ -65,20 +60,14 @@ public class LineController implements ToolController {
     public void mousePressed(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
-
-        // Get color
-        brushColor = canvas.getBrushColor();
-
-        // Get brushSize
-
         brushSize = canvas.getBrushSize();
-
-        line.setLine(lastX, lastY, lastX, lastY);
-        canvas.setSurfaceShape(line);
+        brushColor = canvas.getBrushColor();
     }
 
-    public void mouseReleased(MouseEvent e) {
-        // Get position
+    /*
+     * When mouse moves while a button is pressed down, draw a line segment.
+     */
+    public void mouseDragged(MouseEvent e) {
         int x = e.getX();
         int y = e.getY();
 
@@ -89,12 +78,8 @@ public class LineController implements ToolController {
                 "drawline", arguments);
         canvas.mClient.send(message);
 
-        canvas.setSurfaceShape(null);
-    }
-
-    public void mouseDragged(MouseEvent e) {
-        line.setLine(lastX, lastY, e.getX(), e.getY());
-        canvas.repaint();
+        lastX = x;
+        lastY = y;
     }
 
     // Ignore all these other mouse events.
@@ -102,6 +87,9 @@ public class LineController implements ToolController {
     }
 
     public void mouseClicked(MouseEvent e) {
+    }
+
+    public void mouseReleased(MouseEvent e) {
     }
 
     public void mouseEntered(MouseEvent e) {

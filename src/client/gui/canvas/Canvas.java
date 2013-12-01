@@ -12,13 +12,13 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import tools.ToolController;
-import tools.EraseTool;
-import tools.FreehandTool;
-import tools.LineTool;
-import tools.RectangleTool;
-import tools.Tool;
 import client.ClientApplication;
+import client.gui.canvas.tools.EraseTool;
+import client.gui.canvas.tools.FreehandTool;
+import client.gui.canvas.tools.LineTool;
+import client.gui.canvas.tools.RectangleTool;
+import client.gui.canvas.tools.Tool;
+import client.gui.canvas.tools.ToolController;
 
 /**
  * Canvas represents a drawing surface that allows the user to draw on it

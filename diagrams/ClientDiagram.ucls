@@ -46,8 +46,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <interface id="6" language="java" name="tools.Tool" project="whiteboard" file="/whiteboard/src/tools/Tool.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="6" language="java" name="client.gui.canvas.tools.Tool" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/tools/Tool.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="677" y="494"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -55,8 +55,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </interface>  
-  <interface id="7" language="java" name="tools.ToolController" project="whiteboard" 
-    file="/whiteboard/src/tools/ToolController.java" binary="false" corner="BOTTOM_RIGHT">    
+  <interface id="7" language="java" name="client.gui.canvas.tools.ToolController" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/tools/ToolController.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="677" y="644"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

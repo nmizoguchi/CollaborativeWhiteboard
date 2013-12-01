@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -7,13 +7,13 @@ import java.awt.Image;
 
 import client.gui.canvas.Canvas;
 
-public class EraseTool implements Tool {
+public class LineTool implements Tool {
 
-    public final String name = "Erase";
+    public final String name = "Draw Line";
     public final ToolController controller;
 
-    public EraseTool(Canvas canvas) {
-        this.controller = new EraseController(canvas);
+    public LineTool(Canvas canvas) {
+        this.controller = new LineController(canvas);
     }
 
     @Override

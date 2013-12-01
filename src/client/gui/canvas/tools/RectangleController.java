@@ -1,4 +1,4 @@
-package tools;
+package client.gui.canvas.tools;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
