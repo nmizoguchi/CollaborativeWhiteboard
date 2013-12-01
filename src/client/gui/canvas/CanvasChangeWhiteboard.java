@@ -1,13 +1,15 @@
-package client;
+package client.gui.canvas;
 
 import java.util.List;
 
-public class ExecuteWhiteboards implements Runnable {
+import client.WhiteboardListModel;
+
+public class CanvasChangeWhiteboard implements Runnable {
     
     private final List<String> names;
     private final WhiteboardListModel whiteboards;
     
-    public ExecuteWhiteboards(WhiteboardListModel whiteboards, List<String> names) {
+    public CanvasChangeWhiteboard(WhiteboardListModel whiteboards, List<String> names) {
         this.names = names;
         this.whiteboards = whiteboards;
     }

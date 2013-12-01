@@ -1,4 +1,4 @@
-package canvas;
+package client.gui.canvas;
 
 
 public class CanvasPainter implements Runnable {

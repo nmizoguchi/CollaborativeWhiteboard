@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="client.WhiteboardGUI" project="whiteboard" 
-    file="/whiteboard/src/client/WhiteboardGUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="client.gui.WhiteboardGUI" project="whiteboard" 
+    file="/whiteboard/src/client/gui/WhiteboardGUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="400" y="110"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -28,8 +28,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="canvas.Canvas" project="whiteboard" file="/whiteboard/src/canvas/Canvas.java" 
-    binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="client.gui.canvas.Canvas" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/Canvas.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="404" y="495"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      
@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="canvas.CanvasPainter" project="whiteboard" 
-    file="/whiteboard/src/canvas/CanvasPainter.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="client.gui.canvas.CanvasPainter" project="whiteboard" 
+    file="/whiteboard/src/client/gui/canvas/CanvasPainter.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="681" y="292"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" accessors="true" 
       visibility="true">      

@@ -1,4 +1,4 @@
-package canvas;
+package client.gui.canvas;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -156,13 +156,13 @@ public class Canvas extends JPanel {
      */
     private void makeDrawingBuffer() {
         drawingBuffer = createImage(getWidth(), getHeight());
-        fillWithWhite();
+        clearScreen();
     }
 
     /*
      * Make the drawing buffer entirely white.
      */
-    private void fillWithWhite() {
+    public void clearScreen() {
         final Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
 
         g.setColor(Color.WHITE);

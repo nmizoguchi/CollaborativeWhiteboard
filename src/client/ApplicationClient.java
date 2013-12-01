@@ -12,6 +12,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import client.gui.WhiteboardGUI;
+import client.gui.canvas.CanvasChangeWhiteboard;
 import Protocol.Protocol;
 
 public class ApplicationClient {
@@ -60,18 +62,19 @@ public class ApplicationClient {
             }
 
             else if (tokens[0].equals("whiteboards")) {
-                List<String> activeBoardNames = new ArrayList();
+                List<String> activeBoardNames = new ArrayList<String>();
                 for(int i = 1; i < tokens.length; i++) {
                     activeBoardNames.add(tokens[i]);
                 }
-                SwingUtilities.invokeLater(new ExecuteWhiteboards(
+                SwingUtilities.invokeLater(new CanvasChangeWhiteboard(
                         activeWhiteboards, activeBoardNames));
             }
 
             else if (tokens[0].equals("changeboard")) {
                 // TODO: PASSES TO THE GUI SO IT CAN RESET THE BOARD! IF TREAT
                 // HERE, IS NOT GONNA GET ANOTHER MESSAGE. IS CONSISTENT
-                whiteboard = new Whiteboard(tokens[1]);
+                GUI.changeWhiteboard(tokens[1]);
+                
             }
 
             else {
@@ -134,5 +137,9 @@ public class ApplicationClient {
 
     public OnlineUserListModel getActiveUsers() {
         return activeUsers;
+    }
+    
+    public void changeWhiteboard(String name) {
+        this.whiteboard = new Whiteboard(name);
     }
 }

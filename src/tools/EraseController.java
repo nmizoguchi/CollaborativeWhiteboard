@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
-import canvas.Canvas;
+import client.gui.canvas.Canvas;
 
 /*
  * DrawingController handles the user's freehand drawing.

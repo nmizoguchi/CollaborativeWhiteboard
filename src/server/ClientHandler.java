@@ -120,6 +120,7 @@ public class ClientHandler {
                         String boardName = tokens[1];
                         client.setActiveBoard(boardName);
                     }
+                    outputQueue.add(line);
                 }
 
                 else if (command.equals("whiteboards")) {

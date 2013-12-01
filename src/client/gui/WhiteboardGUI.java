@@ -1,8 +1,7 @@
-package client;
+package client.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
@@ -13,21 +12,16 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
-import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
-import canvas.Canvas;
-import canvas.CanvasPainter;
+import client.ApplicationClient;
+import client.ExecuteChangeboard;
+import client.gui.canvas.Canvas;
+import client.gui.canvas.CanvasPainter;
 
 public class WhiteboardGUI extends JFrame {
     /**
@@ -35,6 +29,7 @@ public class WhiteboardGUI extends JFrame {
 	 */
     private static final long serialVersionUID = 1L;
 
+    private final ApplicationClient client;
     private final Canvas canvas;
     private final JMenuBar buttonsMenu = new JMenuBar();
     private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -49,17 +44,18 @@ public class WhiteboardGUI extends JFrame {
     private final JButton size20 = new JButton("20");
     private final JButton colorButton = new JButton();
     private final JColorChooser colorOptions = new JColorChooser();
-    private final JList onlineUserList;
-    private final JList whiteboardsList;
-    private final JScrollPane onlineUserScroller;
-    private final JScrollPane whiteboardsScroller;
-    private final OnlineUserListModel activeUsersData;
-    private final WhiteboardListModel activeWhiteboardsData;
-    
+    private final MenuEast menuEast;
+
     public WhiteboardGUI(ApplicationClient client) {
+        
+        this.client = client;
+        
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
+        
+        menuEast = new MenuEast(this);
+        
         eraserIcon = new ImageIcon(new ImageIcon("images/eraser.gif")
                 .getImage().getScaledInstance(50, 50, 100));
         drawIcon = new ImageIcon(new ImageIcon("images/brush.png").getImage()
@@ -73,13 +69,7 @@ public class WhiteboardGUI extends JFrame {
         drawRect = new JToggleButton(drawIcon);
         drawRect.setBackground(Color.WHITE);
         colorButton.setBackground(Color.BLACK);
-        
-        activeUsersData = client.getActiveUsers();
-        activeWhiteboardsData = client.getActiveWhiteboards();
-        
-        onlineUserList = new JList(activeUsersData);
-        whiteboardsList = new JList(activeWhiteboardsData);
-        
+
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(800, 600));
 
@@ -89,40 +79,29 @@ public class WhiteboardGUI extends JFrame {
         buttonGroup.add(freehand);
         buttonGroup.add(drawLine);
         buttonGroup.add(drawRect);
-        
+
         // default selected button
         freehand.setSelected(true);
-        
+
         // this is for the eraser sizes
         buttonsMenu.setLayout(new GridLayout(20, 1));
         colorOptions.setPreviewPanel(new JPanel());
-        
-        onlineUserList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        onlineUserList.setLayoutOrientation(JList.VERTICAL);
-        onlineUserList.setVisibleRowCount(-1);
-        onlineUserScroller = new JScrollPane(onlineUserList);
-        onlineUserScroller.setPreferredSize(new Dimension(200, 80));
-        
-        whiteboardsList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        whiteboardsList.setLayoutOrientation(JList.VERTICAL);
-        whiteboardsList.setVisibleRowCount(-1);
-        whiteboardsScroller = new JScrollPane(whiteboardsList);
-        whiteboardsScroller.setPreferredSize(new Dimension(200, 80));
-        
+
         /********** Initialize listeners **********/
         colorButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				Color color = JColorChooser.showDialog(colorOptions, "Choose a color", colorOptions.getColor());
-				if (color != null){
-					canvas.setBrushColor(color.getRGB());
-					canvas.setFillColor(color.getRGB());
-					colorButton.setBackground(color);
-				}
-				
-			}
-		});
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color color = JColorChooser.showDialog(colorOptions,
+                        "Choose a color", colorOptions.getColor());
+                if (color != null) {
+                    canvas.setBrushColor(color.getRGB());
+                    canvas.setFillColor(color.getRGB());
+                    colorButton.setBackground(color);
+                }
+
+            }
+        });
 
         // listener that sets the brush size
         class sizeListener implements ActionListener {
@@ -177,26 +156,19 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(colorButton);
         this.add(canvas, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);
-        this.add(onlineUserScroller, BorderLayout.EAST);
-        this.add(whiteboardsScroller, BorderLayout.NORTH);
-        
-//        whiteboardsList.addListSelectionListener(new ListSelectionListener() {
-//            
-//            @Override
-//            public void valueChanged(ListSelectionEvent e) {
-//
-//                ListSelectionModel m = (ListSelectionModel)e.getSource();
-//                for(int i = e.getFirstIndex(); i < e.getLastIndex(); i++) {
-//                    if(m.isSelectedIndex(i)) {
-//                        System.out.println("changeboard ");
-//                    }
-//                }
-//            }
-//        });
+        this.add(menuEast, BorderLayout.EAST);
     }
 
     public void updateModelView(String command) {
         // set up the UI (on the event-handling thread)
         SwingUtilities.invokeLater(new CanvasPainter(canvas, command));
+    }
+    
+    public void changeWhiteboard(String boardName) {
+        SwingUtilities.invokeLater(new ExecuteChangeboard(canvas,boardName));
+    }
+
+    public ApplicationClient getClient() {
+        return client;
     }
 }

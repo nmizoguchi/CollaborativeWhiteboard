@@ -5,7 +5,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 
-import canvas.Canvas;
+import client.gui.canvas.Canvas;
 
 public class EraseTool implements Tool {
 
