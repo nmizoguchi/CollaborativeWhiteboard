@@ -43,11 +43,10 @@ public class EraseController implements ToolController {
         Color color = Color.WHITE;
 
         // Define Brush Size
-        int brush = Integer.valueOf(args[5]);
-        System.out.println(brush);
+        int brushSizeInt = Integer.valueOf(args[5]);
 
         g2.setColor(color);
-        g2.setStroke(new BasicStroke(brush));
+        g2.setStroke(new BasicStroke(brushSizeInt));
         g2.drawLine(lastX, lastY, x, y);
 
         lastX = x;

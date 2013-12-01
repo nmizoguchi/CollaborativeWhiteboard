@@ -35,7 +35,6 @@ public class ApplicationServer {
             server = new ApplicationServer(port);
             server.serve();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

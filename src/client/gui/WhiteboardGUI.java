@@ -35,11 +35,13 @@ public class WhiteboardGUI extends JFrame {
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private final ImageIcon eraserIcon;
     private final ImageIcon drawIcon;
+    private final ImageIcon drawLineIcon;
+    private final ImageIcon rectangleIcon;
     private final JToggleButton eraser;
     private final JToggleButton freehand;
     private final JToggleButton drawLine;
     private final JToggleButton drawRect;
-    private final JMenu brushSizes = new JMenu("brush sizes");
+    private final JMenu brushSizes;
     private final JButton size5 = new JButton("5");
     private final JButton size20 = new JButton("20");
     private final JButton colorButton = new JButton();
@@ -50,26 +52,41 @@ public class WhiteboardGUI extends JFrame {
         
         this.client = client;
         
+        this.menuEast = new MenuEast(this);
+        
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
-        
-        menuEast = new MenuEast(this);
-        
-        eraserIcon = new ImageIcon(new ImageIcon("images/eraser.gif")
+
+        brushSizes = new JMenu("Size: " + canvas.getBrushSize());
+        eraserIcon = new ImageIcon(new ImageIcon("images/Eraser.png")
+
                 .getImage().getScaledInstance(50, 50, 100));
         drawIcon = new ImageIcon(new ImageIcon("images/brush.png").getImage()
                 .getScaledInstance(50, 50, 100));
+        drawLineIcon = new ImageIcon(new ImageIcon("images/Line.png").getImage()
+        		.getScaledInstance(50, 50, 100));
+        rectangleIcon = new ImageIcon(new ImageIcon("images/rectangle.png").getImage()
+        		.getScaledInstance(50, 50, 100));
         eraser = new JToggleButton(eraserIcon);
         eraser.setBackground(Color.WHITE);
         freehand = new JToggleButton(drawIcon);
         freehand.setBackground(Color.WHITE);
-        drawLine = new JToggleButton(drawIcon);
+        drawLine = new JToggleButton(drawLineIcon);
         drawLine.setBackground(Color.WHITE);
-        drawRect = new JToggleButton(drawIcon);
+        drawRect = new JToggleButton(rectangleIcon);
         drawRect.setBackground(Color.WHITE);
         colorButton.setBackground(Color.BLACK);
 
+        
+        //adding tool tip texts to each icon
+        brushSizes.setToolTipText("Click to select size");
+        eraser.setToolTipText("Erase tool");
+        freehand.setToolTipText("Free draw tool");
+        drawLine.setToolTipText("Draw line tool");
+        drawRect.setToolTipText("Draw rectangle tool");
+        colorButton.setToolTipText("Click to select color");
+        
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(800, 600));
 
@@ -82,49 +99,49 @@ public class WhiteboardGUI extends JFrame {
 
         // default selected button
         freehand.setSelected(true);
-
-        // this is for the eraser sizes
-        buttonsMenu.setLayout(new GridLayout(20, 1));
-        colorOptions.setPreviewPanel(new JPanel());
-
+        
+        buttonsMenu.setLayout(new GridLayout(10, 1));
+        
         /********** Initialize listeners **********/
+        /*
+         * Clicking the colorButton will open up a color palette. The user-selected color will then set the 
+         * brush color and fill color along with changing the colorButton to that selected color.
+         */
         colorButton.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color color = JColorChooser.showDialog(colorOptions,
-                        "Choose a color", colorOptions.getColor());
-                if (color != null) {
-                    canvas.setBrushColor(color.getRGB());
-                    canvas.setFillColor(color.getRGB());
-                    colorButton.setBackground(color);
-                }
-
-            }
-        });
-
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Color color = JColorChooser.showDialog(colorOptions, "Choose a color", colorOptions.getColor());
+				if (color != null){
+					canvas.setBrushColor(color.getRGB());
+					canvas.setFillColor(color.getRGB());
+					colorButton.setBackground(color);
+				}
+			}
+		});
+        
         // listener that sets the brush size
         class sizeListener implements ActionListener {
             private int brushsize;
-
             public sizeListener(int b) {
                 brushsize = b;
             }
-
             @Override
             public void actionPerformed(ActionEvent e) {
                 canvas.setBrushSize(brushsize);
+                brushSizes.setPopupMenuVisible(false);
+                brushSizes.setText("Size: " + canvas.getBrushSize());
             }
         }
         size5.addActionListener(new sizeListener(5));
         size20.addActionListener(new sizeListener(20));
-        brushSizes.add(size5);
-        brushSizes.add(size20);
 
         // sets the mode and selects the button
         eraser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+            	canvas.setBrushSize(50);
+            	brushSizes.setText("Size: " + canvas.getBrushSize());
                 canvas.setMode(Canvas.MODE.ERASE);
             }
         });
@@ -146,8 +163,10 @@ public class WhiteboardGUI extends JFrame {
                 canvas.setMode(Canvas.MODE.RECTANGLE);
             }
         });
-
+        
         /********** Initialize Layout **********/
+        brushSizes.add(size5);
+        brushSizes.add(size20);
         buttonsMenu.add(eraser);
         buttonsMenu.add(freehand);
         buttonsMenu.add(drawLine);
@@ -159,6 +178,7 @@ public class WhiteboardGUI extends JFrame {
         this.add(menuEast, BorderLayout.EAST);
     }
 
+    
     public void updateModelView(String command) {
         // set up the UI (on the event-handling thread)
         SwingUtilities.invokeLater(new CanvasPainter(canvas, command));
