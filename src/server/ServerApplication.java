@@ -94,8 +94,8 @@ public class ServerApplication implements ConnectionListener {
         		} else {
         			//If user selects 'OK' without entering a username
         			//then they will receive an automatically generated username with the format of:
-        			//Anonymous[random double from 0-10000]
-        			newUser = new User(message.getArgument(0), "Anonymous" + Math.random()*10000);
+        			//Anonymous[random int from 0-10000]
+        			newUser = new User(message.getArgument(0), "Anonymous" + (int)Math.floor(Math.random()*10000));
         		}
         		currentConnection.setUser(newUser);
 

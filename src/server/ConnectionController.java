@@ -78,7 +78,6 @@ public class ConnectionController implements ConnectionOutputHandler {
             try {
                 inputStream.close();
             } catch (IOException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
             } finally {
                 l.onClientDisconnected(this);
@@ -96,9 +95,8 @@ public class ConnectionController implements ConnectionOutputHandler {
      */
     private void handleIncomingMessages() {
         try {
-//        	while (true){
-        	for (String line = inputStream.readLine(); line != null; line = inputStream.readLine()){
-        		
+        	while(true){
+        		String line = inputStream.readLine();
                 listener.onMessageReceived(this, line);
             }
         } catch (IOException e) {

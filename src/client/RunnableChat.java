@@ -14,13 +14,13 @@ public class RunnableChat implements Runnable {
     
     @Override
     public void run() {
-        String[] tokens = arguments.split(" ");
-        String user = tokens[0] + ":";
-        String message = "";
-        for(int i = 1; i < tokens.length; i++)
-            message = message + " " + tokens[i];
-        
-        gui.addChatMessage(user, message.trim());
+    	gui.addChatMessage(arguments);
+//        String[] tokens = arguments.split(":");
+//        String user = tokens[0];
+//        StringBuilder message = new StringBuilder();
+//        for(int i = 1; i < tokens.length; i++)
+//            message.append(" ").append(tokens[i]);
+//        gui.addChatMessage(user, message.toString().trim());
 
     }
 

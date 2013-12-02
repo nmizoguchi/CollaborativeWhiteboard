@@ -10,6 +10,10 @@ import java.awt.event.ActionListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ButtonGroup;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout.ParallelGroup;
+import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JColorChooser;
@@ -37,6 +41,7 @@ public class WhiteboardGUI extends JFrame {
 
     private final ClientApplication client;
     private final Canvas canvas;
+    private final JScrollPane canvasPane;
     private final JMenuBar buttonsMenu = new JMenuBar();
     private final ButtonGroup buttonGroup = new ButtonGroup();
     private final ImageIcon eraserIcon;
@@ -63,6 +68,7 @@ public class WhiteboardGUI extends JFrame {
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
+        canvasPane = new JScrollPane(canvas);
 
         brushSizes = new JMenu("Size: " + canvas.getBrushSize());
         eraserIcon = new ImageIcon(new ImageIcon("images/Eraser.png")
@@ -94,7 +100,7 @@ public class WhiteboardGUI extends JFrame {
         colorButton.setToolTipText("Click to select color");
         
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.setBounds(new Rectangle(1200, 600));
+        this.setBounds(new Rectangle(1000, 600));
 
         /********** Initialize buttonGroup **********/
         // buttonGroup ensures that only one of the buttons is selected
@@ -179,28 +185,23 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(drawRect);
         buttonsMenu.add(brushSizes);
         buttonsMenu.add(colorButton);
-        this.add(canvas, BorderLayout.CENTER);
-        this.add(buttonsMenu, BorderLayout.WEST);
+////        JScrollPane chat = new JScrollPane(new ChatView());
+//        GroupLayout layout = new GroupLayout(this.getContentPane());
+//        SequentialGroup row = layout.createSequentialGroup();
+//        row.addComponent(buttonsMenu).addComponent(canvasPane).addComponent(menuEast);
+//        layout.setHorizontalGroup(row);
+//        
+//        ParallelGroup top = layout.createParallelGroup(Alignment.LEADING).addComponent(buttonsMenu).addComponent(canvasPane)
+//        		.addComponent(menuEast);
+//        layout.setVerticalGroup(top);
+//        layout.setAutoCreateGaps(true);
         
+        this.add(canvasPane, BorderLayout.CENTER);
+        this.add(buttonsMenu, BorderLayout.WEST);
+        this.add(menuEast, BorderLayout.EAST);
+//        this.setLayout(layout);
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         
-        
-        
-        
-//        whiteboardsList.addListSelectionListener(new ListSelectionListener() {
-//            
-//            @Override
-//            public void valueChanged(ListSelectionEvent e) {
-//
-//                ListSelectionModel m = (ListSelectionModel)e.getSource();
-//                for(int i = e.getFirstIndex(); i < e.getLastIndex(); i++) {
-//                    if(m.isSelectedIndex(i)) {
-//                        System.out.println("changeboard ");
-//                    }
-//                }
-//            }
-//        });
-        this.add(menuEast, BorderLayout.LINE_END);
     }
 
     public void updateModelView(String command) {
@@ -212,8 +213,8 @@ public class WhiteboardGUI extends JFrame {
         SwingUtilities.invokeLater(new RunnableChangeboard(canvas, boardName));
     }
     
-    public void addChatMessage(String user, String message) {
-        menuEast.addMessage(user, message);
+    public void addChatMessage(String message) {
+        menuEast.addMessage(message);
     }
 
     public ClientApplication getClient() {

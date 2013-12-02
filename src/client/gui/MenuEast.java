@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -49,13 +50,13 @@ public class MenuEast extends JPanel {
         onlineUserList.setLayoutOrientation(JList.VERTICAL);
         onlineUserList.setVisibleRowCount(-1);
         onlineUserScroller = new JScrollPane(onlineUserList);
-        onlineUserScroller.setPreferredSize(new Dimension(200, 80));
+//        onlineUserScroller.setPreferredSize(new Dimension(50, 80));
 
         whiteboardsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         whiteboardsList.setLayoutOrientation(JList.VERTICAL);
         whiteboardsList.setVisibleRowCount(-1);
         whiteboardsScroller = new JScrollPane(whiteboardsList);
-        whiteboardsScroller.setPreferredSize(new Dimension(200, 80));
+//        whiteboardsScroller.setPreferredSize(new Dimension(50, 80));
 
         whiteboardsList.addListSelectionListener(new ListSelectionListener() {
 
@@ -89,15 +90,24 @@ public class MenuEast extends JPanel {
         });
 
         this.setLayout(new GridLayout(10, 1));
+//        layout.addLayoutComponent("userlabel", new JLabel("Online users"));
+//        layout.addLayoutComponent("users", onlineUserScroller);
+//        layout.addLayoutComponent("boardlabel", whiteboardsScroller);
+//        layout.addLayoutComponent("boardbutton", createBoardButton);
+//        layout.addLayoutComponent("chat", new JScrollPane(chatView));
+//        this.setLayout(layout);
+//        this.add
+        JScrollPane chatPane = new JScrollPane(chatView);
         this.add(new JLabel("Online users"));
         this.add(onlineUserScroller);
         this.add(new JLabel("Available Boards"));
         this.add(whiteboardsScroller);
         this.add(createBoardButton);
-        this.add(chatView);
+        this.add(chatPane);
+        this.setPreferredSize(new Dimension(250, 80));
     }
     
-    public void addMessage(String user, String message) {
-        chatView.addMessage(user, message);
+    public void addMessage(String message) {
+        chatView.addMessage(message);
     }
 }

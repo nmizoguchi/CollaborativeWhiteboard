@@ -60,12 +60,14 @@ public class ClientApplication {
             if (action.equals("newuser")) {
                 User user = new User(message.getArgument(0), message.getArgument(1));
                 SwingUtilities.invokeLater(new RunnableNewuser(activeUsers, user));
+                SwingUtilities.invokeLater(new RunnableChat(GUI, message.getArgument(1)+ "has entered the server"));
             }
 
             else if (action.equals("disconnecteduser")) {
                 User user = new User(message.getArgument(0), message.getArgument(1));
                 SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                         activeUsers, user));
+                SwingUtilities.invokeLater(new RunnableChat(GUI, message.getArgument(1) + "has disconnected from the server"));
             }
 
             else if (action.equals("whiteboards")) {
@@ -82,7 +84,7 @@ public class ClientApplication {
             }
             
             else if (action.equals("chat")) {
-                SwingUtilities.invokeLater(new RunnableChat(GUI,message.getArguments()));
+                SwingUtilities.invokeLater(new RunnableChat(GUI, message.getArguments()));
             }
 
             else {
