@@ -1,18 +1,20 @@
 package client.gui;
 
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneLayout;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -20,9 +22,10 @@ import Protocol.Protocol;
 import client.UserListModel;
 import client.WhiteboardListModel;
 
-public class MenuEast extends JPanel {
+public class MenuEast extends JPanel{
 
-    private final WhiteboardGUI gui;
+	private final GroupLayout layout;
+	private final WhiteboardGUI gui;
 
     private final JList onlineUserList;
     private final JList whiteboardsList;
@@ -31,13 +34,23 @@ public class MenuEast extends JPanel {
     private final UserListModel activeUsersData;
     private final WhiteboardListModel activeWhiteboardsData;
     private final JButton createBoardButton;
-    private final ChatView chatView;
+    private final JTextArea chatArea;
+    private final JScrollPane chatAreaPane;
+    private final JTextField userChat;
+    private final JLabel chatHereText;
     
-    public MenuEast(final WhiteboardGUI userInterface) {
-
-        this.gui = userInterface;
+	public MenuEast(WhiteboardGUI userInterface) {
+		layout = new GroupLayout(this);
+		layout.setAutoCreateGaps(true);
+		layout.setAutoCreateContainerGaps(true);
+		
+		this.gui = userInterface;
         
-        chatView = new ChatView();
+		chatArea = new JTextArea();
+		chatAreaPane = new JScrollPane(chatArea);
+		userChat = new JTextField();
+		chatHereText = new JLabel("Chat Here: ");
+        
 
         activeUsersData = gui.getClient().getActiveUsers();
         activeWhiteboardsData = gui.getClient().getActiveWhiteboards();
@@ -58,6 +71,9 @@ public class MenuEast extends JPanel {
         whiteboardsScroller = new JScrollPane(whiteboardsList);
 //        whiteboardsScroller.setPreferredSize(new Dimension(50, 80));
 
+        JLabel online = new JLabel("Online Users");
+        JLabel boardsAvail = new JLabel("Available Boards");
+        
         whiteboardsList.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -74,6 +90,7 @@ public class MenuEast extends JPanel {
 
         createBoardButton.addActionListener(new ActionListener() {
 
+
         	@Override
         	public void actionPerformed(ActionEvent e) {
         		try{
@@ -89,25 +106,34 @@ public class MenuEast extends JPanel {
         	}
         });
 
-        this.setLayout(new GridLayout(10, 1));
-//        layout.addLayoutComponent("userlabel", new JLabel("Online users"));
-//        layout.addLayoutComponent("users", onlineUserScroller);
-//        layout.addLayoutComponent("boardlabel", whiteboardsScroller);
-//        layout.addLayoutComponent("boardbutton", createBoardButton);
-//        layout.addLayoutComponent("chat", new JScrollPane(chatView));
-//        this.setLayout(layout);
-//        this.add
-        JScrollPane chatPane = new JScrollPane(chatView);
-        this.add(new JLabel("Online users"));
-        this.add(onlineUserScroller);
-        this.add(new JLabel("Available Boards"));
-        this.add(whiteboardsScroller);
-        this.add(createBoardButton);
-        this.add(chatPane);
-        this.setPreferredSize(new Dimension(250, 80));
+        userChat.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e) {
+        		String message = Protocol.CreateMessage(gui.getClient().getUser(),"chat", userChat.getText());
+        		gui.getClient().send(message);
+        		userChat.setText("");
+        	}
+        });
+	
+	
+        /****************Layout********************/
+        ParallelGroup horizGroup = layout.createParallelGroup();
+        horizGroup.addComponent(online).addComponent(onlineUserScroller)
+        		.addComponent(boardsAvail).addComponent(whiteboardsScroller)
+        		.addComponent(createBoardButton).addComponent(chatAreaPane).addGroup(layout.createSequentialGroup()
+        				.addComponent(chatHereText).addComponent(userChat));
+        layout.setHorizontalGroup(layout.createSequentialGroup().addGroup(horizGroup));
+        
+        ParallelGroup vertGroup = layout.createParallelGroup(GroupLayout.Alignment.BASELINE);
+        vertGroup.addComponent(chatHereText).addComponent(userChat);
+        layout.setVerticalGroup(layout.createSequentialGroup().addComponent(online).addComponent(onlineUserScroller)
+        		.addComponent(boardsAvail).addComponent(whiteboardsScroller).addComponent(createBoardButton)
+        		.addComponent(chatAreaPane).addGroup(vertGroup));
+        this.setLayout(layout);
+        this.setPreferredSize(new Dimension(200, 600));
+	}
+	//TODO: not thread-safe
+	public void addMessage(String message) {
+        chatArea.append(message + "\n");
     }
-    
-    public void addMessage(String message) {
-        chatView.addMessage(message);
-    }
+
 }

@@ -185,16 +185,6 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(drawRect);
         buttonsMenu.add(brushSizes);
         buttonsMenu.add(colorButton);
-////        JScrollPane chat = new JScrollPane(new ChatView());
-//        GroupLayout layout = new GroupLayout(this.getContentPane());
-//        SequentialGroup row = layout.createSequentialGroup();
-//        row.addComponent(buttonsMenu).addComponent(canvasPane).addComponent(menuEast);
-//        layout.setHorizontalGroup(row);
-//        
-//        ParallelGroup top = layout.createParallelGroup(Alignment.LEADING).addComponent(buttonsMenu).addComponent(canvasPane)
-//        		.addComponent(menuEast);
-//        layout.setVerticalGroup(top);
-//        layout.setAutoCreateGaps(true);
         
         this.add(canvasPane, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);

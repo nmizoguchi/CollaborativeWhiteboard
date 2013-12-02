@@ -221,10 +221,6 @@ public class ServerApplication implements ConnectionListener {
             String message = Protocol.CreateServerMessage("disconnecteduser",
                     connection.getUser().toString());
             broadcastMessage(message);
-            
-            //TODO: put this message on the chat message in GUI
-            System.out.println(connection.getUser().getName()
-                    + " has disconnected from the server.");
             }
             }catch (NullPointerException n){}
         }

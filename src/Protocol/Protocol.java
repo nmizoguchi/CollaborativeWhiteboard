@@ -103,7 +103,6 @@ public class Protocol {
     }
     
     public String getArguments() {
-        
         String args = "";
         for(String arg : arguments) {
             args = args + " " + arg;

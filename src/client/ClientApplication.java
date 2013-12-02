@@ -67,6 +67,7 @@ public class ClientApplication {
                 User user = new User(message.getArgument(0), message.getArgument(1));
                 SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                         activeUsers, user));
+                //TODO: message.getArgument(1)
                 SwingUtilities.invokeLater(new RunnableChat(GUI, message.getArgument(1) + "has disconnected from the server"));
             }
 
