@@ -36,7 +36,7 @@ public class ClientApplication {
      * 
      */
 
-    private final WhiteboardGUI GUI;
+    private WhiteboardGUI GUI;
     private Whiteboard whiteboard;
     private final User user;
     private final Socket socket;
@@ -50,7 +50,6 @@ public class ClientApplication {
         whiteboard = new Whiteboard("Default");
         activeUsers = new UserListModel();
         activeWhiteboards = new WhiteboardListModel();
-        // activeBoardNames.add("Default");
         socket = new Socket(serverAddress, port);
         GUI = new WhiteboardGUI(this);
         GUI.setVisible(true);
