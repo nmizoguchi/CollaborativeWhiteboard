@@ -12,8 +12,11 @@ import shared.models.Whiteboard;
 import Protocol.Protocol;
 
 /**
- * This class represents the Model of the Server. It is also the entry point of
- * the Server application.  It is mutable.
+ * This class represents the Model of the Server. It has the representation of
+ * all connected clients and also all active whiteboards. The server's
+ * whiteboards are the official ones, and all clients are always updating
+ * themselves to keep consistency with the server's representation. It is also
+ * the entry point of the Server application. It is mutable.
  * 
  * @author Nicholas M. Mizoguchi
  * 
@@ -93,7 +96,7 @@ public class ServerApplication implements ConnectionListener {
     }
 
     /**
-     * Add a new Connection to this server.
+     * Adds a new Connection to this server.
      * 
      * @param controller
      *            the controller of the connection.
@@ -115,6 +118,19 @@ public class ServerApplication implements ConnectionListener {
     }
 
     /**
+     * Broadcasts a message to all connected clients.
+     * 
+     * @param message
+     */
+    public void broadcastMessage(String message) {
+        synchronized (connectionMap) {
+            for (ConnectionController controller : connectionMap.keySet()) {
+                controller.scheduleMessage(message);
+            }
+        }
+    }
+    
+    /**
      * @return a list of names of all the active Whiteboards in the server.
      */
     private String getWhiteboardNames() {
@@ -130,19 +146,6 @@ public class ServerApplication implements ConnectionListener {
         }
 
         return names;
-    }
-
-    /**
-     * Broadcasts a message to all connected clients.
-     * 
-     * @param message
-     */
-    public void broadcastMessage(String message) {
-        synchronized (connectionMap) {
-            for (ConnectionController controller : connectionMap.keySet()) {
-                controller.scheduleMessage(message);
-            }
-        }
     }
 
     /*
@@ -295,7 +298,7 @@ public class ServerApplication implements ConnectionListener {
         }
     }
 
-    /**
+    /*
      * Entry point of the server.
      */
     public static void main(String[] args) {

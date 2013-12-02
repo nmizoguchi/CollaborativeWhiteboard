@@ -7,7 +7,8 @@ import java.util.List;
 /**
  * A model of a whiteboard. It represents both clientside and serverside models.
  * Each instance of Whiteboard has its own name and version. The drawing in a
- * whiteboard is simply a collection of actions, defined by our protocol.
+ * whiteboard is simply a collection of actions, defined by our protocol. It is
+ * mutable.
  * 
  * @author Nicholas M. Mizoguchi
  * 

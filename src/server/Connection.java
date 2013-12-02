@@ -140,13 +140,6 @@ public class Connection {
 	}
 
 	/**
-	 * @return the unique id of this connection.
-	 */
-	public UUID getUid() {
-		return uid;
-	}
-
-	/**
 	 * Define the equals method for this class. It depends directly to the
 	 * unique id that represents this class.
 	 */
@@ -157,7 +150,7 @@ public class Connection {
 		}
 
 		Connection that = (Connection) o;
-		if (!that.getUid().equals(uid)) {
+		if (!that.uid.equals(uid)) {
 			return false;
 		}
 

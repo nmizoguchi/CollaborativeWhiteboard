@@ -195,13 +195,6 @@ public class ConnectionController implements ConnectionOutputHandler {
     }
 
     /**
-     * @return the unique ID that represents this controller.
-     */
-    public UUID getUid() {
-        return uid;
-    }
-
-    /**
      * Schedules a message to be sent to the client.
      * 
      * @param the
@@ -222,7 +215,7 @@ public class ConnectionController implements ConnectionOutputHandler {
         }
 
         ConnectionController that = (ConnectionController) o;
-        if (!that.getUid().equals(uid)) {
+        if (!that.uid.equals(uid)) {
             return false;
         }
 

@@ -63,7 +63,7 @@ public class User {
      * Sets the name of this user
      * 
      * @param username
-     *            the desired username.
+     *            the desired username, cannot have spaces.
      */
     public synchronized void setName(String username) {
         this.name = username;

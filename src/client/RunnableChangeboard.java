@@ -16,6 +16,5 @@ public class RunnableChangeboard implements Runnable {
     @Override
     public void run() {
         canvas.clearScreen();
-        canvas.mClient.changeWhiteboard(boardName);
     }
 }

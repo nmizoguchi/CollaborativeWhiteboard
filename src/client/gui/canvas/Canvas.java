@@ -64,7 +64,7 @@ public class Canvas extends JPanel {
         FREEHAND, ERASE, LINE, RECTANGLE
     }
 
-    public void initializeTools() {
+    private void initializeTools() {
         mTools.add(MODE.FREEHAND.ordinal(), new FreehandTool(this));
         mTools.add(MODE.ERASE.ordinal(), new EraseTool(this));
         mTools.add(MODE.LINE.ordinal(), new LineTool(this));
@@ -171,7 +171,7 @@ public class Canvas extends JPanel {
         this.repaint();
     }
 
-    public Image getBuffer() {
+    public Image getDrawingBuffer() {
         return drawingBuffer;
     }
 

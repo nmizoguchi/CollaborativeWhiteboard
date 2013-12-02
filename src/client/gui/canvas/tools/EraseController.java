@@ -30,7 +30,7 @@ public class EraseController implements ToolController {
          * pixels relative to the upper-left corner of the drawing buffer.
          */
 
-        Image drawingBuffer = canvas.getBuffer();
+        Image drawingBuffer = canvas.getDrawingBuffer();
         Graphics2D g2 = (Graphics2D) drawingBuffer.getGraphics();
 
         // Get points
