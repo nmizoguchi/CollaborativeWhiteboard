@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import Protocol.Protocol;
 import client.gui.canvas.Canvas;
 
-/*
+/**
  * DrawingController handles the user's freehand drawing.
  */
 public class EraseController implements ToolController {

@@ -38,7 +38,6 @@ public class ClientApplication {
         whiteboard = new Whiteboard("Default");
         activeUsers = new UserListModel();
         activeWhiteboards = new WhiteboardListModel();
-//        activeBoardNames.add("Default");
         socket = new Socket(serverAddress, port);
         GUI = new WhiteboardGUI(this);
         GUI.setVisible(true);
