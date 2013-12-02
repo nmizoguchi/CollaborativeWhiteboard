@@ -10,7 +10,7 @@ import Protocol.Protocol;
  * Represents a client connection on server-side. This connection has
  * information about the connected user, such as its username, which board the
  * user is working on, and also the last version sent to the client of that
- * board.
+ * board. It is mutable.
  * 
  * @author Nicholas M. Mizoguchi
  */

@@ -6,7 +6,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import shared.models.User;
 import shared.models.Whiteboard;
@@ -14,12 +13,27 @@ import Protocol.Protocol;
 
 /**
  * This class represents the Model of the Server. It is also the entry point of
- * the Server application.
+ * the Server application.  It is mutable.
  * 
  * @author Nicholas M. Mizoguchi
  * 
  */
 public class ServerApplication implements ConnectionListener {
+
+    /*
+     * Representation Invariant: connectionMap has connections that represents
+     * only active connections. Methods that require informing or updating
+     * information in one of these collections cannot have the collection
+     * modified in the middle, otherwise they might not be performing the action
+     * correctly.
+     * 
+     * Thread-safe argument: whiteboardList and connectionMap uses thread-safe
+     * datatypes. All methods that require inform or update all elements in one
+     * of these collections cannot have the collection modified until the method
+     * performs what it says it should do. To achieve this we acquires the lock
+     * of the collection, so no one can modify it until it completes all
+     * actions.
+     */
 
     private final List<Whiteboard> whiteboardList;
     private final Map<ConnectionController, Connection> connectionMap;

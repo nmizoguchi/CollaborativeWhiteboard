@@ -6,7 +6,8 @@ import java.net.Socket;
 
 /**
  * Handles incoming client connections. It is responsible for creating a
- * Connection and ConnectionController to handle this new connection.
+ * Connection and ConnectionController to handle this new connection. Immutable
+ * class.
  * 
  * @author Nicholas M. Mizoguchi
  * 
@@ -61,7 +62,8 @@ public class ServerConnectionHandler implements Runnable {
                 controller.startThreads();
             }
         } catch (IOException e) {
-            // Problem with serving. Stops server. Also, prints the stack for debugging.
+            // Problem with serving. Stops server. Also, prints the stack for
+            // debugging.
             e.printStackTrace();
         }
     }

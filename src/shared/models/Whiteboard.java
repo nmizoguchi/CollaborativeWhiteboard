@@ -15,8 +15,10 @@ import java.util.List;
 public class Whiteboard {
 
     /*
-     * Rep. Invariant: - The version has the same value of the number of
-     * actions.
+     * Rep. Invariant: The version has the same value of the number of actions.
+     * 
+     * Thread-safe argument: Uses a thread-safe datatype, and invariant depends
+     * directly to the state of this thread-safe datatype (synchronized list).
      */
 
     private final String name;
