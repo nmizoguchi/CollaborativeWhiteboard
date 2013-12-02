@@ -35,7 +35,8 @@ import client.gui.canvas.CanvasPainter;
 
 public class WhiteboardGUI extends JFrame {
     /**
-	 * 
+	 * This is the display portion that a user directly interacts with.
+	 * @author rcha
 	 */
     private static final long serialVersionUID = 1L;
 

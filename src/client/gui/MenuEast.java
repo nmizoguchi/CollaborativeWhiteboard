@@ -22,6 +22,14 @@ import Protocol.Protocol;
 import client.UserListModel;
 import client.WhiteboardListModel;
 
+/**
+ * This panel is found on the east side of the GUI.
+ * It contains a list of users currently connected to the server,
+ * a list of the whiteboards, a button that creates new whiteboards, and a chat box.
+ * The chat box is updated whenever a user types in a message, or connects/disconnects from the server.
+ * @author rcha
+ *
+ */
 public class MenuEast extends JPanel{
 
 	private final GroupLayout layout;
@@ -38,6 +46,8 @@ public class MenuEast extends JPanel{
     private final JScrollPane chatAreaPane;
     private final JTextField userChat;
     private final JLabel chatHereText;
+    private final JLabel online;
+    private final JLabel boardsAvail;
     
 	public MenuEast(WhiteboardGUI userInterface) {
 		layout = new GroupLayout(this);
@@ -46,12 +56,16 @@ public class MenuEast extends JPanel{
 		
 		this.gui = userInterface;
         
+		/********Initialize Components****************/
+		//Initializes the chatbox-related components
 		chatArea = new JTextArea();
+		chatArea.setWrapStyleWord(true);
+		chatArea.setLineWrap(true);
 		chatAreaPane = new JScrollPane(chatArea);
 		userChat = new JTextField();
 		chatHereText = new JLabel("Chat Here: ");
         
-
+		//Initializes the list of users and boards -related components
         activeUsersData = gui.getClient().getActiveUsers();
         activeWhiteboardsData = gui.getClient().getActiveWhiteboards();
 
@@ -72,9 +86,12 @@ public class MenuEast extends JPanel{
         whiteboardsScroller = new JScrollPane(whiteboardsList);
 //        whiteboardsScroller.setPreferredSize(new Dimension(50, 80));
 
-        JLabel online = new JLabel("Online Users");
-        JLabel boardsAvail = new JLabel("Available Boards");
+        online = new JLabel("Online Users");
+        boardsAvail = new JLabel("Available Boards");
         
+        /*
+         * When the user selects a whiteboard in the list, the gui sends a message to the server to switch boards
+         */
         whiteboardsList.addListSelectionListener(new ListSelectionListener() {
 
             @Override
@@ -89,9 +106,12 @@ public class MenuEast extends JPanel{
             }
         });
 
+        /*
+         * When the user selects the button to make a new board, a dialog appears. 
+         * If the user enters a board name, the gui sends a message to the server to make a new board.
+         *  If the user does not and selects either OK or CANCEL, the dialog closes and nothing happens.
+         */
         createBoardButton.addActionListener(new ActionListener() {
-
-
         	@Override
         	public void actionPerformed(ActionEvent e) {
         		try{
@@ -107,6 +127,11 @@ public class MenuEast extends JPanel{
         	}
         });
 
+        /*
+         * When the user types a message in the chatbox,
+         *  the gui sends a message to the server to update the chatbox,
+         *  adding a new row with text of the form [username] + ": " + [typed message]
+         */
         userChat.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e) {
         		String message = Protocol.CreateMessage(gui.getClient().getUser(),"chat", userChat.getText());

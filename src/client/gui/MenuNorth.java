@@ -14,6 +14,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+/**
+ * This menu bar (located at the top of the GUI) contains a submenu called "File" with a menu item called "Save".
+ * Clicking "Save" or entering CTRL+S would save a
+ * screenshot of the whiteboard as a png file in the user-selected directory
+ * 
+ * @author rcha
+ */
 public class MenuNorth extends JMenuBar {
 
 	private final JMenu file;
