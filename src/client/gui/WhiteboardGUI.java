@@ -58,17 +58,19 @@ public class WhiteboardGUI extends JFrame {
     private final JButton colorButton = new JButton();
     private final JColorChooser colorOptions = new JColorChooser();
     private final MenuEast menuEast;
+    private final JMenuBar menuBar;
 
     public WhiteboardGUI(ClientApplication client) {
         
         this.client = client;
         
-        this.menuEast = new MenuEast(this);
         
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
         canvasPane = new JScrollPane(canvas);
+        menuEast = new MenuEast(this);
+        menuBar = new MenuNorth(this);
 
         brushSizes = new JMenu("Size: " + canvas.getBrushSize());
         eraserIcon = new ImageIcon(new ImageIcon("images/Eraser.png")
@@ -186,6 +188,7 @@ public class WhiteboardGUI extends JFrame {
         buttonsMenu.add(brushSizes);
         buttonsMenu.add(colorButton);
         
+        this.add(menuBar, BorderLayout.NORTH);
         this.add(canvasPane, BorderLayout.CENTER);
         this.add(buttonsMenu, BorderLayout.WEST);
         this.add(menuEast, BorderLayout.EAST);

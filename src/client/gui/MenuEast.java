@@ -58,6 +58,7 @@ public class MenuEast extends JPanel{
         onlineUserList = new JList(activeUsersData);
         whiteboardsList = new JList(activeWhiteboardsData);
         createBoardButton = new JButton("New Board");
+        createBoardButton.setSize(new Dimension(this.getWidth(), JButton.HEIGHT));
 
         onlineUserList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         onlineUserList.setLayoutOrientation(JList.VERTICAL);
