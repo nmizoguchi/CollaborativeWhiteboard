@@ -134,7 +134,8 @@ public class MenuEast extends JPanel{
          */
         userChat.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e) {
-        		String message = Protocol.CreateMessage(gui.getClient().getUser(),"chat", userChat.getText());
+        		String args = gui.getClient().getUser().getName()+": "+userChat.getText();
+        		String message = Protocol.CreateMessage(gui.getClient().getUser(),"chat", args);
         		gui.getClient().send(message);
         		userChat.setText("");
         	}
