@@ -95,8 +95,9 @@ public class ConnectionController implements ConnectionOutputHandler {
      */
     private void handleIncomingMessages() {
         try {
-        	while(true){
-        		String line = inputStream.readLine();
+            for (String line = inputStream.readLine(); line != null; line = inputStream
+                    .readLine()) {
+
                 listener.onMessageReceived(this, line);
             }
         } catch (IOException e) {
