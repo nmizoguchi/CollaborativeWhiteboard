@@ -112,10 +112,6 @@ public class Canvas extends JPanel {
             Graphics2D g2 = (Graphics2D) g;
             g2.setColor(new Color (brushColor));
             g2.setStroke(new BasicStroke(brushSize));
-            if(hasFill) {
-                g2.setColor(new Color (fillColor));
-                g2.fill(surfaceShape);
-            }
             g2.draw(surfaceShape);
         }
     }
