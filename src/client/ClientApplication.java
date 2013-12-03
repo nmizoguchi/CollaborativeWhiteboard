@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.Inet4Address;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class ClientApplication {
 
         user = new User("");
         whiteboard = new Whiteboard("Default");
-        socket = new Socket(serverAddress, port);
+        socket = new Socket(Inet4Address.getByName(serverAddress), port);
         this.outputQueue = new LinkedBlockingQueue<String>();
     }
 
