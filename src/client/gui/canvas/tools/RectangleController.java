@@ -89,7 +89,7 @@ public class RectangleController implements ToolController {
                 + e.getY() + " " + brushColor + " "
                 + brushSize + " " + hasFill + " " + fillColor;
         String message = Protocol.CreateMessage(canvas.mClient.getUser(),"drawrect",arguments);
-        canvas.mClient.send(message);
+        canvas.mClient.scheduleMessage(message);
         
         canvas.setSurfaceShape(null);
     }

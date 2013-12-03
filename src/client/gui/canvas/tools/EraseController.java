@@ -77,7 +77,7 @@ public class EraseController implements ToolController {
         String arguments = lastX + " " + lastY + " " + x + " " + y + " "
                 + brushSize;
         String message = Protocol.CreateMessage(canvas.mClient.getUser(),"erase",arguments);
-        canvas.mClient.send(message);
+        canvas.mClient.scheduleMessage(message);
 
         lastX = x;
         lastY = y;

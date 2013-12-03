@@ -8,6 +8,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -35,24 +37,19 @@ public class ClientApplication {
     /*
      * 
      */
-
-    private WhiteboardGUI GUI;
+    private ClientListener listener;
     private Whiteboard whiteboard;
     private final User user;
     private final Socket socket;
-    private final UserListModel activeUsers;
-    private final WhiteboardListModel activeWhiteboards;
+    private final Queue<String> outputQueue;
 
     public ClientApplication(String serverAddress, int port)
             throws UnknownHostException, IOException {
 
         user = new User("");
         whiteboard = new Whiteboard("Default");
-        activeUsers = new UserListModel();
-        activeWhiteboards = new WhiteboardListModel();
         socket = new Socket(serverAddress, port);
-        GUI = new WhiteboardGUI(this);
-        GUI.setVisible(true);
+        this.outputQueue = new LinkedBlockingQueue<String>();
     }
 
     /**
@@ -74,47 +71,33 @@ public class ClientApplication {
             String action = message.getAction();
 
             if (action.equals("newuser")) {
-                User user = new User(message.getArgument(0),
-                        message.getArgument(1));
-                SwingUtilities.invokeLater(new RunnableNewuser(activeUsers,
-                        user));
-                SwingUtilities.invokeLater(new RunnableChat(GUI, message
-                        .getArgument(1) + "has entered the server"));
+                listener.onNewuserMessageReceived(message);
             }
 
             else if (action.equals("disconnecteduser")) {
-                User user = new User(message.getArgument(0),
-                        message.getArgument(1));
-                SwingUtilities.invokeLater(new RunnableDisconnecteduser(
-                        activeUsers, user));
-                // TODO: message.getArgument(1)
-                SwingUtilities.invokeLater(new RunnableChat(GUI, message
-                        .getArgument(1) + "has disconnected from the server"));
+                listener.onDisconnecteduserMessageReceived(message);
             }
 
             else if (action.equals("whiteboards")) {
-                List<String> activeBoardNames = new ArrayList<String>();
-                for (int i = 0; i < message.getArgumentsSize(); i++) {
-                    activeBoardNames.add(message.getArgument(i));
-                }
-                SwingUtilities.invokeLater(new CanvasChangeWhiteboard(
-                        activeWhiteboards, activeBoardNames));
+
+                listener.onWhiteboardsMessageReceived(message);
             }
 
             else if (action.equals("changeboard")) {
                 changeWhiteboard(message.getArgument(0));
-                GUI.changeWhiteboard(message.getArgument(0));
+                listener.onChangeboardMessageReceived(message);
             }
 
             else if (action.equals("chat")) {
-                SwingUtilities.invokeLater(new RunnableChat(GUI, message
-                        .getArguments()));
+                listener.onChatMessageReceived(message);
             }
 
+            // TODO: Check for paint message using Protocol
             else {
-                GUI.updateModelView(command);
                 whiteboard.update(command);
+                listener.onPaintMessageReceived(message);
             }
+            // TODO: error handling
         }
     }
 
@@ -124,16 +107,25 @@ public class ClientApplication {
      * 
      * @param message
      */
-    public void send(String message) {
+    public void scheduleMessage(String message) {
 
+        outputQueue.add(message);
+    }
+
+    public void send() throws IOException {
         PrintWriter outputStream;
-
+        // Checks if there is a message to be sent. If it has, send it. Block
+        // otherwise.
         try {
             outputStream = new PrintWriter(socket.getOutputStream(), true);
-            outputStream.println(message);
-        }
+            while (socket.isConnected()) {
+                String message = ((LinkedBlockingQueue<String>) outputQueue)
+                        .take();
+                outputStream.println(message);
+            }
 
-        catch (IOException e) {
+            // Checks for checked exceptions that could be raised.
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -146,14 +138,6 @@ public class ClientApplication {
         return user;
     }
 
-    public UserListModel getActiveUsers() {
-        return activeUsers;
-    }
-
-    public WhiteboardListModel getActiveWhiteboards() {
-        return activeWhiteboards;
-    }
-
     /**
      * Initializes the client by sending an initialization request to the
      * server.
@@ -161,10 +145,46 @@ public class ClientApplication {
      * @param username
      *            the desired username of this client.
      */
-    private void initialize(String username) {
+    public void initialize(ClientListener listener, String username) {
+        
+        // Defines the listener
+        this.listener = listener;
+        
+        // Sets the initial username
         getUser().setName(username);
-        send(Protocol.CreateMessage(getUser(), "initialize", getUser()
-                .toString()));
+        scheduleMessage(Protocol.CreateMessage(getUser(), "initialize",
+                getUser().toString()));
+
+        // Creates the listening thread, that receives messages from updates of
+        // the model
+        Thread incomingMessageHandler = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    listen();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        
+        // Creates the listening thread, that receives messages from updates of
+        // the model
+        Thread outgoingMessageHandler = new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    send();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        incomingMessageHandler.start();
+        outgoingMessageHandler.start();
     }
 
     /**
@@ -172,47 +192,7 @@ public class ClientApplication {
      * 
      * @throws IOException
      */
-    private void close() throws IOException {
+    public void close() throws IOException {
         socket.close();
-    }
-
-    /*
-     * Main program. Make a window containing a Canvas.
-     */
-    public static void main(String[] args) throws UnknownHostException,
-            IOException {
-
-        // Request for the server IP
-        // TODO: Check for invalid IP's and problems with the connection!
-        String server = JOptionPane.showInputDialog("Server IP:");
-        final ClientApplication client = new ClientApplication(server, 4444);
-
-        // Need to initialize username before running listen method.
-        String username = JOptionPane.showInputDialog("Username:");
-
-        // Username dialog will continue to pop-up if the user clicks cancel
-        while (username == null) {
-            username = JOptionPane.showInputDialog("Username:");
-        }
-
-        // Initialize client by setting its username.
-        client.initialize(username);
-
-        // Creates the listening thread, that receives messages from updates of
-        // the model
-        Thread listenerThread = new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-                try {
-                    client.listen();
-                    client.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        listenerThread.start();
     }
 }

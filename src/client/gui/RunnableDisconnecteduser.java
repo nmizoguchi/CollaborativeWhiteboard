@@ -1,4 +1,4 @@
-package client;
+package client.gui;
 
 import server.ServerApplication;
 import shared.models.User;

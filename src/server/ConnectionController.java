@@ -89,12 +89,6 @@ public class ConnectionController implements ConnectionOutputHandler {
                 }
             });
 
-            // TODO: INITIALIZE THIS CONNECTION SUCH THAT THE FIRST THING TO
-            // SEND TO THE CLIENT IS THE LIST OF ALL CLIENTS THAT WERE CONNECTED
-            // BEFORE HIM THIS HAS TO BE DONE AQUIRING THE LOCK OF THE LIST OF
-            // CONNECTIONS, SO IT MAKES SURE THAT WHEN HE IS UPDATING ITSELF
-            // WITH THE CURRENT USERS, NO NEW USERS ARE ENTERING.
-
         } catch (IOException e) {
             e.printStackTrace();
             try {

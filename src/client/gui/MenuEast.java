@@ -19,8 +19,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import Protocol.Protocol;
-import client.UserListModel;
-import client.WhiteboardListModel;
 
 /**
  * This panel is found on the east side of the GUI.
@@ -66,8 +64,8 @@ public class MenuEast extends JPanel{
 		chatHereText = new JLabel("Chat Here: ");
         
 		//Initializes the list of users and boards -related components
-        activeUsersData = gui.getClient().getActiveUsers();
-        activeWhiteboardsData = gui.getClient().getActiveWhiteboards();
+        activeUsersData = gui.getActiveUsers();
+        activeWhiteboardsData = gui.getActiveWhiteboards();
 
         onlineUserList = new JList(activeUsersData);
         whiteboardsList = new JList(activeWhiteboardsData);
@@ -101,7 +99,7 @@ public class MenuEast extends JPanel{
                     String message = Protocol.CreateMessage(gui.getClient()
                             .getUser(), "changeboard", activeWhiteboardsData
                             .getElementAt(idx));
-                    gui.getClient().send(message);
+                    gui.getClient().scheduleMessage(message);
                 }
             }
         });
@@ -120,7 +118,7 @@ public class MenuEast extends JPanel{
         			if (name != null){
         				String message = Protocol.CreateMessage(gui.getClient()
         						.getUser(), "changeboard", name);
-        				gui.getClient().send(message);
+        				gui.getClient().scheduleMessage(message);
         			} 
         		}catch (NullPointerException n) {}
 
@@ -136,7 +134,7 @@ public class MenuEast extends JPanel{
         	public void actionPerformed(ActionEvent e) {
         		String args = gui.getClient().getUser().getName()+": "+userChat.getText();
         		String message = Protocol.CreateMessage(gui.getClient().getUser(),"chat", args);
-        		gui.getClient().send(message);
+        		gui.getClient().scheduleMessage(message);
         		userChat.setText("");
         	}
         });

@@ -2,7 +2,7 @@ package client.gui.canvas;
 
 import java.util.List;
 
-import client.WhiteboardListModel;
+import client.gui.WhiteboardListModel;
 
 public class CanvasChangeWhiteboard implements Runnable {
     

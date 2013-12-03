@@ -76,7 +76,7 @@ public class FreehandController implements ToolController {
                 + brushColor + " " + brushSize;
         String message = Protocol.CreateMessage(canvas.mClient.getUser(),
                 "drawline", arguments);
-        canvas.mClient.send(message);
+        canvas.mClient.scheduleMessage(message);
 
         lastX = x;
         lastY = y;

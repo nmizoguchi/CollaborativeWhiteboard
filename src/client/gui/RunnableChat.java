@@ -1,6 +1,5 @@
-package client;
+package client.gui;
 
-import client.gui.WhiteboardGUI;
 
 public class RunnableChat implements Runnable {
 

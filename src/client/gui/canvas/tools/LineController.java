@@ -87,7 +87,7 @@ public class LineController implements ToolController {
                 + brushColor + " " + brushSize;
         String message = Protocol.CreateMessage(canvas.mClient.getUser(),
                 "drawline", arguments);
-        canvas.mClient.send(message);
+        canvas.mClient.scheduleMessage(message);
 
         canvas.setSurfaceShape(null);
     }
