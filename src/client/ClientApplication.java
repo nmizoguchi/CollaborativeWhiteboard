@@ -138,21 +138,23 @@ public class ClientApplication {
     public User getUser() {
         return user;
     }
+    public void setUserName(String username) {
+    	getUser().setName(username);
+    }
 
     /**
      * Initializes the client by sending an initialization request to the
      * server.
      * 
-     * @param username
-     *            the desired username of this client.
+     * @param ClientListener
+     *            GUI on the client side
      */
-    public void initialize(ClientListener listener, String username) {
+    public void initialize(ClientListener listener) {
         
         // Defines the listener
         this.listener = listener;
         
         // Sets the initial username
-        getUser().setName(username);
         scheduleMessage(Protocol.CreateMessage(getUser(), "initialize",
                 getUser().toString()));
 

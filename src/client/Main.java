@@ -19,16 +19,21 @@ public class Main {
         String server = JOptionPane.showInputDialog("Server IP:");
         final ClientApplication client = new ClientApplication(server, 4444);
 
-        WhiteboardGUI GUI = new WhiteboardGUI(client);
-        GUI.setVisible(true);
-
         // Username dialog will continue to pop-up if the user clicks cancel
         String username;
         do {
             username = JOptionPane.showInputDialog("Username:");
         } while (username == null);
+        if (username.equals("")){
+        	username = "Anonymous" + (int)Math.floor(Math.random()*10000);
+        }
 
      // Initialize client by setting its username.
-        client.initialize(GUI, username);
+        client.setUserName(username);
+        WhiteboardGUI GUI = new WhiteboardGUI(client);
+        client.initialize(GUI);
+        
+        GUI.setVisible(true);
+        
     }
 }

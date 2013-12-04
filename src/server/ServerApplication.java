@@ -172,17 +172,8 @@ public class ServerApplication implements ConnectionListener {
             // Makes sure that won't lose a client that is connecting by...
             synchronized (connectionMap) {
                 User newUser;
-                if (message.getArgumentsSize() == 2) {
                     newUser = new User(message.getArgument(0),
                             message.getArgument(1));
-                } else {
-                    // If user selects 'OK' without entering a username
-                    // then they will receive an automatically generated
-                    // username with the format of:
-                    // Anonymous[random int from 0-10000]
-                    newUser = new User(message.getArgument(0), "Anonymous"
-                            + (int) Math.floor(Math.random() * 10000));
-                }
                 currentConnection.setUser(newUser);
 
                 // Broadcasts to everyone that this client connected.

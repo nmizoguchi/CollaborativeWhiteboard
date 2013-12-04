@@ -118,6 +118,7 @@ public class MenuEast extends JPanel{
         			if (name != null){
         				String message = Protocol.CreateMessage(gui.getClient()
         						.getUser(), "changeboard", name);
+        				
         				gui.getClient().scheduleMessage(message);
         			} 
         		}catch (NullPointerException n) {}
@@ -132,7 +133,7 @@ public class MenuEast extends JPanel{
          */
         userChat.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e) {
-        		String args = gui.getClient().getUser().getName()+": "+userChat.getText();
+        		String args = ": " + userChat.getText();
         		String message = Protocol.CreateMessage(gui.getClient().getUser(),"chat", args);
         		gui.getClient().scheduleMessage(message);
         		userChat.setText("");

@@ -240,8 +240,7 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
                 message.getArgument(1));
         SwingUtilities.invokeLater(new RunnableNewuser(activeUsers,
                 user));
-        SwingUtilities.invokeLater(new RunnableChat(this, message
-                .getArgument(1) + "has entered the server"));
+        SwingUtilities.invokeLater(new RunnableChat(this, " has entered the server"));
     }
 
     @Override
@@ -253,8 +252,7 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                 activeUsers, user));
 
-        SwingUtilities.invokeLater(new RunnableChat(this, message
-                .getArgument(1) + "has disconnected from the server"));
+        SwingUtilities.invokeLater(new RunnableChat(this, " has disconnected from the server"));
     }
 
     @Override
