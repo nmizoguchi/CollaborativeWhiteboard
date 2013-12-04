@@ -4,7 +4,10 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Label;
 import java.awt.event.MouseEvent;
+
+import javax.swing.JLabel;
 
 import Protocol.Protocol;
 import client.gui.canvas.Canvas;
@@ -94,6 +97,7 @@ public class EraseController implements ToolController {
     }
 
     public void mouseEntered(MouseEvent e) {
+    	
     }
 
     public void mouseExited(MouseEvent e) {

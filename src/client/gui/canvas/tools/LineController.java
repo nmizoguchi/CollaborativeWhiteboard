@@ -5,8 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.Line2D;
 
 import Protocol.Protocol;
@@ -22,7 +20,7 @@ public class LineController implements ToolController {
     private final Canvas canvas;
     private int lastX, lastY;
 
-    private int brushSize, brushColor;
+    private int brushSize, brushColor, hasFill, fillColor;
 
     private Line2D line;
 
@@ -51,9 +49,9 @@ public class LineController implements ToolController {
 
         // Define Brush Size
         int brush = Integer.valueOf(args[6]);
-
-        g2.setColor(color);
+        
         g2.setStroke(new BasicStroke(brush));
+        g2.setColor(color);
         g2.drawLine(lastX, lastY, x, y);
 
         // IMPORTANT! every time we draw on the internal drawing buffer, we
@@ -67,7 +65,7 @@ public class LineController implements ToolController {
     public void mousePressed(MouseEvent e) {
         lastX = e.getX();
         lastY = e.getY();
-
+        
         // Get color
         brushColor = canvas.getBrushColor();
 

@@ -30,7 +30,7 @@ public class Canvas extends JPanel {
     private Image drawingBuffer;
     private int brushSize = 3;
     private int brushColor = Color.BLACK.getRGB();
-    private boolean hasFill = true;
+    private boolean hasFill = false;
     private int fillColor = Color.BLACK.getRGB();
 
     private MODE editorMode;
@@ -110,8 +110,12 @@ public class Canvas extends JPanel {
         // If there is some shape being drawn only on client-side, show it
         if (surfaceShape != null) {
             Graphics2D g2 = (Graphics2D) g;
-            g2.setColor(new Color (brushColor));
             g2.setStroke(new BasicStroke(brushSize));
+            if (hasFill) {
+            	g2.setColor(new Color(fillColor));
+            	g2.fill(surfaceShape);
+            }
+            g2.setColor(new Color (brushColor));
             g2.draw(surfaceShape);
         }
     }

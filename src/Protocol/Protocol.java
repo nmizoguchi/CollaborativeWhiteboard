@@ -51,7 +51,8 @@ public class Protocol {
     private String[] CheckAndFormat(String input) {
 
         // Commands sent and received both sides:
-//         drawline x1 y1 x2 y2 color brushSize
+//         drawline x1 y1 x2 y2 color brushSize fillColor hasFill
+//		   freehand x1 y1 x2 y2 color brushSize
 //         erase x1 y1 x2 y2 brushSize
 //         drawrect x1 y1 x2 y2 brushColor brushSize fillColor hasFill
 //         changeboard boardName

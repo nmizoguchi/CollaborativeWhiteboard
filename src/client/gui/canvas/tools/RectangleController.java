@@ -4,6 +4,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
@@ -56,12 +57,21 @@ public class RectangleController implements ToolController {
 
         // Define hasFill
         int hasFillInt = Integer.valueOf(args[7]);
+        int fillColorInt = Integer.valueOf(args[8]);
         
         // Draw
-        g2.setColor(new Color(colorInt));
+        
         g2.setStroke(new BasicStroke(brush));
-        //rectangle is anchored at the least x and y values (top left corner)
-        g2.drawRect(Math.min(x1,x2), Math.min(y1,y2), width, height);
+      //rectangle is anchored at the least x and y values (top left corner)
+        Rectangle toDraw = new Rectangle(Math.min(x1, x2), Math.min(y1, y2), width, height);
+        
+        
+        if (hasFillInt == 1){
+        	g2.setPaint(new Color(fillColorInt));
+        	g2.fill(toDraw);
+        }
+        g2.setColor(new Color(colorInt));
+        g2.draw(toDraw);
 
         canvas.repaint();
     }
@@ -73,6 +83,8 @@ public class RectangleController implements ToolController {
     public void mousePressed(MouseEvent e) {
         brushColor = canvas.getBrushColor();
         brushSize = canvas.getBrushSize();
+        hasFill = canvas.hasFill()? 1 : 0; //1 if it has a fill color, 0 if it doesn't
+        fillColor = canvas.getFillColor();
 
     	lastX = e.getX(); lastY = e.getY();
     	rectangle.setFrame(lastX, lastY, 0, 0);
