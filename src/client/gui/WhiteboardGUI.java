@@ -60,15 +60,6 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, client);
-        try {
-			canvas.setCursor(Cursor.getSystemCustomCursor("username"));
-		} catch (HeadlessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
         canvasPane = new JScrollPane(canvas);
         menuEast = new MenuEast(this);
         menuBar = new MenuNorth(this);

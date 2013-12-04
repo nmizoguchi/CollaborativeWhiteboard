@@ -191,8 +191,6 @@ public class MenuWest extends JMenuBar{
         eraser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            	canvas.setBrushSize(50);
-            	brushSizes.setText("Size: " + canvas.getBrushSize());
                 canvas.setMode(Canvas.MODE.ERASE);
             }
         });
@@ -231,20 +229,21 @@ public class MenuWest extends JMenuBar{
         
         SequentialGroup current = layout.createSequentialGroup()
         		.addComponent(brushSizes).addComponent(enterSize);
-        SequentialGroup custom = layout.createSequentialGroup()
-        		.addComponent(sizeDec).addComponent(sizeInc);
-        SequentialGroup colors = layout.createSequentialGroup()
-        		.addComponent(colorButton).addComponent(fillColor);
+        
+        ParallelGroup topBottom1 = layout.createParallelGroup().addComponent(sizeDec).addComponent(colorButton);
+        ParallelGroup topBottom2 = layout.createParallelGroup().addComponent(sizeInc).addComponent(fillColor);
+        SequentialGroup custom = layout.createSequentialGroup().addGroup(topBottom1).addGroup(topBottom2);
+        
         ParallelGroup horizontal = layout.createParallelGroup()
         		.addComponent(eraser).addComponent(freehand).addComponent(drawLine).addComponent(drawRect)
-        		.addGroup(current).addGroup(custom).addGroup(colors);
+        		.addGroup(current).addGroup(custom);
         layout.setHorizontalGroup(horizontal);
         
         layout.setAutoCreateContainerGaps(true);
         layout.setAutoCreateGaps(true);
         
         this.setLayout(layout);
-        this.setPreferredSize(new Dimension(110, 300));
+        this.setPreferredSize(new Dimension(130, 300));
         
 	}
 
