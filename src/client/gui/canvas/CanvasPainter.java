@@ -1,5 +1,7 @@
 package client.gui.canvas;
 
+import Protocol.CWPMessage;
+
 /**
  * Implements Runnable. It is responsible for painting an action of the
  * Whiteboard over the Canvas. It exists so it keeps the GUI single threaded, by
@@ -12,15 +14,17 @@ package client.gui.canvas;
 public class CanvasPainter implements Runnable {
 
     private final Canvas canvas;
-    private final String command;
+    private final String action;
+    private final String[] args;
 
-    public CanvasPainter(Canvas canvas, String command) {
+    public CanvasPainter(Canvas canvas, CWPMessage message) {
         this.canvas = canvas;
-        this.command = command;
+        this.action = message.getAction();
+        this.args = message.getArguments();
     }
 
     @Override
     public void run() {
-        canvas.execute(command);
+        canvas.execute(action, args);
     }
 }

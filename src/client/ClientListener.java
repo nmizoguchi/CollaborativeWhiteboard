@@ -1,14 +1,14 @@
 package client;
 
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 
 
 public interface ClientListener {
-    public void onNewuserMessageReceived(Protocol message);
-    public void onDisconnecteduserMessageReceived(Protocol message);
-    public void onWhiteboardsMessageReceived(Protocol message);
-    public void onChangeboardMessageReceived(Protocol message);
-    public void onChatMessageReceived(Protocol message);
-    public void onPaintMessageReceived(Protocol message);
-    public void onInvalidMessageReceived(Protocol message);
+    public void onNewuserMessageReceived(CWPMessage message);
+    public void onDisconnecteduserMessageReceived(CWPMessage message);
+    public void onWhiteboardsMessageReceived(CWPMessage message);
+    public void onChangeboardMessageReceived(CWPMessage message);
+    public void onChatMessageReceived(CWPMessage message);
+    public void onPaintMessageReceived(CWPMessage message);
+    public void onInvalidMessageReceived(CWPMessage message);
 }

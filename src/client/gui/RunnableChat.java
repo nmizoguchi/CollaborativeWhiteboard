@@ -4,16 +4,16 @@ package client.gui;
 public class RunnableChat implements Runnable {
 
     private final WhiteboardGUI gui;
-    private final String arguments;
+    private final String message;
     
-    public RunnableChat(WhiteboardGUI gui, String arguments) {
+    public RunnableChat(WhiteboardGUI gui, String message) {
         this.gui = gui;
-        this.arguments = arguments;
+        this.message = message;
     }
     
     @Override
     public void run() {
-    	gui.addChatMessage(gui.getClient().getUser().getName() + arguments);
+    	gui.addChatMessage(gui.getClient().getUser().getName() + message);
     }
 
 }

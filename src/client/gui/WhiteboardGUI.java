@@ -26,7 +26,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import shared.models.User;
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 import client.ClientApplication;
 import client.ClientListener;
 import client.gui.canvas.Canvas;
@@ -93,7 +93,7 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
     }
 
     @Override
-    public void onNewuserMessageReceived(Protocol message) {
+    public void onNewuserMessageReceived(CWPMessage message) {
         
         User user = new User(message.getArgument(0),
                 message.getArgument(1));
@@ -103,7 +103,7 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
     }
 
     @Override
-    public void onDisconnecteduserMessageReceived(Protocol message) {
+    public void onDisconnecteduserMessageReceived(CWPMessage message) {
         
         User user = new User(message.getArgument(0),
                 message.getArgument(1));
@@ -111,11 +111,12 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                 activeUsers, user));
 
+        // TODO: THIS IS WRONG!
         SwingUtilities.invokeLater(new RunnableChat(this, " has disconnected from the server"));
     }
 
     @Override
-    public void onWhiteboardsMessageReceived(Protocol message) {
+    public void onWhiteboardsMessageReceived(CWPMessage message) {
         List<String> activeBoardNames = new ArrayList<String>();
         
         for (int i = 0; i < message.getArgumentsSize(); i++) {
@@ -128,25 +129,22 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
     }
 
     @Override
-    public void onChangeboardMessageReceived(Protocol message) {
+    public void onChangeboardMessageReceived(CWPMessage message) {
         SwingUtilities.invokeLater(new RunnableChangeboard(canvas, message.getArgument(0)));
-        
     }
 
     @Override
-    public void onChatMessageReceived(Protocol message) {
-        SwingUtilities.invokeLater(new RunnableChat(this, message
-                .getArguments()));
+    public void onChatMessageReceived(CWPMessage message) {
+        SwingUtilities.invokeLater(new RunnableChat(this, message.getArgument(0)));
     }
 
     @Override
-    public void onPaintMessageReceived(Protocol message) {
-        String action = message.getPaintAction();
-        SwingUtilities.invokeLater(new CanvasPainter(canvas, action));
+    public void onPaintMessageReceived(CWPMessage message) {
+        SwingUtilities.invokeLater(new CanvasPainter(canvas, message));
     }
 
     @Override
-    public void onInvalidMessageReceived(Protocol message) {
+    public void onInvalidMessageReceived(CWPMessage message) {
         // TODO Auto-generated method stub
         
     }

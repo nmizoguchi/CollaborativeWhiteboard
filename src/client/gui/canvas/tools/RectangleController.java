@@ -8,7 +8,7 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 import client.gui.canvas.Canvas;
 
 /*
@@ -42,22 +42,22 @@ public class RectangleController implements ToolController {
         Graphics2D g2 = (Graphics2D) drawingBuffer.getGraphics();
 
         // Get points
-        int x1 = Integer.valueOf(args[1]); //lastX
-        int y1 = Integer.valueOf(args[2]); //lastY
-        int x2 = Integer.valueOf(args[3]); //currentX
-        int y2 = Integer.valueOf(args[4]); //currentY
+        int x1 = Integer.valueOf(args[0]); //lastX
+        int y1 = Integer.valueOf(args[1]); //lastY
+        int x2 = Integer.valueOf(args[2]); //currentX
+        int y2 = Integer.valueOf(args[3]); //currentY
         int width = Math.abs(x2-x1);
         int height = Math.abs(y2-y1);
         
         //Define brushColor
-        int colorInt = Integer.valueOf(args[5]);
+        int colorInt = Integer.valueOf(args[4]);
 
         // Define Brush Size
-        int brush = Integer.valueOf(args[6]);
+        int brush = Integer.valueOf(args[5]);
 
         // Define hasFill
-        int hasFillInt = Integer.valueOf(args[7]);
-        int fillColorInt = Integer.valueOf(args[8]);
+        int hasFillInt = Integer.valueOf(args[6]);
+        int fillColorInt = Integer.valueOf(args[7]);
         
         // Draw
         
@@ -96,10 +96,17 @@ public class RectangleController implements ToolController {
      */
     public void mouseReleased(MouseEvent e) {
         
-        String arguments = lastX + " " + lastY + " " + e.getX() + " "
-                + e.getY() + " " + brushColor + " "
-                + brushSize + " " + hasFill + " " + fillColor;
-        String message = Protocol.CreateMessage(canvas.mClient.getUser(),"drawrect",arguments);
+        String[] arguments = new String[] {
+                String.valueOf(lastX),
+                String.valueOf(lastY),
+                String.valueOf(e.getX()),
+                String.valueOf(e.getY()),
+                String.valueOf(brushColor),
+                String.valueOf(brushSize),
+                String.valueOf(hasFill),
+                String.valueOf(fillColor) };
+        String message = CWPMessage.Encode(canvas.mClient.getUser(), "drawrect",
+                arguments);
         canvas.mClient.scheduleMessage(message);
         
         canvas.setSurfaceShape(null);

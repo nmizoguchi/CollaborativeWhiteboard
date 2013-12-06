@@ -9,7 +9,7 @@ import java.util.Map;
 
 import shared.models.User;
 import shared.models.Whiteboard;
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 
 /**
  * This class represents the Model of the Server. It has the representation of
@@ -40,12 +40,15 @@ public class ServerApplication implements ConnectionListener {
 
     private final List<Whiteboard> whiteboardList;
     private final Map<ConnectionController, Connection> connectionMap;
+    private final User serverUser;
 
     /**
      * Constructor. Creates other models that are part of the server's
      * representation.
      */
     public ServerApplication() {
+
+        serverUser = new User("server");
 
         whiteboardList = Collections
                 .synchronizedList(new ArrayList<Whiteboard>());
@@ -87,8 +90,9 @@ public class ServerApplication implements ConnectionListener {
             whiteboardList.add(whiteboard);
 
             // Let all clients know that a new board was created
-            String names = getWhiteboardNames();
-            String message = Protocol.CreateServerMessage("whiteboards", names);
+            String[] names = getWhiteboardNames();
+            String message = CWPMessage
+                    .Encode(serverUser, "whiteboards", names);
             broadcastMessage(message);
         }
 
@@ -129,11 +133,11 @@ public class ServerApplication implements ConnectionListener {
             }
         }
     }
-    
+
     /**
      * @return a list of names of all the active Whiteboards in the server.
      */
-    private String getWhiteboardNames() {
+    private String[] getWhiteboardNames() {
 
         String names = "";
 
@@ -145,7 +149,7 @@ public class ServerApplication implements ConnectionListener {
             }
         }
 
-        return names;
+        return names.split(" ");
     }
 
     /*
@@ -161,7 +165,7 @@ public class ServerApplication implements ConnectionListener {
 
         Connection currentConnection = connectionMap.get(callerController);
 
-        Protocol message = Protocol.ForServer(input);
+        CWPMessage message = new CWPMessage(input);
         String command = message.getAction();
 
         if (command.equals("initialize")) {
@@ -172,13 +176,16 @@ public class ServerApplication implements ConnectionListener {
             // Makes sure that won't lose a client that is connecting by...
             synchronized (connectionMap) {
                 User newUser;
-                    newUser = new User(message.getArgument(0),
-                            message.getArgument(1));
+                newUser = new User(message.getArgument(0),
+                        message.getArgument(1));
                 currentConnection.setUser(newUser);
 
                 // Broadcasts to everyone that this client connected.
-                String broadcast = Protocol.CreateServerMessage("newuser",
-                        currentConnection.getUser().toString());
+                String[] args = new String[] {
+                        currentConnection.getUser().getUid().toString(),
+                        currentConnection.getUser().getName() };
+                String broadcast = CWPMessage.Encode(serverUser, "newuser",
+                        args);
                 broadcastMessage(broadcast);
 
                 for (Connection conn : connectionMap.values()) {
@@ -187,16 +194,19 @@ public class ServerApplication implements ConnectionListener {
                     if (conn.isInitialized()
                             && !conn.getUser().equals(
                                     currentConnection.getUser())) {
-                        String sendUser = Protocol.CreateServerMessage(
-                                "newuser", conn.getUser().toString());
+                        String[] arguments = new String[] {
+                                conn.getUser().getUid().toString(),
+                                conn.getUser().getName() };
+                        String sendUser = CWPMessage.Encode(serverUser,
+                                "newuser", arguments);
                         callerController.scheduleMessage(sendUser);
                     }
                 }
             }
 
             // Send the updated list of boards to the new client
-            String names = getWhiteboardNames();
-            String whiteboards = Protocol.CreateServerMessage("whiteboards",
+            String[] names = getWhiteboardNames();
+            String whiteboards = CWPMessage.Encode(serverUser, "whiteboards",
                     names);
             callerController.scheduleMessage(whiteboards);
         }
@@ -219,7 +229,7 @@ public class ServerApplication implements ConnectionListener {
              * Delegates the action of sending the message to the other thread
              * by using the outputQueue.
              */
-            String boardNames = getWhiteboardNames();
+            String[] boardNames = getWhiteboardNames();
             callerController.scheduleMessage(command + boardNames);
         }
 
@@ -228,7 +238,7 @@ public class ServerApplication implements ConnectionListener {
              * Broadcasts the message to all clients, so everyone knows about
              * the message.
              */
-            String chatMessage = Protocol.CreateServerMessage(command,
+            String chatMessage = CWPMessage.Encode(serverUser, command,
                     message.getArguments());
             broadcastMessage(chatMessage);
         }
@@ -282,8 +292,11 @@ public class ServerApplication implements ConnectionListener {
             // If the connection was initialized, broadcasts that the client has
             // disconnected.
             if (connection.isInitialized()) {
-                String message = Protocol.CreateServerMessage(
-                        "disconnecteduser", connection.getUser().toString());
+                String[] args = new String[] {
+                        connection.getUser().getUid().toString(),
+                        connection.getUser().getName() };
+                String message = CWPMessage.Encode(serverUser,
+                        "disconnecteduser", args);
                 broadcastMessage(message);
             }
         }

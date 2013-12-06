@@ -17,7 +17,7 @@ import javax.swing.SwingUtilities;
 
 import shared.models.User;
 import shared.models.Whiteboard;
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 import client.gui.WhiteboardGUI;
 import client.gui.canvas.CanvasChangeWhiteboard;
 
@@ -67,7 +67,7 @@ public class ClientApplication {
 
         while ((command = inputStream.readLine()) != null) {
 
-            Protocol message = Protocol.ForClient(command);
+            CWPMessage message = new CWPMessage(command);
 
             String action = message.getAction();
 
@@ -149,14 +149,14 @@ public class ClientApplication {
      * @param ClientListener
      *            GUI on the client side
      */
-    public void initialize(ClientListener listener) {
+    public void initialize(ClientListener listener, String username) {
         
         // Defines the listener
         this.listener = listener;
-        
+        this.user.setName(username);
         // Sets the initial username
-        scheduleMessage(Protocol.CreateMessage(getUser(), "initialize",
-                getUser().toString()));
+        String[] args = new String[] { getUser().getUid().toString(), getUser().getName() };
+        scheduleMessage(CWPMessage.Encode(getUser(), "initialize", args));
 
         // Creates the listening thread, that receives messages from updates of
         // the model

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
+import Protocol.CWPMessage;
 import client.ClientApplication;
 import client.gui.canvas.tools.*;
 
@@ -71,26 +72,23 @@ public class Canvas extends JPanel {
         mTools.add(MODE.RECTANGLE.ordinal(), new RectangleTool(this));
     }
 
-    public void execute(String command) {
+    public void execute(String action, String[] args) {
 
-        String[] tokens = command.split(" ");
-        String cmd = tokens[0];
+        MODE actionMode = MODE.FREEHAND;
 
-        MODE action = MODE.FREEHAND;
+        if (action.equals("freehand"))
+            actionMode = MODE.FREEHAND;
 
-        if (cmd.equals("freehand"))
-            action = MODE.FREEHAND;
+        else if (action.equals("erase"))
+            actionMode = MODE.ERASE;
 
-        else if (cmd.equals("erase"))
-            action = MODE.ERASE;
-
-        else if (cmd.equals("drawline"))
-            action = MODE.LINE;
+        else if (action.equals("drawline"))
+            actionMode = MODE.LINE;
         
-        else if (cmd.equals("drawrect"))
-            action = MODE.RECTANGLE;
+        else if (action.equals("drawrect"))
+            actionMode = MODE.RECTANGLE;
 
-        mTools.get(action.ordinal()).getController().paint(tokens);
+        mTools.get(actionMode.ordinal()).getController().paint(args);
     }
 
     /**

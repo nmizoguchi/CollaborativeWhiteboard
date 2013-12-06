@@ -28,10 +28,13 @@ public class Main {
         	username = "Anonymous" + (int)Math.floor(Math.random()*10000);
         }
 
-     // Initialize client by setting its username.
-        client.setUserName(username);
         WhiteboardGUI GUI = new WhiteboardGUI(client);
-        client.initialize(GUI);
+        
+        // Important, otherwise don't create the image buffer.
+        GUI.setVisible(true);
+        
+        // Initialize the client. To initialize a client, we need a username.
+        client.initialize(GUI, username);
         
         GUI.setVisible(true);
         

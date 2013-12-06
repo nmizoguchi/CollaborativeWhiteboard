@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
 
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 import client.gui.canvas.Canvas;
 
 /**
@@ -34,14 +34,14 @@ public class FreehandController implements ToolController {
         Graphics2D g2 = (Graphics2D) drawingBuffer.getGraphics();
 
         // Get points
-        int lastX = Integer.valueOf(args[1]);
-        int lastY = Integer.valueOf(args[2]);
-        int x = Integer.valueOf(args[3]);
-        int y = Integer.valueOf(args[4]);
+        int lastX = Integer.valueOf(args[0]);
+        int lastY = Integer.valueOf(args[1]);
+        int x = Integer.valueOf(args[2]);
+        int y = Integer.valueOf(args[3]);
 
         // Define Brush Size
-        int brush = Integer.valueOf(args[6]);
-        Color color = new Color(Integer.valueOf(args[5]));
+        int brush = Integer.valueOf(args[5]);
+        Color color = new Color(Integer.valueOf(args[4]));
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brush));
         g2.drawLine(lastX, lastY, x, y);
@@ -72,10 +72,15 @@ public class FreehandController implements ToolController {
         int y = e.getY();
 
         // Sends info to the server
-        String arguments = lastX + " " + lastY + " " + x + " " + y + " "
-                + brushColor + " " + brushSize;
-        String message = Protocol.CreateMessage(canvas.mClient.getUser(),
-                "drawline", arguments);
+        String[] arguments = new String[] {
+                String.valueOf(lastX),
+                String.valueOf(lastY),
+                String.valueOf(x),
+                String.valueOf(y),
+                String.valueOf(brushColor),
+                String.valueOf(brushSize) };
+        String message = CWPMessage.Encode(canvas.mClient.getUser(), "drawline",
+                arguments);
         canvas.mClient.scheduleMessage(message);
 
         lastX = x;

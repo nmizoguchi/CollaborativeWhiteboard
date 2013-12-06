@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JLabel;
 
-import Protocol.Protocol;
+import Protocol.CWPMessage;
 import client.gui.canvas.Canvas;
 
 /**
@@ -37,16 +37,16 @@ public class EraseController implements ToolController {
         Graphics2D g2 = (Graphics2D) drawingBuffer.getGraphics();
 
         // Get points
-        int lastX = Integer.valueOf(args[1]);
-        int lastY = Integer.valueOf(args[2]);
-        int x = Integer.valueOf(args[3]);
-        int y = Integer.valueOf(args[4]);
+        int lastX = Integer.valueOf(args[0]);
+        int lastY = Integer.valueOf(args[1]);
+        int x = Integer.valueOf(args[2]);
+        int y = Integer.valueOf(args[3]);
 
         // Define Color
         Color color = Color.WHITE;
 
         // Define Brush Size
-        int brushSizeInt = Integer.valueOf(args[5]);
+        int brushSizeInt = Integer.valueOf(args[4]);
 
         g2.setColor(color);
         g2.setStroke(new BasicStroke(brushSizeInt));
@@ -77,9 +77,12 @@ public class EraseController implements ToolController {
         int y = e.getY();
 
         // Sends info to the server
-        String arguments = lastX + " " + lastY + " " + x + " " + y + " "
-                + brushSize;
-        String message = Protocol.CreateMessage(canvas.mClient.getUser(),"erase",arguments);
+        String[] arguments = new String[] { String.valueOf(lastX),
+                String.valueOf(lastY), String.valueOf(x), String.valueOf(y),
+                String.valueOf(brushSize) };
+        String message = CWPMessage.Encode(canvas.mClient.getUser(), "erase",
+                arguments);
+        
         canvas.mClient.scheduleMessage(message);
 
         lastX = x;
@@ -97,7 +100,7 @@ public class EraseController implements ToolController {
     }
 
     public void mouseEntered(MouseEvent e) {
-    	
+
     }
 
     public void mouseExited(MouseEvent e) {
