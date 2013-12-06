@@ -49,7 +49,7 @@ public class ServerConnectionHandler implements Runnable {
 
                 // Creates the Connection and its controller.
                 Connection connection = new Connection(
-                        server.getWhiteboard("Default"));
+                        server.getWhiteboard("Default"),server.getServerUser());
                 ConnectionController controller = new ConnectionController(
                         server, socket);
                 connection.addConnectionOutputHandler(controller);

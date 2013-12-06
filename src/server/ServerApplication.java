@@ -48,6 +48,7 @@ public class ServerApplication implements ConnectionListener {
      */
     public ServerApplication() {
 
+        // Server has an UUID too.
         serverUser = new User("server");
 
         whiteboardList = Collections
@@ -150,6 +151,10 @@ public class ServerApplication implements ConnectionListener {
         }
 
         return names.split(" ");
+    }
+    
+    public User getServerUser() {
+        return this.serverUser;
     }
 
     /*

@@ -48,11 +48,11 @@ public class Connection {
      * @param activeWhiteboard
      *            the board that it will start working on.
      */
-    public Connection(Whiteboard activeWhiteboard) {
+    public Connection(Whiteboard activeWhiteboard, User serverUser) {
         this.uid = UUID.randomUUID();
         this.activeWhiteboard = activeWhiteboard;
         this.lastSentVersion = lastSentVersion;
-        this.serverUser = new User("server");
+        this.serverUser = serverUser;
     }
 
     /**
