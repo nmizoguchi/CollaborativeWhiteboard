@@ -29,6 +29,7 @@ public class MenuNorth extends JMenuBar {
 	private final WhiteboardGUI gui;
 	
 	public MenuNorth(final WhiteboardGUI gui) {
+		//initiates a menu and its submenu
 		saveFile = new JFileChooser();
 		saveFile.setToolTipText("Must add .png to the end of file");
 		saveFile.setDialogTitle("Save screenshot of whiteboard");
@@ -40,6 +41,11 @@ public class MenuNorth extends JMenuBar {
 		file.add(save);
 		this.gui = gui;
 
+		/*
+		 * When this menu item is activated, it opens a save dialog
+		 * that allows the user to save a file and the program would save
+		 *  a .png file at the indicated file directory
+		 */
 		save.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -54,9 +60,11 @@ public class MenuNorth extends JMenuBar {
 						file = new File(saveFile.getSelectedFile().getPath() + ".png");
 					}
 					try{
-						BufferedImage img = new BufferedImage(gui.getWidth(), gui.getHeight(), BufferedImage.TYPE_INT_RGB);
-						gui.paint(img.getGraphics());
-						ImageIO.write(img, "png", file);
+						synchronized(gui){
+							BufferedImage img = new BufferedImage(gui.getWidth(), gui.getHeight(), BufferedImage.TYPE_INT_RGB);
+							gui.paint(img.getGraphics());
+							ImageIO.write(img, "png", file);
+						}
 					} catch (IOException ex){
 					}
 

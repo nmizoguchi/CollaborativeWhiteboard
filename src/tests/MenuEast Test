@@ -1,0 +1,45 @@
+//Documentation for GUI tests
+//Tests for MenuEast
+
+/**
+* This document is sectioned into:
+	Testing the basic layout
+	Testing the online users list
+	Testing the available boards list
+	Testing the New Board button
+	Testing the message box
+	Testing the Chat Here text box
+*/
+
+//Basic layout from top to bottom
+-- Does not change width and the elements change heights proportionally until they reach a minimal height.
+-- There is a list of current usernames under "Online Users".
+-- Underneath the Online users list, there is a list of board names under "Available Boards"
+-- Then there is a button named "New Board"
+-- Underneath there is a message box.
+-- Last, there is a "Chat Here: " followed by a text box.
+
+//Online Users list
+-- Should update when a user enters the server, by adding the new username to the end of the list.
+-- Should also update when a user disconnects, by removing the username and moving the rest 
+	of the list such that there is no gap (if the username was not at the end of the list).
+
+//Available Boards list
+-- Should update when a new board is created by adding a the new board name to the end of the list.
+-- When the user selects one of the items on the list, the user's canvas would display the board which they had selected.
+
+//New Board button test
+-- When clicked on, a dialog would open up asking the users to enter a board name
+-- If the user clicks cancel, the dialog would close and nothing would happen.
+-- If the user does not enter a name and clicks OK, the dialog would close and nothing would happen
+-- If the user does enter a name and clicks OK, the Available Boards list would update
+	and the user's current canvas would display the new board (switching from the previous one).
+
+//Message box test
+-- When a user enters the server, the message box would add a new line "[new username] has entered the server"
+-- When a user disconnects from the server, the message box would add a new line "[disconnected username] has disconnected from the server"
+-- When a user enters a message the box would add a line "[chatting username] [message]"
+
+//Chat Here text box
+-- When a user enters a message in the text box, the message box would be updated accordingly
+	and the text box would be cleared.

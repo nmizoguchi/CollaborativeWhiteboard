@@ -13,7 +13,7 @@ public class RunnableChat implements Runnable {
     
     @Override
     public void run() {
-    	gui.addChatMessage(gui.getClient().getUser().getName() + message);
+    	gui.addChatMessage(message);
     }
 
 }

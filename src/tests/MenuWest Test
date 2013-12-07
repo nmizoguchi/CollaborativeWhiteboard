@@ -1,0 +1,81 @@
+//Documentation of the GUI tests, splitting into the sections: MenuWest, MenuNorth, MenuEast, and WhiteboardGUI(overall)
+//Tests for MenuWest
+
+/**
+* This document is sectioned into:
+	Testing the basic layout
+	Testing the tools (eraser, freehand, draw line, rectangle)
+	Testing the size-related components
+	Testing the color-related buttons
+*/
+
+	//basic layout
+-- From top to bottom there are tool buttons in the following order:
+	Eraser, Freehand, Draw Line, Rectangle
+	This is then followed by a JLabel "Size: " adjacent to an input box.
+	This input box should also display the current brush size.
+	Beneath this, there is a + and - button that should increment/decrement the size by 1.
+	Then there are two colored buttons adjacent to each other.
+-- If the user changes the window size, this portion of the window should not change widths but does change heights.
+	The objects (aside from the size text box) individually does not change size however.
+	
+	//Tool button functions	
+--	Tests if only one of the test buttons are selected at a time
+	by clicking one of the buttons (like the Eraser tool button), 
+	then another button (like the Rectangle tool button).
+//Eraser Tool
+--  When the eraser button (has the icon of an eraser) is selected, a brush in a white color of the current brush size
+	would be activated and the user could use this to cover up any drawings 
+	already on the canvas with white (essentially "erasing" it).
+//Freehand tool
+--	When the freehand tool (has the icon of a pencil) is selected, a brush in the current brush color of the current brush size
+	would be activated and the user uses this to draw what they wish on the canvas.
+//Draw Line tool
+-- 	When the draw line tool (has the icon of a straight line) is selected, the user can then draw a line with thickness of the brush size 
+	and of the current color. This is done by clicking and dragging across the canvas, then releasing the mouse button.
+	In the case of the user just clicking, then there will be a very short line that occurs on that point.            
+	To check if the line can be drawn at any angle, click and drag the mouse around in a circle.
+	To check for thread safety and concurrency, as you draw the line have another user erase across it. 
+	This should not affect the line in the drawing process. Also, have two users draw lines of different colors that intersect each other.
+	The intersecting lines should overlap the same way on both screens.
+//Rectangle tool
+-- 	The rectangle tool (indicated by a rectangle icon) is selected, the user is then able to draw a rectangle
+	by clicking and dragging. The point where the user clicked at would be the starting corner and the 
+	point where the user released the mouse button would be the opposing corner of the rectangle.
+	The border color would be determined by the user-selected color (default black) chosen using the left color button.
+	The border size would be the current brush size. The fill color (default none) would be
+	determined by the user-selected color using the right color button.
+	Check if the rectangle can be drawn in any quadrant relative to the starting corner.
+	Check for thread-safety and concurrency by having another user draw lines or erase while one user is drawing a rectangle.
+	
+//Testing Size options
+--	Every time the brush size is changed, the text box that displays a number, should be updated and displays the current size.
+	A user can change the size by entering a number in the text box and pressing ENTER.
+--	Clicking the - button should decrement the size by 1. Clicking the + button should decrement the size by 1.
+
+
+//Testing Color options
+--	The left button color determines the freehand and draw line's color and the rectangle border's color.
+	(Default black). When clicked on, a color palette would pop up. When a user selects a color and presses OK,
+	the palette would close and the button would be turned to that color.
+--	The right button color determines the rectangle fill color. When the user clicks it with 
+	the left mouse button, the color button would switch between "on" or "off". The "on" mode
+	would mean that the rectangle has a fill color, which is the user-selected color. (Default black).
+	The user would know it is "on" if the button is the color of the user-selected color.
+	The "off" mode would mean that the rectangle does not have a fill color. This is indicated by 
+	the button turning into a sort of dull, light blue color.
+	When the user clicks on the color button with the right mouse button, a color palette pops up. 
+	After the user selects a color, the button (if it in "on" mode or the next time it is "on") will then change colors.
+
+//Multiple users
+	//Selecting buttons
+--	This is all specific for each user. Meaning, if User A selects Eraser and B selects Draw Line,
+then the buttons selected would be Eraser for A, and Draw Line for B.
+	//Changing size
+-- 	If the brush size for both users A and B is 50 and A enters 26 in the text box, A's brush size would be 26 while at the same time B clicked the + button, B's brush size would be 51.
+	//Selecting colors
+--	User A selects a color (either left or right), and User B would not be affected by this. The same goes for both users selecting a color simultaneously.
+	And the same goes for the different users selecting colors on different color buttons.
+
+
+	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     

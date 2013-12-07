@@ -60,6 +60,7 @@ public class MenuEast extends JPanel {
         chatArea = new JTextArea();
         chatArea.setWrapStyleWord(true);
         chatArea.setLineWrap(true);
+        chatArea.setEditable(false);
         chatAreaPane = new JScrollPane(chatArea);
         userChat = new JTextField();
         chatHereText = new JLabel("Chat Here: ");
@@ -141,7 +142,7 @@ public class MenuEast extends JPanel {
          */
         userChat.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String[] args = new String[] { ": " + userChat.getText() };
+                String[] args = new String[] {gui.getClient().getUser().getName() + ": " + userChat.getText() };
                 String message = CWPMessage.Encode(gui.getClient()
                         .getUser(), "chat", args);
                 gui.getClient().scheduleMessage(message);

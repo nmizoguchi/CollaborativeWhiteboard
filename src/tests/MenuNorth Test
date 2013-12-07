@@ -1,0 +1,24 @@
+//Documentation on GUI Tests
+//Tests for MenuNorth
+
+/**
+*This document is sectioned into:
+	Testing the basic layout
+	Testing the submenu "File" function
+	Testing the menu item "Save" function and saving a screenshot of the window
+*/
+
+//Basic layout
+-- This is located at the top of the window.
+-- Should have one submenu at the left named "File"
+
+//Testing submenu "File"
+-- When clicked on, a menu pops up, which has a menu item named "Save"
+-- When the user clicks on something other than "File" then the submenu closes
+
+//Testing menu Item "Save"
+-- When clicked on, a save dialog opens up. 
+-- When the user presses "CTRL + S" on the keys, this item is activated.
+	So the save dialog opens up.
+-- The user picks the file directory and saves a file. A png should be formed.
+	The png file would be a screenshot of the window the instance the user saved it.

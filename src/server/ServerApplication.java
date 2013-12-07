@@ -180,20 +180,8 @@ public class ServerApplication implements ConnectionListener {
 
             // Makes sure that won't lose a client that is connecting by...
             synchronized (connectionMap) {
-                User newUser;
-                newUser = new User(message.getArgument(0),
-                        message.getArgument(1));
-                currentConnection.setUser(newUser);
-
-                // Broadcasts to everyone that this client connected.
-                String[] args = new String[] {
-                        currentConnection.getUser().getUid().toString(),
-                        currentConnection.getUser().getName() };
-                String broadcast = CWPMessage.Encode(serverUser, "newuser",
-                        args);
-                broadcastMessage(broadcast);
-
-                for (Connection conn : connectionMap.values()) {
+            	//TODO: sort this
+            	for (Connection conn : connectionMap.values()) {
                     // Get initialized connections and that are not the same as
                     // the caller
                     if (conn.isInitialized()
@@ -207,6 +195,20 @@ public class ServerApplication implements ConnectionListener {
                         callerController.scheduleMessage(sendUser);
                     }
                 }
+                User newUser;
+                newUser = new User(message.getArgument(0),
+                        message.getArgument(1));
+                currentConnection.setUser(newUser);
+
+                // Broadcasts to everyone that this client connected.
+                String[] args = new String[] {
+                        currentConnection.getUser().getUid().toString(),
+                        currentConnection.getUser().getName() };
+                String broadcast = CWPMessage.Encode(serverUser, "newuser",
+                        args);
+                broadcastMessage(broadcast);
+
+                
             }
 
             // Send the updated list of boards to the new client
