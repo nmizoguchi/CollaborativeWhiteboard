@@ -13,17 +13,17 @@ public class CWPMessage {
     private final String[] arguments;
 
     public CWPMessage(String message) {
-        
+
         // TODO: Check if it is a valid message
         String[] tokens = message.split(SEPARATOR);
 
         this.senderUID = tokens[0];
         this.action = tokens[1];
-    
+
         if (tokens.length >= 2) {
             arguments = Arrays.copyOfRange(tokens, 2, tokens.length);
         } else {
-            arguments = new String[]{};
+            arguments = new String[] {};
         }
     }
 
@@ -37,7 +37,7 @@ public class CWPMessage {
         // TODO: Check if it is a valid message
         return message;
     }
-    
+
     public static String EncodePaintAction(User user, String paintAction) {
         String message = user.getUid() + SEPARATOR + paintAction;
 
@@ -50,9 +50,9 @@ public class CWPMessage {
      * 
      * @param input
      *            The command desired.
-     * @return message to client
+     * @throws  UnsupportedOperationException if the input is not a valid message
      */
-    private String[] CheckAndFormat(String input) {
+    private void validate(String input) {
 
         // Commands sent and received both sides:
         // drawline x1 y1 x2 y2 color brushSize fillColor hasFill
@@ -85,10 +85,6 @@ public class CWPMessage {
             System.out.println("Unsupported operation: " + input);
             throw new UnsupportedOperationException();
         }
-
-        String[] tokens = input.split(" ");
-
-        return tokens;
     }
 
     public String getSenderUID() {
