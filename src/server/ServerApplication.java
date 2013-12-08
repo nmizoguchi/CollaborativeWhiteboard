@@ -140,17 +140,19 @@ public class ServerApplication implements ConnectionListener {
      */
     private String[] getWhiteboardNames() {
 
-        String names = "";
+        String[] names;
 
         // Guarantees that it won't break the invariant while iterating over the
         // list by aquiring the lock of the list.
         synchronized (whiteboardList) {
-            for (Whiteboard board : whiteboardList) {
-                names = names + " " + board.getName();
+
+            names = new String[whiteboardList.size()];
+            for (int i = 0; i < whiteboardList.size(); i++) {
+                names[i] = whiteboardList.get(i).getName();
             }
         }
 
-        return names.split(" ");
+        return names;
     }
     
     public User getServerUser() {
@@ -195,6 +197,8 @@ public class ServerApplication implements ConnectionListener {
                         callerController.scheduleMessage(sendUser);
                     }
                 }
+            	
+            	// Sets username
                 User newUser;
                 newUser = new User(message.getArgument(0),
                         message.getArgument(1));
@@ -237,7 +241,8 @@ public class ServerApplication implements ConnectionListener {
              * by using the outputQueue.
              */
             String[] boardNames = getWhiteboardNames();
-            callerController.scheduleMessage(command + boardNames);
+            String whiteboardsMessage = CWPMessage.Encode(serverUser, command, boardNames);
+            callerController.scheduleMessage(whiteboardsMessage);
         }
 
         else if (command.equals("chat")) {
