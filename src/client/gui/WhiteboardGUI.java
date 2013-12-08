@@ -110,8 +110,6 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         
         SwingUtilities.invokeLater(new RunnableDisconnecteduser(
                 activeUsers, user));
-
-        // TODO: THIS IS WRONG!
         SwingUtilities.invokeLater(new RunnableChat(this, user.getName() + " has disconnected from the server"));
     }
 

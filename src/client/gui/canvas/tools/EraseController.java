@@ -16,12 +16,14 @@ import client.gui.canvas.Canvas;
  * DrawingController handles the user's freehand drawing.
  */
 public class EraseController implements ToolController {
-    // store the coordinates of the last mouse event, so we can
-    // draw a line segment from that last point to the point of the next mouse
-    // event.
+    
     private final Canvas canvas;
     private int brushSize, lastX, lastY;
 
+    /* Stores the coordinates of the last mouse event, so we can 
+     * draw a line segment from that last point to the point of the next mouse event.
+     * 
+     */
     public EraseController(Canvas c) {
         this.canvas = c;
     }
@@ -54,9 +56,7 @@ public class EraseController implements ToolController {
 
         lastX = x;
         lastY = y;
-
-        // IMPORTANT! every time we draw on the internal drawing buffer, we
-        // have to notify Swing to repaint this component on the screen.
+        
         canvas.repaint();
     }
 
@@ -90,19 +90,13 @@ public class EraseController implements ToolController {
     }
 
     // Ignore all these other mouse events.
-    public void mouseMoved(MouseEvent e) {
-    }
+    public void mouseMoved(MouseEvent e) {    }
 
-    public void mouseClicked(MouseEvent e) {
-    }
+    public void mouseClicked(MouseEvent e) {    }
 
-    public void mouseReleased(MouseEvent e) {
-    }
+    public void mouseReleased(MouseEvent e) {    }
 
-    public void mouseEntered(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) {    }
 
-    }
-
-    public void mouseExited(MouseEvent e) {
-    }
+    public void mouseExited(MouseEvent e) {   }
 }

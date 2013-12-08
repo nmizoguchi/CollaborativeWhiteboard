@@ -7,6 +7,11 @@ import org.junit.Test;
 
 import shared.models.User;
 
+/**
+ * 
+ * @author 
+ *
+ */
 public class CWPMessageTest {
 
     @Test

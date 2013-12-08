@@ -55,7 +55,9 @@ public class ClientApplication {
 
     /**
      * Listen to messages sent from the server. Also, routes the message to the
-     * right object depending on its content (for instance, the Whiteboard).
+     * right object depending on the action found in the message.
+     * Possible actions include "newuser", "disconnecteduser", "whiteboards", 
+     * "changeboard", and "chat".
      * 
      * @throws IOException
      */
@@ -113,10 +115,13 @@ public class ClientApplication {
         outputQueue.add(message);
     }
 
+    /**
+     * Checks if there is a message to be sent.
+     * If there is a message, then it sends it. If there isn't, it blocks the stream
+     * @throws IOException
+     */
     public void send() throws IOException {
         PrintWriter outputStream;
-        // Checks if there is a message to be sent. If it has, send it. Block
-        // otherwise.
         try {
             outputStream = new PrintWriter(socket.getOutputStream(), true);
             while (socket.isConnected()) {
@@ -131,13 +136,25 @@ public class ClientApplication {
         }
     }
 
+    /**
+     * Sets this class's whiteboard to a new instance of Whiteboard 
+     * @param name is a non-null name of a board
+     */
     public void changeWhiteboard(String name) {
         this.whiteboard = new Whiteboard(name);
     }
 
+    /**
+     * Returns this class's user
+     * @return user
+     */
     public User getUser() {
         return user;
     }
+    /**
+     * Sets this class's user's name
+     * @param username is a non-null String for the username
+     */
     public void setUserName(String username) {
     	getUser().setName(username);
     }

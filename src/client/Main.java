@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import client.gui.WhiteboardGUI;
 
 public class Main {
-    /*
+    /**
      * Main program. Make a window containing a Canvas.
      */
     public static void main(String[] args) throws UnknownHostException,

@@ -4,6 +4,11 @@ import java.util.Arrays;
 
 import shared.models.User;
 
+/**
+ * 
+ * @author
+ *
+ */
 public class CWPMessage {
 
     public final static String SEPARATOR = String.valueOf('\0');

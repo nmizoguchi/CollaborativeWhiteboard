@@ -163,9 +163,6 @@ public class Canvas extends JPanel {
 
         g.setColor(Color.WHITE);
         g.fillRect(0, 0, getWidth(), getHeight());
-
-        // IMPORTANT! every time we draw on the internal drawing buffer, we
-        // have to notify Swing to repaint this component on the screen.
         this.repaint();
     }
 
