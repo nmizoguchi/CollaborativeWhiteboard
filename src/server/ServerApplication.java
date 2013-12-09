@@ -143,7 +143,7 @@ public class ServerApplication implements ConnectionListener {
         String[] names;
 
         // Guarantees that it won't break the invariant while iterating over the
-        // list by aquiring the lock of the list.
+        // list by acquiring the lock of the list.
         synchronized (whiteboardList) {
 
             names = new String[whiteboardList.size()];

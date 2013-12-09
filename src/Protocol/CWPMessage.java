@@ -103,23 +103,18 @@ public class CWPMessage {
      */
     private static void validate(String input) {
 
-        // Commands sent and received both sides:
-        // drawline x1 y1 x2 y2 color brushSize fillColor hasFill
-        // freehand x1 y1 x2 y2 color brushSize
-        // erase x1 y1 x2 y2 brushSize
-        // drawrect x1 y1 x2 y2 brushColor brushSize fillColor hasFill
-        // changeboard boardName
-        // cleanboard boardName
-        // newuser username
-        // updateuser oldUsername newUsername
-        //
-        // Commands sent from the client (to the server):
-        //
-        // initialize username
-        //
-        // Commands sent from the server (to the client):
-        // whiteboards name1 name2 name3 ...
-        // disconnecteduser username
+        // Valid messages:
+        // uuid initialize uuid username
+        // uuid disconnecteduser uuid username
+        // uuid newuser uuid username
+        // uuid drawline arg0 ... arg5
+        // uuid erase arg0 ... arg4
+        // uuid drawrect arg0 ... arg5
+        // uuid changeboard boardname
+        // uuid cleanboard boardname  -> supported but not implemented yet
+        // uuid whiteboards arg n* (may our not have arguments)
+        // uuid updateuser uuid username -> supported but not implemented yet
+        // uuid chat message
 
         String div = "[" + SEPARATOR + "]";
         String any = "[^" + SEPARATOR + "]+";
@@ -138,7 +133,7 @@ public class CWPMessage {
         // uuid newuser uuid argument
         regexes.add("(" + uuid + div + "newuser" + div + uuid + div + any + ")");
 
-        // uuid drawline 5 arguments
+        // uuid erase 5 arguments
         regexes.add("(" + uuid + div + "erase" + div + "-?\\d+" + div
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+)");
 
@@ -212,7 +207,8 @@ public class CWPMessage {
      * @return an array of all arguments in the current message.
      */
     public String[] getArguments() {
-        return arguments;
+        // returns a copy of the arguments for immutability
+        return Arrays.copyOf(arguments, arguments.length);
     }
 
     /**
