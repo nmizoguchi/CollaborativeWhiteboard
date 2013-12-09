@@ -26,13 +26,13 @@ public class CWPMessageTest {
         // Arguments
         String inputArgs = "10" + CWPMessage.SEPARATOR + "20"
                 + CWPMessage.SEPARATOR + "30" + CWPMessage.SEPARATOR + "40"
-                + CWPMessage.SEPARATOR + "50";
+                + CWPMessage.SEPARATOR + "50" + CWPMessage.SEPARATOR + "60";
 
         CWPMessage message = new CWPMessage(inputHead + inputArgs);
 
         // Checks if was parsed correctly
         assertEquals("erase", message.getAction());
-        assertEquals(5, message.getArgumentsSize());
+        assertEquals(6, message.getArgumentsSize());
 
         // Checks if the parsed arguments are all equal.
         Assert.assertArrayEquals(inputArgs.split(CWPMessage.SEPARATOR),
@@ -96,7 +96,7 @@ public class CWPMessageTest {
     public void validateTest_eraseValid() {
         User user = new User("Nick");
         String action = "erase";
-        String[] params = new String[] { "10", "20", "30", "40", "50" };
+        String[] params = new String[] { "10", "20", "30", "40", "50", "60" };
         String message = CWPMessage.Encode(user, action, params);
     }
 
@@ -104,7 +104,7 @@ public class CWPMessageTest {
     public void validateTest_eraseInvalidArgument() {
         User user = new User("Nick");
         String action = "erase";
-        String[] params = new String[] { "10", "20", "30", "40", "thick" };
+        String[] params = new String[] { "10", "20", "30", "40", "50", "thick" };
         String message = CWPMessage.Encode(user, action, params);
     }
 
