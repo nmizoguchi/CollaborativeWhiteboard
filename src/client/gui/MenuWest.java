@@ -49,13 +49,13 @@ public class MenuWest extends JMenuBar{
 	public MenuWest(Canvas c) {
 		this.canvas = c;
 		brushSizes = new JLabel("Size:");
-        eraserIcon = new ImageIcon(new ImageIcon("images/Eraser.png")
+        eraserIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/Eraser.png"))
                 .getImage().getScaledInstance(50, 50, 100));
-        drawIcon = new ImageIcon(new ImageIcon("images/brush.png").getImage()
+        drawIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/brush.png")).getImage()
                 .getScaledInstance(50, 50, 100));
-        drawLineIcon = new ImageIcon(new ImageIcon("images/Line.png").getImage()
+        drawLineIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/Line.png")).getImage()
         		.getScaledInstance(50, 50, 100));
-        rectangleIcon = new ImageIcon(new ImageIcon("images/rectangle.png").getImage()
+        rectangleIcon = new ImageIcon(new ImageIcon(this.getClass().getResource("/rectangle.png")).getImage()
         		.getScaledInstance(50, 50, 100));
         eraser = new JToggleButton(eraserIcon);
         eraser.setBackground(Color.WHITE);
