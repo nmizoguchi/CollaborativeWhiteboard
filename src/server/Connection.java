@@ -124,8 +124,7 @@ public class Connection {
     public synchronized void sendClientWhiteboardUpdate() {
 
         if (this.lastSentVersion < activeWhiteboard.getVersion()) {
-            String message = CWPMessage.EncodePaintAction(serverUser,
-                    activeWhiteboard.getAction(lastSentVersion));
+            String message = activeWhiteboard.getAction(lastSentVersion);
             scheduler.scheduleMessage(message);
             lastSentVersion += 1;
         }

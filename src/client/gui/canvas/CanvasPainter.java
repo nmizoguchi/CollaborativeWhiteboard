@@ -14,17 +14,15 @@ import Protocol.CWPMessage;
 public class CanvasPainter implements Runnable {
 
     private final Canvas canvas;
-    private final String action;
-    private final String[] args;
-
+    private final CWPMessage message;
+    
     public CanvasPainter(Canvas canvas, CWPMessage message) {
         this.canvas = canvas;
-        this.action = message.getAction();
-        this.args = message.getArguments();
+        this.message = message;
     }
 
     @Override
     public void run() {
-        canvas.execute(action, args);
+        canvas.execute(message);
     }
 }

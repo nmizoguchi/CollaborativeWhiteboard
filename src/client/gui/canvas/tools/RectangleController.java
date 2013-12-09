@@ -7,9 +7,11 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
+import java.util.NoSuchElementException;
 
 import Protocol.CWPMessage;
 import client.gui.canvas.Canvas;
+import client.gui.canvas.UserTrackerView;
 
 /*
  * DrawingController handles the user's freehand drawing.
@@ -32,11 +34,13 @@ public class RectangleController implements ToolController {
     }
 
     @Override
-    public void paint(String[] args) {
+    public void paint(CWPMessage message) {
         /*
-         * Draw a line between two points (x1, y1) and (x2, y2), specified in
+         * Draw a rectangle between two points (x1, y1) and (x2, y2), specified in
          * pixels relative to the upper-left corner of the drawing buffer.
          */
+        
+        String[] args = message.getArguments();
         
         Image drawingBuffer = canvas.getDrawingBuffer();
         Graphics2D g2 = (Graphics2D) drawingBuffer.getGraphics();
@@ -72,6 +76,15 @@ public class RectangleController implements ToolController {
         }
         g2.setColor(new Color(colorInt));
         g2.draw(toDraw);
+        
+        try {
+            UserTrackerView tracker = canvas.getUserTracker(message.getSenderUID());
+            tracker.setX(lastX);
+            tracker.setY(lastY);
+            tracker.setTimer();
+        } catch (NoSuchElementException e) {
+            // The user that painted has already disconnected!
+        }
 
         canvas.repaint();
     }
@@ -105,9 +118,9 @@ public class RectangleController implements ToolController {
                 String.valueOf(brushSize),
                 String.valueOf(hasFill),
                 String.valueOf(fillColor) };
-        String message = CWPMessage.Encode(canvas.mClient.getUser(), "drawrect",
+        String message = CWPMessage.Encode(canvas.GUI.getClient().getUser(), "drawrect",
                 arguments);
-        canvas.mClient.scheduleMessage(message);
+        canvas.GUI.getClient().scheduleMessage(message);
         
         canvas.setSurfaceShape(null);
     }

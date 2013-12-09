@@ -5,9 +5,11 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.MouseEvent;
+import java.util.NoSuchElementException;
 
 import Protocol.CWPMessage;
 import client.gui.canvas.Canvas;
+import client.gui.canvas.UserTrackerView;
 
 /**
  * DrawingController handles the user's freehand drawing.
@@ -24,11 +26,13 @@ public class FreehandController implements ToolController {
     }
 
     @Override
-    public void paint(String[] args) {
+    public void paint(CWPMessage message) {
         /*
          * Draw a line between two points (x1, y1) and (x2, y2), specified in
          * pixels relative to the upper-left corner of the drawing buffer.
          */
+        
+        String[] args = message.getArguments();
 
         Image drawingBuffer = canvas.getDrawingBuffer();
         Graphics2D g2 = (Graphics2D) drawingBuffer.getGraphics();
@@ -48,6 +52,15 @@ public class FreehandController implements ToolController {
 
         lastX = x;
         lastY = y;
+        
+        try {
+            UserTrackerView tracker = canvas.getUserTracker(message.getSenderUID());
+            tracker.setX(lastX);
+            tracker.setY(lastY);
+            tracker.setTimer();
+        } catch (NoSuchElementException e) {
+            // The user that painted has already disconnected!
+        }
 
         // IMPORTANT! every time we draw on the internal drawing buffer, we
         // have to notify Swing to repaint this component on the screen.
@@ -79,9 +92,9 @@ public class FreehandController implements ToolController {
                 String.valueOf(y),
                 String.valueOf(brushColor),
                 String.valueOf(brushSize) };
-        String message = CWPMessage.Encode(canvas.mClient.getUser(), "drawline",
+        String message = CWPMessage.Encode(canvas.GUI.getClient().getUser(), "drawline",
                 arguments);
-        canvas.mClient.scheduleMessage(message);
+        canvas.GUI.getClient().scheduleMessage(message);
 
         lastX = x;
         lastY = y;

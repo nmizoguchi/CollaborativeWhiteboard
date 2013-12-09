@@ -262,7 +262,7 @@ public class ServerApplication implements ConnectionListener {
              * for running updateClient will handle it.
              */
             // VERIFY IF IT IS A MESSAGE OF PAINTING BOARDS
-            currentConnection.updateActiveWhiteboard(message.getPaintAction());
+            currentConnection.updateActiveWhiteboard(input);
         }
     }
 

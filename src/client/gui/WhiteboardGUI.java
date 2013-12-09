@@ -1,28 +1,13 @@
 package client.gui;
 
-import java.awt.AWTException;
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JColorChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import shared.models.User;
@@ -59,7 +44,7 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
-        canvas = new Canvas(800, 600, client);
+        canvas = new Canvas(800, 600, this);
         canvasPane = new JScrollPane(canvas);
         menuEast = new MenuEast(this);
         menuBar = new MenuNorth(this);

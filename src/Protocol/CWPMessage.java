@@ -65,7 +65,6 @@ public class CWPMessage {
             message = message + SEPARATOR + params[i];
         }
 
-        System.out.println(message.replace('\0', '|'));
         // Check if it is a valid message
         validate(message);
 
