@@ -28,6 +28,8 @@ public class RunnableDisconnecteduser implements Runnable {
      */
     @Override
     public void run() {
-        users.removeElement(user);
+        if(users.contains(user)) {
+            users.removeElement(user);
+        }
     }
 }

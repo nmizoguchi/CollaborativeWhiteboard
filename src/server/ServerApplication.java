@@ -154,7 +154,7 @@ public class ServerApplication implements ConnectionListener {
 
         return names;
     }
-    
+
     public User getServerUser() {
         return this.serverUser;
     }
@@ -182,27 +182,26 @@ public class ServerApplication implements ConnectionListener {
 
             // Makes sure that won't lose a client that is connecting by...
             synchronized (connectionMap) {
-            	//TODO: sort this
-            	for (Connection conn : connectionMap.values()) {
-                    // Get initialized connections and that are not the same as
-                    // the caller
-                    if (conn.isInitialized()
-                            && !conn.getUser().equals(
-                                    currentConnection.getUser())) {
-                        String[] arguments = new String[] {
-                                conn.getUser().getUid().toString(),
-                                conn.getUser().getName() };
-                        String sendUser = CWPMessage.Encode(serverUser,
-                                "newuser", arguments);
-                        callerController.scheduleMessage(sendUser);
-                    }
-                }
-            	
-            	// Sets username
+
+                // Sets username
                 User newUser;
                 newUser = new User(message.getArgument(0),
                         message.getArgument(1));
                 currentConnection.setUser(newUser);
+
+                // Sends to everyone that is connected to the "Default" board
+                // that this client is active
+                Whiteboard board = getWhiteboard("Default");
+                String[] boardConnectedUsers = getConnectedUsersOnBoard(board);
+
+                for (ConnectionController controller : connectionMap.keySet()) {
+                    if (board.equals(connectionMap.get(controller)
+                            .getActiveWhiteboard())) {
+                        controller
+                                .scheduleMessage(CWPMessage.Encode(serverUser,
+                                        "updateusers", boardConnectedUsers));
+                    }
+                }
 
                 // Broadcasts to everyone that this client connected.
                 String[] args = new String[] {
@@ -211,8 +210,6 @@ public class ServerApplication implements ConnectionListener {
                 String broadcast = CWPMessage.Encode(serverUser, "newuser",
                         args);
                 broadcastMessage(broadcast);
-
-                
             }
 
             // Send the updated list of boards to the new client
@@ -229,8 +226,34 @@ public class ServerApplication implements ConnectionListener {
              */
             if (message.getArgumentsSize() != 0) {
                 // new board will be made if the user enters a board name
+
+                Whiteboard previousBoard = currentConnection
+                        .getActiveWhiteboard();
+
+                // Change the board as requested by the client
                 Whiteboard board = getWhiteboard(message.getArgument(0));
                 currentConnection.setActiveWhiteboard(board, 0);
+
+                synchronized (connectionMap) {
+                    String[] boardConnectedUsers = getConnectedUsersOnBoard(board);
+                    String[] previousConnectedUsers = getConnectedUsersOnBoard(previousBoard);
+
+                    for (ConnectionController controller : connectionMap
+                            .keySet()) {
+                        if (board.equals(connectionMap.get(controller)
+                                .getActiveWhiteboard())) {
+                            controller.scheduleMessage(CWPMessage.Encode(
+                                    serverUser, "updateusers",
+                                    boardConnectedUsers));
+                        }
+                        if (previousBoard.equals(connectionMap.get(controller)
+                                .getActiveWhiteboard())) {
+                            controller.scheduleMessage(CWPMessage.Encode(
+                                    serverUser, "updateusers",
+                                    previousConnectedUsers));
+                        }
+                    }
+                }
             }
         }
 
@@ -241,7 +264,8 @@ public class ServerApplication implements ConnectionListener {
              * by using the outputQueue.
              */
             String[] boardNames = getWhiteboardNames();
-            String whiteboardsMessage = CWPMessage.Encode(serverUser, command, boardNames);
+            String whiteboardsMessage = CWPMessage.Encode(serverUser, command,
+                    boardNames);
             callerController.scheduleMessage(whiteboardsMessage);
         }
 
@@ -264,6 +288,29 @@ public class ServerApplication implements ConnectionListener {
             // VERIFY IF IT IS A MESSAGE OF PAINTING BOARDS
             currentConnection.updateActiveWhiteboard(input);
         }
+    }
+
+    private String[] getConnectedUsersOnBoard(Whiteboard board) {
+
+        String[] users;
+        List<User> userList = new ArrayList<User>();
+
+        synchronized (connectionMap) {
+            for (Connection c : connectionMap.values()) {
+                if (c.getActiveWhiteboard().equals(board)) {
+                    userList.add(c.getUser());
+                }
+            }
+        }
+
+        users = new String[userList.size() * 2];
+
+        for (int i = 0; i < userList.size(); i++) {
+            users[i * 2] = userList.get(i).getUid().toString();
+            users[i * 2 + 1] = userList.get(i).getName();
+        }
+
+        return users;
     }
 
     /*
@@ -318,7 +365,7 @@ public class ServerApplication implements ConnectionListener {
      * Entry point of the server.
      */
     public static void main(String[] args) {
-        
+
         int port = 4444; // default port
 
         ServerApplication server = new ServerApplication("Server");

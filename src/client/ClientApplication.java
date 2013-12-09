@@ -80,6 +80,10 @@ public class ClientApplication {
             else if (action.equals("disconnecteduser")) {
                 listener.onDisconnecteduserMessageReceived(message);
             }
+            
+            else if (action.equals("updateusers")) {
+                listener.onReceiveUpdatedUsersOnBoard(message);
+            }
 
             else if (action.equals("whiteboards")) {
 

@@ -1,5 +1,8 @@
 package client.gui;
 
+import java.util.Enumeration;
+import java.util.List;
+
 import shared.models.User;
 
 /**
@@ -7,9 +10,9 @@ import shared.models.User;
  * @author rcha
  *
  */
-public class RunnableNewuser implements Runnable {
+public class RunnableUpdateUsers implements Runnable {
     
-    private final User user;
+    private final List<User> userList;
     private final UserListModel users;
     
     /**
@@ -17,8 +20,8 @@ public class RunnableNewuser implements Runnable {
      * @param users is a UserListModel
      * @param user is a new User
      */
-    public RunnableNewuser(UserListModel users, User user) {
-        this.user = user;
+    public RunnableUpdateUsers(UserListModel users, List<User> userList) {
+        this.userList = userList;
         this.users = users;
     }
 
@@ -27,6 +30,11 @@ public class RunnableNewuser implements Runnable {
      */
     @Override
     public void run() {
-        users.addElement(user);
+        
+        users.clear();
+        
+        for(User user : userList) {
+                users.addElement(user);
+        }
     }
 }

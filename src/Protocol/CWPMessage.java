@@ -110,7 +110,7 @@ public class CWPMessage {
         // uuid erase arg0 ... arg5
         // uuid drawrect arg0 ... arg5
         // uuid changeboard boardname
-        // uuid cleanboard boardname  -> supported but not implemented yet
+        // uuid cleanboard boardname -> supported but not implemented yet
         // uuid whiteboards arg n* (may our not have arguments)
         // uuid updateuser uuid username -> supported but not implemented yet
         // uuid chat message
@@ -131,12 +131,15 @@ public class CWPMessage {
 
         // uuid newuser uuid argument
         regexes.add("(" + uuid + div + "newuser" + div + uuid + div + any + ")");
-        
+
+        // uuid updateusers (uuid argument)+
+        regexes.add("(" + uuid + div + "updateusers(" + div + uuid + div + any + ")+)");
+
         // uuid drawline 6 arguments
         regexes.add("(" + uuid + div + "drawline" + div + "-?\\d+" + div
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
                 + div + "-?\\d+)");
-        
+
         // uuid drawline 6 arguments
         regexes.add("(" + uuid + div + "erase" + div + "-?\\d+" + div
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
