@@ -8,7 +8,7 @@ public class EraseTool implements Tool {
     public final ToolController controller;
 
     public EraseTool(Canvas canvas) {
-        this.controller = new EraseController(canvas);
+        this.controller = new DrawController(canvas);
     }
 
     @Override

@@ -207,8 +207,8 @@ public class Canvas extends JPanel {
         return drawingBuffer;
     }
 
-    public void changeMode(MODE m) {
-        editorMode = m;
+    public MODE getMode() {
+        return editorMode;
     }
 
     public Shape getSurfaceShape() {

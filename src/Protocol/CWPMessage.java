@@ -7,17 +7,11 @@ import java.util.List;
 import shared.models.User;
 
 /**
-<<<<<<< HEAD
- * 
- * @author
- *
-=======
  * Represents messages of the custom protocol defined for this application. CWP
  * stands for Collaborative Whiteboard Protocol. It is an immutable class.
  * 
  * @author Nicholas M. Mizoguchi
  * 
->>>>>>> c6c42b3cf85f7e84890038b47f5e5c77bd776406
  */
 public class CWPMessage {
 
@@ -113,7 +107,7 @@ public class CWPMessage {
         // uuid disconnecteduser uuid username
         // uuid newuser uuid username
         // uuid drawline arg0 ... arg5
-        // uuid erase arg0 ... arg4
+        // uuid erase arg0 ... arg5
         // uuid drawrect arg0 ... arg5
         // uuid changeboard boardname
         // uuid cleanboard boardname  -> supported but not implemented yet
@@ -137,13 +131,14 @@ public class CWPMessage {
 
         // uuid newuser uuid argument
         regexes.add("(" + uuid + div + "newuser" + div + uuid + div + any + ")");
-
-        // uuid erase 5 arguments
-        regexes.add("(" + uuid + div + "erase" + div + "-?\\d+" + div
-                + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+)");
-
+        
         // uuid drawline 6 arguments
         regexes.add("(" + uuid + div + "drawline" + div + "-?\\d+" + div
+                + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
+                + div + "-?\\d+)");
+        
+        // uuid drawline 6 arguments
+        regexes.add("(" + uuid + div + "erase" + div + "-?\\d+" + div
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
                 + div + "-?\\d+)");
 

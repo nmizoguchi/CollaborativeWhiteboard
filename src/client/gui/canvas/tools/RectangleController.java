@@ -79,15 +79,17 @@ public class RectangleController implements ToolController {
         
         try {
             UserTrackerView tracker = canvas.getUserTracker(message.getSenderUID());
-            tracker.setX(lastX);
-            tracker.setY(lastY);
+            tracker.setX(x2);
+            tracker.setY(y2);
             tracker.setTimer();
         } catch (NoSuchElementException e) {
             // The user that painted has already disconnected!
         }
 
+
         canvas.repaint();
     }
+    
 
     /*
      * When mouse button is pressed down, start drawing.
@@ -108,8 +110,7 @@ public class RectangleController implements ToolController {
      * Sends information to the server and resets the canvas surface shape from 'rectangle' to 'null'
      */
     public void mouseReleased(MouseEvent e) {
-        
-        String[] arguments = new String[] {
+    	String[] arguments = new String[] {
                 String.valueOf(lastX),
                 String.valueOf(lastY),
                 String.valueOf(e.getX()),
@@ -121,7 +122,6 @@ public class RectangleController implements ToolController {
         String message = CWPMessage.Encode(canvas.GUI.getClient().getUser(), "drawrect",
                 arguments);
         canvas.GUI.getClient().scheduleMessage(message);
-        
         canvas.setSurfaceShape(null);
     }
 
@@ -145,7 +145,7 @@ public class RectangleController implements ToolController {
     	canvas.setSurfaceShape(rectangle);
     	canvas.repaint();
     }
-
+    
     // Ignore all these other mouse events.
     public void mouseMoved(MouseEvent e) {
     }

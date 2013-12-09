@@ -19,15 +19,15 @@ public class LineController implements ToolController {
     // store the coordinates of the last mouse event, so we can
     // draw a line segment from that last point to the point of the next mouse
     // event.
-    private final Canvas canvas;
+	private Canvas canvas;
     private int lastX, lastY;
 
-    private int brushSize, brushColor, hasFill, fillColor;
+    private int brushSize, brushColor;
 
     private Line2D line;
 
-    public LineController(Canvas canvas) {
-        this.canvas = canvas;
+    public LineController(Canvas c) {
+    	canvas = c;
         this.line = new Line2D.Double();
     }
 
@@ -60,17 +60,15 @@ public class LineController implements ToolController {
         
         try {
             UserTrackerView tracker = canvas.getUserTracker(message.getSenderUID());
-            tracker.setX(lastX);
-            tracker.setY(lastY);
+            tracker.setX(x);
+            tracker.setY(y);
             tracker.setTimer();
         } catch (NoSuchElementException e) {
             // The user that painted has already disconnected!
         }
-
-        // IMPORTANT! every time we draw on the internal drawing buffer, we
-        // have to notify Swing to repaint this component on the screen.
         canvas.repaint();
     }
+
 
     /*
      * When mouse button is pressed down, start drawing.
@@ -102,7 +100,7 @@ public class LineController implements ToolController {
                 String.valueOf(x),
                 String.valueOf(y),
                 String.valueOf(brushColor),
-                String.valueOf(brushSize) };
+                String.valueOf(brushSize)};
         String message = CWPMessage.Encode(canvas.GUI.getClient().getUser(), "drawline",
                 arguments);
         canvas.GUI.getClient().scheduleMessage(message);

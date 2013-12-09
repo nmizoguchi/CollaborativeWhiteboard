@@ -8,7 +8,7 @@ public class FreehandTool implements Tool {
     public final ToolController controller;
 
     public FreehandTool(Canvas canvas) {
-        this.controller = new FreehandController(canvas);
+        this.controller = new DrawController(canvas);
     }
 
     @Override
