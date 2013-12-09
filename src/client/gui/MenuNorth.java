@@ -44,7 +44,7 @@ public class MenuNorth extends JMenuBar {
 		/*
 		 * When this menu item is activated, it opens a save dialog
 		 * that allows the user to save a file and the program would save
-		 *  a .png file at the indicated file directory
+		 *  a png file at the indicated file directory
 		 */
 		save.addActionListener(new ActionListener(){
 			@Override

@@ -23,6 +23,10 @@ import client.gui.canvas.CanvasPainter;
 public class WhiteboardGUI extends JFrame implements ClientListener {
     /**
 	 * This is the display portion that a user directly interacts with.
+	 * It contains a tool menu on the west side, a canvas in the center and a list of online users and boards
+	 * and a chat box on the east side. It also has a File menu at the north. This display updates when the user
+	 * makes an action, by receiving messages from the server and calling different runnable classes accordingly.
+	 * 
 	 * @author rcha
 	 */
     private static final long serialVersionUID = 1L;
@@ -37,6 +41,10 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
     private final JMenuBar menuBar;
     
 
+    /**
+     * Initializes and sets up the display.
+     * @param client is a ClientApplication
+     */
     public WhiteboardGUI(ClientApplication client) {
         
         this.client = client;
@@ -70,18 +78,34 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         
     }
     
+    /**
+     * Returns a list of active users
+     * @return activeUsers is a UserListModel
+     */
     public UserListModel getActiveUsers() {
         return activeUsers;
     }
 
+    /**
+     * Returns a list of the names of current whiteboards
+     * @return activeWhiteboards is a WhiteboardListModel
+     */
     public WhiteboardListModel getActiveWhiteboards() {
         return activeWhiteboards;
     }
     
+    /**
+     * Appends a line of user-input text in the chat area pane
+     * @param message is a String that the user inputs in the chatbox
+     */
     public void addChatMessage(String message) {
         menuEast.addMessage(message);
     }
 
+    /**
+     * Returns the client that is associated with the display
+     * @return client is a ClientApplication
+     */
     public ClientApplication getClient() {
         return client;
     }
@@ -122,7 +146,7 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
 
     @Override
     public void onChangeboardMessageReceived(CWPMessage message) {
-        SwingUtilities.invokeLater(new RunnableChangeboard(canvas, message.getArgument(0)));
+        SwingUtilities.invokeLater(new RunnableChangeboard(canvas));
     }
 
     @Override

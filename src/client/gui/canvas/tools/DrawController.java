@@ -11,12 +11,23 @@ import client.gui.canvas.Canvas;
 import client.gui.canvas.UserTrackerView;
 import Protocol.CWPMessage;
 
+/**
+ * Implements ToolController. This class is in charge of drawing on the canvas when
+ * the user selects either the ERASE tool or FREEHAND tool.
+ * @see ToolController
+ * @author rcha
+ *
+ */
 public class DrawController implements ToolController{
 
 	private final Canvas canvas;
     private int brushSize, brushColor, lastX, lastY;
     private String editorMode;
     
+    /**
+     * Takes in the canvas that the user is painting on
+     * @param c is the Canvas that user sees
+     */
 	public DrawController(Canvas c) {
 		canvas = c;
 	}
@@ -65,6 +76,10 @@ public class DrawController implements ToolController{
 		
 	}
 
+	/**
+	 * When the mouse is pressed, this sets the brush color, size and coordinates 
+	 * and sends information to the server to draw
+	 */
 	@Override
 	public void mousePressed(MouseEvent e) {
 		lastX = e.getX();
@@ -74,21 +89,32 @@ public class DrawController implements ToolController{
         //else, the mode is "LINE" and set the color to the canvas brush color
         brushColor = editorMode.equals("ERASE")? Color.WHITE.getRGB() : canvas.getBrushColor();
         brushSize = canvas.getBrushSize();
-        sendInfo(e, lastX, lastY);
+        sendInfo(lastX, lastY);
 		
 	}
 
+	/**
+	 * When the mouse is dragged, this continues to get updates of the brush size
+	 * and gets the coordinates of the mouse. Then it sends the information to the server.
+	 */
 	@Override
 	public void mouseDragged(MouseEvent e) {
 		int x = e.getX();
         int y = e.getY();
         brushSize = canvas.getBrushSize();
-        sendInfo(e, x, y);
+        sendInfo(x, y);
         lastX = x;
         lastY = y;
 		
 	}
-	 private void sendInfo(MouseEvent e, int x, int y){
+	/**
+	 * This takes in the current mouse coordinates and puts together information needed to draw in the form of:
+	 * {int lastX, int lastY, int x, int y, int brushColor, int brushSize}
+	 * Then it sends the information to the server
+	 * @param x is the current X coordinate of the mouse
+	 * @param y is the current Y coordinate of the mouse
+	 */
+	 private void sendInfo(int x, int y){
 	    	// Sends info to the server
 	        String[] arguments = new String[] {
 	        		String.valueOf(lastX),
@@ -105,6 +131,7 @@ public class DrawController implements ToolController{
 	        canvas.GUI.getClient().scheduleMessage(message);
 	    }
 
+	 //Ignore these mouse events
 	@Override
 	public void mouseMoved(MouseEvent e) {
 	}

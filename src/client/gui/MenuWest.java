@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
@@ -25,8 +26,15 @@ import javax.swing.SwingUtilities;
 
 import client.gui.canvas.Canvas;
 
+/**
+ * This is a menu bar located on the west side of the GUI. 
+ * It contains tool buttons that user selects to 
+ * erase, freedraw, draw lines and draw rectangles. It also contains color and size options
+ *  that allows the user to view and select their brush color/size using their mouse or the keyboard.
+ * @author rcha
+ *
+ */
 public class MenuWest extends JMenuBar{
-//	 private final JMenuBar buttonsMenu = new JMenuBar();
 	
 		private final Canvas canvas;
 	    private final ButtonGroup buttonGroup = new ButtonGroup();
@@ -46,6 +54,10 @@ public class MenuWest extends JMenuBar{
 	    private final JColorChooser colorOptions = new JColorChooser();
 	    private final JTextField enterSize;
 	    
+	    /**
+	     * Initializes the components and their shortcuts and sets up the layout
+	     * @param c is the Canvas that this menu bar is associated with
+	     */
 	public MenuWest(Canvas c) {
 		this.canvas = c;
 		brushSizes = new JLabel("Size:");
@@ -161,8 +173,13 @@ public class MenuWest extends JMenuBar{
 			}
         });
         
-        // listener that sets the brush size
+        
         class sizeListener implements ActionListener {
+        	/*
+             * sizeListener implements ActionListener and modifies the user's brush size according to their actions
+             * When the sizeDec button is clicked or activated, the brush size will decrease
+             * and when the sizeInc button is clicked or activated, the brush size will increase
+             */
             private int brushsize;
             public sizeListener(int b) {
                 brushsize = b;
@@ -179,15 +196,26 @@ public class MenuWest extends JMenuBar{
         sizeInc.addActionListener(new sizeListener(1));
         sizeInc.setMnemonic(KeyEvent.VK_CLOSE_BRACKET);
         
+       
         enterSize.addActionListener(new ActionListener() {
+        	 /*
+             * The user is able to enter a number in the enterSize text box
+             * This would set their brush size to their input.
+             * If the user enters an invalid number, a dialog box would open
+             */
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				try{
 				canvas.setBrushSize(Integer.parseInt(enterSize.getText()));
 				enterSize.setText(String.valueOf(canvas.getBrushSize()));
+				} catch (NumberFormatException e){
+					JOptionPane.showMessageDialog(canvas, "Please enter a number.", "Size Input error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
 
-        // sets the mode and selects the button
+        //Sets the drawing mode to the tool that the user selects.
+        //Drawing modes are ERASE, FREEHAND, LINE, and RECTANGLE
         eraser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
