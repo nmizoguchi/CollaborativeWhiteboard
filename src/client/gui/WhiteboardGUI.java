@@ -1,12 +1,14 @@
 package client.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
@@ -45,7 +47,14 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         /********** Initialize attributes **********/
         // creates eraser and drawLine buttons with icons
         canvas = new Canvas(800, 600, this);
-        canvasPane = new JScrollPane(canvas);
+        
+        // this panel is the part that is not drawable
+        JPanel panel = new JPanel();
+        panel.add(canvas, BorderLayout.CENTER);
+        
+        canvasPane = new JScrollPane(panel);
+        canvasPane.setBackground(Color.gray);
+        
         menuEast = new MenuEast(this);
         menuBar = new MenuNorth(this);
         buttonsMenu = new MenuWest(canvas);
