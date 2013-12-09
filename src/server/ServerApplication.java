@@ -46,10 +46,10 @@ public class ServerApplication implements ConnectionListener {
      * Constructor. Creates other models that are part of the server's
      * representation.
      */
-    public ServerApplication() {
+    public ServerApplication(String serverName) {
 
         // Server has an UUID too.
-        serverUser = new User("server");
+        serverUser = new User(serverName);
 
         whiteboardList = Collections
                 .synchronizedList(new ArrayList<Whiteboard>());
@@ -318,9 +318,10 @@ public class ServerApplication implements ConnectionListener {
      * Entry point of the server.
      */
     public static void main(String[] args) {
+        
         int port = 4444; // default port
 
-        ServerApplication server = new ServerApplication();
+        ServerApplication server = new ServerApplication("Server");
 
         // Creates a new thread to listen to new connections.
         Thread newConnectionHandler;

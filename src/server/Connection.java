@@ -34,8 +34,6 @@ public class Connection {
      * atomic methods are guaranteed to maintain the rep. invariant after
      * finishing.
      */
-
-    private final UUID uid;
     private ConnectionOutputHandler scheduler;
     private User user;
     private final User serverUser;
@@ -49,14 +47,14 @@ public class Connection {
      *            the board that it will start working on.
      */
     public Connection(Whiteboard activeWhiteboard, User serverUser) {
-        this.uid = UUID.randomUUID();
         this.activeWhiteboard = activeWhiteboard;
-        this.lastSentVersion = lastSentVersion;
+        this.lastSentVersion = 0;
         this.serverUser = serverUser;
     }
 
     /**
-     * @return the User object regarding this connection.
+     * @return the User object regarding this connection. This method can only
+     *         be called if the Connection was initialized.
      */
     public synchronized User getUser() {
         return user;
@@ -114,7 +112,7 @@ public class Connection {
 
         String[] args = new String[] { activeWhiteboard.getName() };
         String message = CWPMessage.Encode(serverUser, "changeboard", args);
-        
+
         scheduler.scheduleMessage(message);
     }
 
@@ -126,7 +124,8 @@ public class Connection {
     public synchronized void sendClientWhiteboardUpdate() {
 
         if (this.lastSentVersion < activeWhiteboard.getVersion()) {
-            String message = CWPMessage.EncodePaintAction(serverUser, activeWhiteboard.getAction(lastSentVersion));
+            String message = CWPMessage.EncodePaintAction(serverUser,
+                    activeWhiteboard.getAction(lastSentVersion));
             scheduler.scheduleMessage(message);
             lastSentVersion += 1;
         }
@@ -140,31 +139,5 @@ public class Connection {
      */
     public synchronized void updateActiveWhiteboard(String action) {
         activeWhiteboard.update(action);
-    }
-
-    /**
-     * Define the equals method for this class. It depends directly to the
-     * unique id that represents this class.
-     */
-    @Override
-    public synchronized boolean equals(Object o) {
-        if (!(o instanceof Connection)) {
-            return false;
-        }
-
-        Connection that = (Connection) o;
-        if (!that.uid.equals(uid)) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Redefine the hashcode implementation. Also depends directly in the UID.
-     */
-    @Override
-    public synchronized int hashCode() {
-        return uid.hashCode();
     }
 }

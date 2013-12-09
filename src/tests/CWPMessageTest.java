@@ -1,10 +1,11 @@
-package Protocol;
+package tests;
 
 import static org.junit.Assert.*;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import Protocol.CWPMessage;
 import shared.models.User;
 
 public class CWPMessageTest {
