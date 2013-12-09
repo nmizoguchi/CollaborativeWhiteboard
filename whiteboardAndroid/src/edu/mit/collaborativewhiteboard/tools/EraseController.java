@@ -32,9 +32,12 @@ public class EraseController implements ToolController {
 		int x = Integer.valueOf(args[2]);
 		int y = Integer.valueOf(args[3]);
 
-		// Define Color
-		Paint paint = new Paint();
-		paint.setColor(Color.WHITE);
+        // Define Color
+        Paint paint = new Paint();
+        
+        paint.setColor(Integer.valueOf(args[4]));
+        paint.setStrokeWidth(Integer.valueOf(args[5]));
+        paint.setStyle(Paint.Style.STROKE);
 
 		// Define Brush Size
 		int brushSizeInt = Integer.valueOf(args[4]);
@@ -61,12 +64,13 @@ public class EraseController implements ToolController {
 
 			int x = (int) event.getX();
 			int y = (int) event.getY();
+			int color = Color.WHITE;
 			int stroke = (int) mView.getPaint().getStrokeWidth();
 			
 			// Sends info to the server
 			String[] arguments = new String[] { String.valueOf(mLastX),
 					String.valueOf(mLastY), String.valueOf(x),
-					String.valueOf(y), String.valueOf(stroke) };
+					String.valueOf(y), String.valueOf(color), String.valueOf(stroke) };
 			
 			mApp.getClient().scheduleMessage(
 					CWPMessage.Encode(mApp.getUser(), "erase", arguments));

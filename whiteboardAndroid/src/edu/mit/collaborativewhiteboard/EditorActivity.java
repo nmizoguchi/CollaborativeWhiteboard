@@ -126,4 +126,10 @@ public class EditorActivity extends GraphicsActivity implements ClientListener {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void onReceiveUpdatedUsersOnBoard(CWPMessage message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

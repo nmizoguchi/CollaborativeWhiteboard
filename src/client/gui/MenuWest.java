@@ -271,7 +271,7 @@ public class MenuWest extends JMenuBar{
         layout.setAutoCreateGaps(true);
         
         this.setLayout(layout);
-        this.setPreferredSize(new Dimension(130, 300));
+//        this.setPreferredSize(new Dimension(130, 300));
         
 	}
 

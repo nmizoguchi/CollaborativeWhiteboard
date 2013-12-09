@@ -369,7 +369,7 @@ public class ServerApplication implements ConnectionListener {
         int port = 4444; // default port
 
         ServerApplication server = new ServerApplication("Server");
-
+        
         // Creates a new thread to listen to new connections.
         Thread newConnectionHandler;
         try {

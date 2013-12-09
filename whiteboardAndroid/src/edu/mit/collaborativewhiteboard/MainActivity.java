@@ -61,9 +61,7 @@ public class MainActivity extends Activity {
 	
 	public void  initializeClient(String ipAddress, int port, String username) {
 		
-		mApplication.getUser().setName(username);
-		
-		Thread initializeClient = new Thread(new InitializeClient(ipAddress, port));
+		Thread initializeClient = new Thread(new InitializeClient(ipAddress, port, username));
 		initializeClient.start();
 	}
 
@@ -71,10 +69,12 @@ public class MainActivity extends Activity {
 
 		final String ipAddress;
 		final int port;
+		final String username;
 		
-		public InitializeClient(String ipAddress, int port) {
+		public InitializeClient(String ipAddress, int port, String username) {
 			this.ipAddress = ipAddress;
 			this.port = port;
+			this.username = username;
 		}
 		
 		@Override
@@ -82,6 +82,7 @@ public class MainActivity extends Activity {
 			try {
 				mApplication.setClient(new ClientApplication(ipAddress,
 						port));
+				mApplication.getUser().setName(username);
 				startActivity(intent);
 			} catch (UnknownHostException e) {
 				// TODO Auto-generated catch block

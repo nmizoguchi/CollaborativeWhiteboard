@@ -67,7 +67,7 @@ public class FreehandController implements ToolController {
 					String.valueOf(stroke) };
 
 			mApp.getClient().scheduleMessage(
-					CWPMessage.Encode(mApp.getUser(), "drawline", arguments));
+					CWPMessage.Encode(mApp.getUser(), "erase", arguments));
 			
 			mLastX = x;
 			mLastY = y;
