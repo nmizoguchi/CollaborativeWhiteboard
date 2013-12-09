@@ -14,9 +14,7 @@ import Protocol.CWPMessage;
 public class CanvasPainter implements Runnable {
 
     private final Canvas canvas;
-    private final String action;
-    private final String[] args;
-
+    private final CWPMessage message;
     /**
      * Constructor method
      * @param canvas is the canvas used to draw on
@@ -25,12 +23,7 @@ public class CanvasPainter implements Runnable {
      */
     public CanvasPainter(Canvas canvas, CWPMessage message) {
         this.canvas = canvas;
-        //actions include freehand, drawline, drawrect, and erase
-        this.action = message.getAction();
-        
-        //args is the information needed for canvas tools to use to paint
-        //this includes coordinates, brush size, and colors
-        this.args = message.getArguments();
+        this.message = message;
     }
 
     /**
@@ -38,6 +31,6 @@ public class CanvasPainter implements Runnable {
      */
     @Override
     public void run() {
-        canvas.execute(action, args);
+        canvas.execute(message);
     }
 }

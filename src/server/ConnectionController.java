@@ -134,6 +134,15 @@ public class ConnectionController implements ConnectionOutputHandler {
         // disconnected.
         finally {
             listener.onClientDisconnected(this);
+            // Signals to the outgoingMessageHandler to stop
+            this.scheduleMessage("poisonPillShutdown");
+            
+            try {
+                socket.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
@@ -155,7 +164,7 @@ public class ConnectionController implements ConnectionOutputHandler {
         // Creates the thread to check for updates
         updateWhiteboardHandler = new Thread(new Runnable() {
             public void run() {
-                while (socket.isConnected())
+                while (!socket.isClosed())
                     listener.onCheckForUpdateRequest(instance);
             }
         });
@@ -166,9 +175,16 @@ public class ConnectionController implements ConnectionOutputHandler {
         // Checks if there is a message to be sent. If it has, send it. Block
         // otherwise.
         try {
-            while (socket.isConnected()) {
+            while (!socket.isClosed()) {
                 String message = ((LinkedBlockingQueue<String>) outputQueue)
                         .take();
+                
+                // Check if it is a signal to stop
+                if(message.equals("poisonPillShutdown")) {
+                    break;
+                }
+                
+                // Outputs normally, otherwise
                 outputStream.println(message);
             }
 

@@ -6,15 +6,25 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.util.List;
 import java.awt.Shape;
+import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
 import Protocol.CWPMessage;
-import client.ClientApplication;
-import client.gui.canvas.tools.*;
+import shared.models.User;
+import client.gui.UserListModel;
+import client.gui.WhiteboardGUI;
+import client.gui.canvas.tools.EraseTool;
+import client.gui.canvas.tools.FreehandTool;
+import client.gui.canvas.tools.LineTool;
+import client.gui.canvas.tools.RectangleTool;
+import client.gui.canvas.tools.Tool;
+import client.gui.canvas.tools.ToolController;
 
 /**
  * Canvas represents a drawing surface that allows the user to draw on it
@@ -22,7 +32,7 @@ import client.gui.canvas.tools.*;
  */
 public class Canvas extends JPanel {
 
-    public ClientApplication mClient;
+    public WhiteboardGUI GUI;
     private ToolController activeController;
     private List<Tool> mTools;
 
@@ -33,6 +43,7 @@ public class Canvas extends JPanel {
     private int brushColor = Color.BLACK.getRGB();
     private boolean hasFill = false;
     private int fillColor = Color.BLACK.getRGB();
+    private Map<String, UserTrackerView> userTrackers;
 
     private MODE editorMode;
 
@@ -44,9 +55,12 @@ public class Canvas extends JPanel {
      * @param height
      *            height in pixels
      */
-    public Canvas(int width, int height, ClientApplication client) {
+    public Canvas(int width, int height, WhiteboardGUI gui) {
+
+        this.userTrackers = new HashMap<String, UserTrackerView>();
+
         this.setPreferredSize(new Dimension(width, height));
-        this.mClient = client;
+        this.GUI = gui;
 
         this.mTools = new ArrayList<Tool>();
         initializeTools();
@@ -56,9 +70,7 @@ public class Canvas extends JPanel {
         activeController = mTools.get(MODE.FREEHAND.ordinal()).getController();
         addMouseListener(activeController);
         addMouseMotionListener(activeController);
-        
-        
-        
+
     }
 
     public enum MODE {
@@ -72,7 +84,9 @@ public class Canvas extends JPanel {
         mTools.add(MODE.RECTANGLE.ordinal(), new RectangleTool(this));
     }
 
-    public void execute(String action, String[] args) {
+    public void execute(CWPMessage message) {
+
+        String action = message.getAction();
 
         MODE actionMode = MODE.FREEHAND;
 
@@ -84,11 +98,11 @@ public class Canvas extends JPanel {
 
         else if (action.equals("drawline"))
             actionMode = MODE.LINE;
-        
+
         else if (action.equals("drawrect"))
             actionMode = MODE.RECTANGLE;
 
-        mTools.get(actionMode.ordinal()).getController().paint(args);
+        mTools.get(actionMode.ordinal()).getController().paint(message);
     }
 
     /**
@@ -105,16 +119,39 @@ public class Canvas extends JPanel {
         // Copy the drawing buffer to the screen.
         g.drawImage(drawingBuffer, 0, 0, null);
 
+        Graphics2D g2 = (Graphics2D) g;
+
         // If there is some shape being drawn only on client-side, show it
         if (surfaceShape != null) {
-            Graphics2D g2 = (Graphics2D) g;
             g2.setStroke(new BasicStroke(brushSize));
             if (hasFill) {
-            	g2.setColor(new Color(fillColor));
-            	g2.fill(surfaceShape);
+                g2.setColor(new Color(fillColor));
+                g2.fill(surfaceShape);
             }
-            g2.setColor(new Color (brushColor));
+            g2.setColor(new Color(brushColor));
             g2.draw(surfaceShape);
+        }
+
+        // Draw the user trackers
+        for (UserTrackerView userTracker : userTrackers.values()) {
+            
+            // Draws a shadow
+            g2.setColor(userTracker.getShadowColor());
+            for (int i = -1; i <= 0; i++) {
+                for (int j = -1; j <= 0; j++) {
+                    g2.drawString(userTracker.getUsername(), userTracker.getX()
+                            - i, userTracker.getY() - j);
+                }
+            }
+            
+            // Draw the name itself
+            g2.setColor(userTracker.getColor());
+            for (int i = -1; i <= 0; i++) {
+                for (int j = -1; j <= 0; j++) {
+                    g2.drawString(userTracker.getUsername(), userTracker.getX()
+                            + i, userTracker.getY() + j);
+                }
+            }
         }
     }
 
@@ -196,5 +233,19 @@ public class Canvas extends JPanel {
 
     public void setBrushColor(int brushColor) {
         this.brushColor = brushColor;
+    }
+
+    public UserTrackerView getUserTracker(String uuid) {
+        if (userTrackers.containsKey(uuid)) {
+            return userTrackers.get(uuid);
+        }
+
+        else {
+            UserListModel users = GUI.getActiveUsers();
+            User user = users.getUser(uuid);
+            UserTrackerView view = new UserTrackerView(this, user.getName());
+            userTrackers.put(uuid, view);
+            return view;
+        }
     }
 }

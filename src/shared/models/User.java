@@ -97,12 +97,4 @@ public class User {
     public synchronized int hashCode() {
         return uid.hashCode();
     }
-
-    /**
-     * Returns a representation of the user in the format "uid username".
-     */
-    @Override
-    public synchronized String toString() {
-        return this.getUid() + " " + this.getName();
-    }
 }

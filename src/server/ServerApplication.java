@@ -46,10 +46,10 @@ public class ServerApplication implements ConnectionListener {
      * Constructor. Creates other models that are part of the server's
      * representation.
      */
-    public ServerApplication() {
+    public ServerApplication(String serverName) {
 
         // Server has an UUID too.
-        serverUser = new User("server");
+        serverUser = new User(serverName);
 
         whiteboardList = Collections
                 .synchronizedList(new ArrayList<Whiteboard>());
@@ -140,17 +140,19 @@ public class ServerApplication implements ConnectionListener {
      */
     private String[] getWhiteboardNames() {
 
-        String names = "";
+        String[] names;
 
         // Guarantees that it won't break the invariant while iterating over the
-        // list by aquiring the lock of the list.
+        // list by acquiring the lock of the list.
         synchronized (whiteboardList) {
-            for (Whiteboard board : whiteboardList) {
-                names = names + " " + board.getName();
+
+            names = new String[whiteboardList.size()];
+            for (int i = 0; i < whiteboardList.size(); i++) {
+                names[i] = whiteboardList.get(i).getName();
             }
         }
 
-        return names.split(" ");
+        return names;
     }
     
     public User getServerUser() {
@@ -195,6 +197,8 @@ public class ServerApplication implements ConnectionListener {
                         callerController.scheduleMessage(sendUser);
                     }
                 }
+            	
+            	// Sets username
                 User newUser;
                 newUser = new User(message.getArgument(0),
                         message.getArgument(1));
@@ -237,7 +241,8 @@ public class ServerApplication implements ConnectionListener {
              * by using the outputQueue.
              */
             String[] boardNames = getWhiteboardNames();
-            callerController.scheduleMessage(command + boardNames);
+            String whiteboardsMessage = CWPMessage.Encode(serverUser, command, boardNames);
+            callerController.scheduleMessage(whiteboardsMessage);
         }
 
         else if (command.equals("chat")) {
@@ -257,7 +262,7 @@ public class ServerApplication implements ConnectionListener {
              * for running updateClient will handle it.
              */
             // VERIFY IF IT IS A MESSAGE OF PAINTING BOARDS
-            currentConnection.updateActiveWhiteboard(message.getPaintAction());
+            currentConnection.updateActiveWhiteboard(input);
         }
     }
 
@@ -313,9 +318,10 @@ public class ServerApplication implements ConnectionListener {
      * Entry point of the server.
      */
     public static void main(String[] args) {
+        
         int port = 4444; // default port
 
-        ServerApplication server = new ServerApplication();
+        ServerApplication server = new ServerApplication("Server");
 
         // Creates a new thread to listen to new connections.
         Thread newConnectionHandler;

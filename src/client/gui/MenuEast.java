@@ -118,20 +118,16 @@ public class MenuEast extends JPanel {
         createBoardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    String name = JOptionPane.showInputDialog("Board name:");
-                    // if user selects cancel or does not enter a name, nothing
-                    // will happen and the dialog will close
-                    if (name != null) {
-                        String[] params = new String[] { name };
-                        String message = CWPMessage.Encode(gui.getClient()
-                                .getUser(), "changeboard", params);
+                String name = JOptionPane.showInputDialog("Board name:");
+                // if user selects cancel or does not enter a name, nothing
+                // will happen and the dialog will close
+                if (name != null && !name.equals("")) {
+                    String[] params = new String[] { name };
+                    String message = CWPMessage.Encode(gui.getClient()
+                            .getUser(), "changeboard", params);
 
-                        gui.getClient().scheduleMessage(message);
-                    }
-                } catch (NullPointerException n) {
+                    gui.getClient().scheduleMessage(message);
                 }
-
             }
         });
 
@@ -142,9 +138,11 @@ public class MenuEast extends JPanel {
          */
         userChat.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String[] args = new String[] {gui.getClient().getUser().getName() + ": " + userChat.getText() };
-                String message = CWPMessage.Encode(gui.getClient()
-                        .getUser(), "chat", args);
+                String[] args = new String[] { gui.getClient().getUser()
+                        .getName()
+                        + ": " + userChat.getText() };
+                String message = CWPMessage.Encode(gui.getClient().getUser(),
+                        "chat", args);
                 gui.getClient().scheduleMessage(message);
                 userChat.setText("");
             }
