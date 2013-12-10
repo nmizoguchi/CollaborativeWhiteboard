@@ -8,6 +8,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
 import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -36,6 +37,7 @@ public class CanvasView extends View {
 		super(c);
 		mContext = (EditorActivity) c;
 		mPaint = new Paint();
+		mPaint.setStrokeCap(Cap.SQUARE);
 		mPaint.setAntiAlias(true);
 		mPaint.setARGB(255, 0, 0, 0);
 		
@@ -188,11 +190,11 @@ public class CanvasView extends View {
 
 		int color = Integer.valueOf(msg.getArgument(4));
 		int brushSize = Integer.valueOf(msg.getArgument(5));
-		Paint p = new Paint();
-		p.setColor(color);
-		p.setStrokeWidth(brushSize);
+		
+		mPaint.setColor(color);
+		mPaint.setStrokeWidth(brushSize);
 
-		drawLine(x1, y1, x2, y2, p);
+		drawLine(x1, y1, x2, y2, mPaint);
 	}
 	
 	public Paint getPaint() {

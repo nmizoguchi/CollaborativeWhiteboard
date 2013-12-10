@@ -3,6 +3,7 @@ package edu.mit.collaborativewhiteboard.tools;
 import Protocol.CWPMessage;
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
 import android.view.MotionEvent;
 import edu.mit.collaborativewhiteboard.CanvasView;
 import edu.mit.collaborativewhiteboard.EditorActivity;
@@ -49,6 +50,7 @@ public class RectangleController implements ToolController {
 		Paint paint = new Paint();
 		paint.setColor(colorInt);
 		paint.setStrokeWidth(brush);
+		paint.setStrokeCap(Cap.SQUARE);
 
 		while (mView.getCanvas() == null) {
 

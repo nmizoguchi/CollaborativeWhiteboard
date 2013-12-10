@@ -3,6 +3,7 @@ package edu.mit.collaborativewhiteboard.tools;
 import Protocol.CWPMessage;
 import android.content.Context;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
 import android.view.MotionEvent;
 import edu.mit.collaborativewhiteboard.CanvasView;
 import edu.mit.collaborativewhiteboard.EditorActivity;
@@ -37,6 +38,7 @@ public class LineController implements ToolController {
 		paint.setColor(Integer.valueOf(args[4]));
 		paint.setStrokeWidth(Integer.valueOf(args[5]));
 		paint.setStyle(Paint.Style.STROKE);
+		paint.setStrokeCap(Cap.SQUARE);
 
 		while (mView.getCanvas() == null) {
 

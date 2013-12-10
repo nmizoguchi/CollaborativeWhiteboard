@@ -4,6 +4,7 @@ import Protocol.CWPMessage;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Paint.Cap;
 import android.view.MotionEvent;
 import edu.mit.collaborativewhiteboard.CanvasView;
 import edu.mit.collaborativewhiteboard.EditorActivity;
@@ -38,11 +39,7 @@ public class EraseController implements ToolController {
         paint.setColor(Integer.valueOf(args[4]));
         paint.setStrokeWidth(Integer.valueOf(args[5]));
         paint.setStyle(Paint.Style.STROKE);
-
-		// Define Brush Size
-		int brushSizeInt = Integer.valueOf(args[4]);
-		paint.setStrokeWidth(brushSizeInt);
-		paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeCap(Cap.SQUARE);
 
 		while (mView.getCanvas() == null) {
 
