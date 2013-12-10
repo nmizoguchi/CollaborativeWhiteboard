@@ -9,8 +9,6 @@ public class MainApplication extends Application {
 	
 	private static MainApplication singleton;
 	private ClientApplication mClient;
-	private final User mUser = new User("Android");
-
 
 	public MainApplication getInstance() {
 		return singleton;
@@ -46,6 +44,6 @@ public class MainApplication extends Application {
 	}
 
 	public User getUser() {
-		return mUser;
+		return this.mClient.getUser();
 	}
 }

@@ -1,6 +1,9 @@
 package tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotSame;
 
 import org.junit.Test;
 
@@ -31,7 +34,7 @@ public class UserTest {
 
         User user = new User("Nick");
         assertEquals("Nick", user.getName());
-        assertNotEquals("nick", user.getName()); // Capital makes difference
+        assertNotSame("nick", user.getName()); // Capital makes difference
 
         user = new User("Nicholas Lastname");
         assertEquals("Nicholas Lastname", user.getName());
@@ -39,7 +42,7 @@ public class UserTest {
         // Tests the other constructor too.
         user = new User("4b1fabfa-13d9-4b47-a6d2-a64518e0c85b", "Nick");
         assertEquals("Nick", user.getName());
-        assertNotEquals("nick", user.getName()); // Capital makes difference
+        assertNotSame("nick", user.getName()); // Capital makes difference
 
         user = new User("4b1fabfa-13d9-4b47-a6d2-a64518e0c85b",
                 "Nicholas Lastname");

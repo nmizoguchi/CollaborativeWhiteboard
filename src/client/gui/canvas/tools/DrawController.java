@@ -39,7 +39,6 @@ public class DrawController implements ToolController{
          * Draw in a line format between two points (x1, y1) and (x2, y2), specified in
          * pixels relative to the upper-left corner of the drawing buffer.
          */
-        
         String[] args = message.getArguments();
 
         Image drawingBuffer = canvas.getDrawingBuffer();

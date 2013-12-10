@@ -59,7 +59,7 @@ public class ServerApplicationTest {
 
         // Creates a new board named "Board name", once it doesn't find one with
         // this name.
-        assertNotEquals(null, whiteboard);
+        assertNotSame(null, whiteboard);
 
         // Should give the same instance of whiteboard
         assertEquals(whiteboard, server.getWhiteboard("Board name"));
