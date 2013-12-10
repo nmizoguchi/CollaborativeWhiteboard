@@ -199,6 +199,10 @@ public class CanvasView extends View {
 		return mPaint;
 	}
 	
+	public void setPaint(Paint paint) {
+		mPaint = paint;
+	}
+	
 	public Canvas getCanvas() {
 		return mCanvas;
 	}

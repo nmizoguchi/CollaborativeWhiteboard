@@ -14,8 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import client.ClientApplication;
 
-import com.example.collaborativewhiteboard.R;
-
 public class MainActivity extends Activity {
 	
 	MainApplication mApplication;

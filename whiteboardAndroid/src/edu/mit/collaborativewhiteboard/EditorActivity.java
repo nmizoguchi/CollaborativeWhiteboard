@@ -15,6 +15,8 @@ package edu.mit.collaborativewhiteboard;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.IOException;
+
 import Protocol.CWPMessage;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -22,8 +24,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import client.ClientListener;
-
-import com.example.collaborativewhiteboard.R;
 
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
@@ -63,6 +63,17 @@ public class EditorActivity extends GraphicsActivity implements ClientListener {
 		mApplication = (MainApplication) getApplication();
 		mApplication.getClient().initialize(this,
 				mApplication.getUser().getName());
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		try {
+			mApplication.getClient().close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public CanvasView getCanvasView() {
@@ -130,6 +141,6 @@ public class EditorActivity extends GraphicsActivity implements ClientListener {
 	@Override
 	public void onReceiveUpdatedUsersOnBoard(CWPMessage message) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

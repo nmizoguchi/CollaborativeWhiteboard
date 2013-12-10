@@ -43,20 +43,24 @@ public class RectangleController implements ToolController {
 		// Define hasFill
 		int hasFillInt = Integer.valueOf(args[6]);
 
+		int fillColorInt = Integer.valueOf(args[7]);
+
 		// Define Color
 		Paint paint = new Paint();
 		paint.setColor(colorInt);
 		paint.setStrokeWidth(brush);
-		
-		if(hasFillInt == 0)
-			paint.setStyle(Paint.Style.STROKE);
-		else
-			paint.setStyle(Paint.Style.FILL);
 
 		while (mView.getCanvas() == null) {
 
 		}
-		mView.getCanvas().drawRect(x1, y1, x2, y2, paint);
+		if (hasFillInt == 0) {
+			paint.setStyle(Paint.Style.STROKE);
+			mView.getCanvas().drawRect(x1, y1, x2, y2, paint);
+		} else {
+			paint.setStyle(Paint.Style.FILL);
+			paint.setColor(fillColorInt);
+			mView.getCanvas().drawRect(x1, y1, x2, y2, paint);
+		}
 		mView.postInvalidate();
 	}
 
@@ -76,8 +80,8 @@ public class RectangleController implements ToolController {
 			int brushColor = mView.getPaint().getColor();
 			int brushStroke = (int) mView.getPaint().getStrokeWidth();
 			int fillColor, hasFill;
-			
-			switch(mView.getPaint().getStyle()) {
+
+			switch (mView.getPaint().getStyle()) {
 			case FILL:
 				hasFill = 1;
 				fillColor = brushColor;
@@ -96,18 +100,17 @@ public class RectangleController implements ToolController {
 				break;
 			}
 
-//			drawrect x1 y1 x2 y2 brushColor brushSize fillColor hasFill
+			// drawrect x1 y1 x2 y2 brushColor brushSize fillColor hasFill
 			String[] arguments = new String[] { String.valueOf(mLastX),
 					String.valueOf(mLastY), String.valueOf(x),
 					String.valueOf(y), String.valueOf(brushColor),
-					String.valueOf(brushStroke),
-					String.valueOf(fillColor),
+					String.valueOf(brushStroke), String.valueOf(fillColor),
 					String.valueOf(hasFill) };
 
 			mApp.getClient().scheduleMessage(
 					CWPMessage.Encode(mApp.getUser(), "drawrect", arguments));
 		}
-		
+
 		return true;
 	}
 }
