@@ -12,7 +12,7 @@ import Protocol.CWPMessage;
 import client.gui.canvas.Canvas;
 import client.gui.canvas.UserTrackerView;
 
-/*
+/**
  * DrawingController handles the user's freehand drawing.
  */
 public class LineController implements ToolController {

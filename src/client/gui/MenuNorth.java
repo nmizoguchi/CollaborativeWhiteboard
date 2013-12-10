@@ -36,7 +36,7 @@ public class MenuNorth extends JMenuBar {
 		file = new JMenu();
 		file.setText("File");
 		save = new JMenuItem();
-		save.setText("Save");
+		save.setText("Save As..");
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		file.add(save);
 		this.gui = gui;
