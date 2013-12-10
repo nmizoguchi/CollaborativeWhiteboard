@@ -27,8 +27,7 @@ import client.gui.canvas.tools.Tool;
 import client.gui.canvas.tools.ToolController;
 
 /**
- * Canvas represents a drawing surface that allows the user to draw on it
- * freehand, with the mouse.
+ * Canvas represents a drawing surface that allows the user to draw on it with the mouse
  */
 public class Canvas extends JPanel {
 
@@ -73,10 +72,14 @@ public class Canvas extends JPanel {
 
     }
 
+    /**
+     * These are the different drawing modes
+     */
     public enum MODE {
         FREEHAND, ERASE, LINE, RECTANGLE
     }
 
+    
     private void initializeTools() {
         mTools.add(MODE.FREEHAND.ordinal(), new FreehandTool(this));
         mTools.add(MODE.ERASE.ordinal(), new EraseTool(this));
@@ -84,10 +87,15 @@ public class Canvas extends JPanel {
         mTools.add(MODE.RECTANGLE.ordinal(), new RectangleTool(this));
     }
 
+    /**
+     * Receives a message and sets the drawing mode depending on the action in the message.
+     * These actions include: "freehand", "erase", "drawline", "drawrect".
+     * The default action mode is FREEHAND. After determining the mode, the tool selected
+     * then paints on the canvas using the information provided by the message
+     * @param message is a CWPMessage
+     */
     public void execute(CWPMessage message) {
-
         String action = message.getAction();
-
         MODE actionMode = MODE.FREEHAND;
 
         if (action.equals("freehand"))
@@ -155,22 +163,43 @@ public class Canvas extends JPanel {
         }
     }
 
+    /**
+     * Returns whether or not the rectangle to be drawn has a fill color
+     * @return hasFill is a boolean
+     */
     public boolean hasFill() {
         return hasFill;
     }
 
+    /**
+     * Sets whether or not the rectangle to be drawn will have a fill color
+     * @param hasFill is a boolean
+     */
     public void setHasFill(boolean hasFill) {
         this.hasFill = hasFill;
     }
 
+    /**
+     * Returns the RGB integer representation of the fill color
+     * @return fillColor is an integer
+     */
     public int getFillColor() {
         return fillColor;
     }
 
+    /**
+     * Sets the fill color
+     * @param fillColor is an RGB integer
+     */
     public void setFillColor(int fillColor) {
         this.fillColor = fillColor;
     }
 
+    /**
+     * Sets the drawing mode
+     * @param m is a MODE that must be one of the following:
+     * 			FREEHAND, ERASE, LINE, RECTANGLE
+     */
     public void setMode(MODE m) {
 
         removeMouseListener(activeController);
@@ -184,16 +213,16 @@ public class Canvas extends JPanel {
         addMouseMotionListener(activeController);
     }
 
-    /*
-     * Make the drawing buffer and draw some starting content for it.
+    /**
+     * Make the drawing buffer and draws a starting content for it.
      */
     private void makeDrawingBuffer() {
         drawingBuffer = createImage(getWidth(), getHeight());
         clearScreen();
     }
 
-    /*
-     * Make the drawing buffer entirely white.
+    /**
+     * Make the drawing buffer entirely white, essentially "clearing" the screen
      */
     public void clearScreen() {
         final Graphics2D g = (Graphics2D) drawingBuffer.getGraphics();
@@ -203,38 +232,68 @@ public class Canvas extends JPanel {
         this.repaint();
     }
 
+    /**
+     * Returns the image that we are drawing on
+     * @return drawingBuffer is an Image
+     */
     public Image getDrawingBuffer() {
         return drawingBuffer;
     }
 
+    /**
+     * Returns the drawing mode: FREEHAND, ERASE, LINE, RECTANGLE
+     * @return editorMode is one of the four options of MODE
+     */
     public MODE getMode() {
         return editorMode;
     }
 
-    public Shape getSurfaceShape() {
-        return surfaceShape;
-    }
-
+    /**
+     * Sets the shape of the graphics to be drawn
+     * @param surfaceShape is a graphics2D primitive shape
+     */
     public void setSurfaceShape(Shape surfaceShape) {
         this.surfaceShape = surfaceShape;
     }
 
+    /**
+     * Sets the size of the brush for erase or freehand,
+     * or sets the thickness of the line or the border of a rectangle
+     * @param b is a nonnegative integer
+     */
     public void setBrushSize(int b) {
         brushSize = b;
     }
 
+    /**
+     * Returns the size or thickness of the brush
+     * @return brushSize is an integer
+     */
     public int getBrushSize() {
         return brushSize;
     }
 
+    /**
+     * Returns the color of the brush
+     * @return brushColor is an RGB integer representation of a color
+     */
     public int getBrushColor() {
         return brushColor;
     }
 
+    /**
+     * Sets the color of the brush
+     * @param brushColor is an RGB integer representation of a color
+     */
     public void setBrushColor(int brushColor) {
         this.brushColor = brushColor;
     }
 
+    /**
+     * Displays the username when the user draws
+     * @param uuid is a UUID String representation of the user
+     * @return view is an instance of UserTrackerView
+     */
     public UserTrackerView getUserTracker(String uuid) {
         if (userTrackers.containsKey(uuid)) {
             return userTrackers.get(uuid);
