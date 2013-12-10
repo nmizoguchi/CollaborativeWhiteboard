@@ -140,7 +140,7 @@ public class CWPMessage {
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
                 + div + "-?\\d+)");
 
-        // uuid drawline 6 arguments
+        // uuid erase 6 arguments
         regexes.add("(" + uuid + div + "erase" + div + "-?\\d+" + div
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
                 + div + "-?\\d+)");

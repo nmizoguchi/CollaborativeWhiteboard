@@ -2,6 +2,12 @@ package client.gui.canvas.tools;
 
 import client.gui.canvas.Canvas;
 
+/**
+ * Implements Tool. This is used when the user selects the eraser tool.
+ * This is associated with the draw controller.
+ * @author rcha
+ *
+ */
 public class EraseTool implements Tool {
 
     public final String name = "Erase";

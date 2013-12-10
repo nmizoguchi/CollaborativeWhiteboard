@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
+import java.awt.image.ImageObserver;
 import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -162,7 +163,6 @@ public class Canvas extends JPanel {
             }
         }
     }
-
     /**
      * Returns whether or not the rectangle to be drawn has a fill color
      * @return hasFill is a boolean

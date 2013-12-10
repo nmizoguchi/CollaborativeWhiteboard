@@ -69,23 +69,18 @@ public class MenuWest extends JMenuBar{
         		.getScaledInstance(50, 50, 100));
         eraser = new JToggleButton(eraserIcon);
         eraser.setBackground(Color.WHITE);
-        eraser.setMnemonic(KeyEvent.VK_E);
         freehand = new JToggleButton(drawIcon);
         freehand.setBackground(Color.WHITE);
-        freehand.setMnemonic(KeyEvent.VK_B);
         drawLine = new JToggleButton(drawLineIcon);
         drawLine.setBackground(Color.WHITE);
-        drawLine.setMnemonic(KeyEvent.VK_L);
         drawRect = new JToggleButton(rectangleIcon);
         drawRect.setBackground(Color.WHITE);
-        drawRect.setMnemonic(KeyEvent.VK_R);
         enterSize = new JTextField();
         enterSize.setText(String.valueOf(canvas.getBrushSize()));
         sizeDec = new JButton("-");
         sizeInc = new JButton("+");
         colorButton = new JButton();
         colorButton.setBackground(Color.BLACK);
-        colorButton.setMnemonic(KeyEvent.VK_C);
         colorButton.setOpaque(true);
         fillColor = new JToggleButton();
         fillColor.setSelected(true);
@@ -156,13 +151,13 @@ public class MenuWest extends JMenuBar{
 				
 			}
 			private void fill(MouseEvent arg0){
-				if (SwingUtilities.isRightMouseButton(arg0)){
+				if (SwingUtilities.isLeftMouseButton(arg0)){
 					Color color = JColorChooser.showDialog(colorOptions, "Choose a color", colorOptions.getColor());
 					if (color != null){
 						canvas.setFillColor(color.getRGB());
 						fillColor.setBackground(color);
 					}
-				} else if (SwingUtilities.isLeftMouseButton(arg0)){
+				} else if (SwingUtilities.isRightMouseButton(arg0)){
 					
 					canvas.setHasFill(fillColor.isSelected()? false : true);
 				}
@@ -269,5 +264,6 @@ public class MenuWest extends JMenuBar{
         this.setLayout(layout);
         
 	}
+	
 
 }
