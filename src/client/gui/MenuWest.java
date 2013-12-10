@@ -88,8 +88,10 @@ public class MenuWest extends JMenuBar{
         colorButton = new JButton();
         colorButton.setBackground(Color.BLACK);
         colorButton.setMnemonic(KeyEvent.VK_C);
+        colorButton.setOpaque(true);
         fillColor = new JToggleButton();
         fillColor.setSelected(true);
+        fillColor.setOpaque(true);
         fillColor.setBackground(Color.BLACK);
         
         //adding tool tip texts to each icon
