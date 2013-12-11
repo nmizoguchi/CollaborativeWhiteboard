@@ -1,9 +1,8 @@
 package server;
 
 /**
- * An interface that implements the listener pattern. This interface defines
- * callbacks that are called when the respective actions defined in the method
- * happens in a ConnectionController.
+ * This interface defines callbacks called when specific actions from the
+ * connection occur.
  * 
  * @author Nicholas M. Mizoguchi
  */
@@ -26,7 +25,7 @@ public interface ConnectionListener {
      * from the server. This method should already send updates to the client
      * through the callerController.
      * 
-     * @param callerController
+     * @param controller
      *            the connectionController that called this method.
      */
     public void onCheckForUpdateRequest(ConnectionController controller);
@@ -35,7 +34,7 @@ public interface ConnectionListener {
      * Callback method called when the client that the ConnectionController was
      * handling disconnects.
      * 
-     * @param callerController
+     * @param controller
      *            the connectionController that called this method.
      */
     public void onClientDisconnected(ConnectionController controller);

@@ -61,8 +61,8 @@ public class Connection {
     }
 
     /**
-     * @param the
-     *            User to be set to this connection
+     * @param user
+     *            the User to be set to this connection
      */
     public synchronized void setUser(User user) {
         this.user = user;

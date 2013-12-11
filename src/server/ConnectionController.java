@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Queue;
 import java.util.UUID;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -136,7 +135,7 @@ public class ConnectionController implements ConnectionOutputHandler {
             listener.onClientDisconnected(this);
             // Signals to the outgoingMessageHandler to stop
             this.scheduleMessage("poisonPillShutdown");
-            
+
             try {
                 socket.close();
             } catch (IOException e) {
@@ -178,12 +177,12 @@ public class ConnectionController implements ConnectionOutputHandler {
             while (!socket.isClosed()) {
                 String message = ((LinkedBlockingQueue<String>) outputQueue)
                         .take();
-                
+
                 // Check if it is a signal to stop
-                if(message.equals("poisonPillShutdown")) {
+                if (message.equals("poisonPillShutdown")) {
                     break;
                 }
-                
+
                 // Outputs normally, otherwise
                 outputStream.println(message);
             }
@@ -207,8 +206,8 @@ public class ConnectionController implements ConnectionOutputHandler {
     /**
      * Schedules a message to be sent to the client.
      * 
-     * @param the
-     *            message itself.
+     * @param message
+     *            the message itself.
      */
     @Override
     public void scheduleMessage(String message) {

@@ -70,42 +70,42 @@ public class ClientApplication {
         while ((command = inputStream.readLine()) != null) {
 
             try {
-            CWPMessage message = new CWPMessage(command);
+                CWPMessage message = new CWPMessage(command);
 
-            String action = message.getAction();
+                String action = message.getAction();
 
-            if (action.equals("newuser")) {
-                listener.onNewuserMessageReceived(message);
-            }
+                if (action.equals("newuser")) {
+                    listener.onNewuserMessageReceived(message);
+                }
 
-            else if (action.equals("disconnecteduser")) {
-                listener.onDisconnecteduserMessageReceived(message);
-            }
-            
-            else if (action.equals("updateusers")) {
-                listener.onReceiveUpdatedUsersOnBoard(message);
-            }
+                else if (action.equals("disconnecteduser")) {
+                    listener.onDisconnecteduserMessageReceived(message);
+                }
 
-            else if (action.equals("whiteboards")) {
-            	
-                listener.onWhiteboardsMessageReceived(message);
-            }
+                else if (action.equals("updateusers")) {
+                    listener.onReceiveUpdatedUsersOnBoard(message);
+                }
 
-            else if (action.equals("changeboard")) {
-                changeWhiteboard(message.getArgument(0));
-                listener.onChangeboardMessageReceived(message);
-            }
+                else if (action.equals("whiteboards")) {
 
-            else if (action.equals("chat")) {
-                listener.onChatMessageReceived(message);
-            }
+                    listener.onWhiteboardsMessageReceived(message);
+                }
 
-            // TODO: Check for paint message using Protocol
-            else {
-                whiteboard.update(command);
-                listener.onPaintMessageReceived(message);
-            }
-            } catch(UnsupportedOperationException e) {
+                else if (action.equals("changeboard")) {
+                    changeWhiteboard(message.getArgument(0));
+                    listener.onChangeboardMessageReceived(message);
+                }
+
+                else if (action.equals("chat")) {
+                    listener.onChatMessageReceived(message);
+                }
+
+                // TODO: Check for paint message using Protocol
+                else {
+                    whiteboard.update(command);
+                    listener.onPaintMessageReceived(message);
+                }
+            } catch (UnsupportedOperationException e) {
                 listener.onInvalidMessageReceived(e.getMessage());
             }
         }
@@ -135,6 +135,10 @@ public class ClientApplication {
             while (socket.isConnected()) {
                 String message = ((LinkedBlockingQueue<String>) outputQueue)
                         .take();
+                // If there is a poison pill, stops listening
+                if(message == "Poison Pill") {
+                    return;
+                }
                 outputStream.println(message);
             }
 
@@ -177,8 +181,10 @@ public class ClientApplication {
      * Initializes the client by sending an initialization request to the
      * server.
      * 
-     * @param ClientListener
-     *            GUI on the client side
+     * @param listener
+     *            A ClientListener, which has callbacks to each type of message
+     *            received.
+     * @param username the desired username of the client.
      */
     public void initialize(ClientListener listener, String username) {
 

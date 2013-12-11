@@ -1,6 +1,5 @@
 package client.gui;
 
-import java.util.Enumeration;
 import java.util.List;
 
 import shared.models.User;
@@ -18,7 +17,7 @@ public class RunnableUpdateUsers implements Runnable {
     /**
      * Takes in a UserListModel of active users and the new User that has connected to the server
      * @param users is a UserListModel
-     * @param user is a new User
+     * @param userList is the list of users
      */
     public RunnableUpdateUsers(UserListModel users, List<User> userList) {
         this.userList = userList;
