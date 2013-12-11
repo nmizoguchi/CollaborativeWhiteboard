@@ -86,7 +86,7 @@ public class ClientApplication {
             }
 
             else if (action.equals("whiteboards")) {
-
+            	
                 listener.onWhiteboardsMessageReceived(message);
             }
 

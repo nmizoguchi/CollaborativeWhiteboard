@@ -8,6 +8,20 @@ import org.junit.Test;
 import Protocol.CWPMessage;
 import shared.models.User;
 
+/**
+ * This tests the CWPMessage class.
+ * -Tests CWPMessage.SEPARATOR
+ * -Tests if the message parses correctly
+ * -Tests messages with whitespace
+ * -Tests valid and invalid parameters for the actions:
+ * 		erase, drawline, drawrect, whiteboards, initialize, disconnecteduser,
+ * 		newuser, changeboard, chat
+ * -Tests initializing the CWPMessage and the getPaintAction method
+ * -Tests for immutability
+ * 
+ * @author rcha
+ *
+ */
 public class CWPMessageTest {
 
     @Test
@@ -92,8 +106,9 @@ public class CWPMessageTest {
      * Validation tests: Tests if the regex is finding valid and invalid
      * messages
      */
-    @Test
+	@Test
     public void validateTest_eraseValid() {
+		//valid parameters
         User user = new User("Nick");
         String action = "erase";
         String[] params = new String[] { "10", "20", "30", "40", "50", "60" };
@@ -102,6 +117,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_eraseInvalidArgument() {
+    	//invalid parameter
         User user = new User("Nick");
         String action = "erase";
         String[] params = new String[] { "10", "20", "30", "40", "50", "thick" };
@@ -110,6 +126,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_eraseInvalidNumberOfArguments() {
+    	//not enough parameters
         User user = new User("Nick");
         String action = "erase";
         String[] params = new String[] { "10", "20", "30", "40" };
@@ -118,6 +135,7 @@ public class CWPMessageTest {
 
     @Test
     public void validateTest_drawlineValid() {
+    	//valid parameters
         User user = new User("Nick");
         String action = "drawline";
         String[] params = new String[] { "10", "20", "30", "40", "50", "60" };
@@ -126,6 +144,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_drawlineInvalidArgument() {
+    	//invalid parameter
         User user = new User("Nick");
         String action = "drawline";
         String[] params = new String[] { "10", "20", "30", "40", "thick" };
@@ -134,6 +153,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_drawlineInvalidNumberOfArguments() {
+    	//not enough parameters
         User user = new User("Nick");
         String action = "drawline";
         String[] params = new String[] { "10", "20", "30", "40" };
@@ -142,6 +162,7 @@ public class CWPMessageTest {
 
     @Test
     public void validateTest_drawrectValid() {
+    	//valid parameters
         User user = new User("Nick");
         String action = "drawrect";
         String[] params = new String[] { "10", "20", "30", "40", "50", "60",
@@ -151,6 +172,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_drawrectInvalidArgument() {
+    	//invalid parameter
         User user = new User("Nick");
         String action = "drawrect";
         String[] params = new String[] { "10", "20", "30", "40", "50", "60",
@@ -160,6 +182,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_drawrectInvalidNumberOfArguments() {
+    	//not enough parameters
         User user = new User("Nick");
         String action = "drawrect";
         String[] params = new String[] { "10", "20", "30", "40", "50", "60",
@@ -167,9 +190,10 @@ public class CWPMessageTest {
         String message = CWPMessage.Encode(user, action, params);
     }
 
-    @Test
+   
+	@Test
     public void validateTest_whiteboardsValid() {
-
+		//valid parameters
         User user = new User("Username");
         String action = "whiteboards";
 
@@ -188,7 +212,7 @@ public class CWPMessageTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_whiteboardsInvalid() {
-
+    	//invalid because there is no name
         User user = new User("Username");
         String action = "whiteboards";
         String[] params = new String[] { "" };
@@ -259,24 +283,24 @@ public class CWPMessageTest {
 
     @Test
     public void validateTest_changeboardValid() {
-        // Message format: uuid newuser uuid username
+        // Message format: uuid changeboard uuid username
         User user = new User("Username");
         String action = "changeboard";
 
         String[] params = new String[] { "Some board" };
         String message = CWPMessage.Encode(user, action, params);
     }
-
+    
     @Test(expected = UnsupportedOperationException.class)
     public void validateTest_changeboardInvalidNumberOfArguments() {
 
         // Test with invalid number of arguments
         User user = new User("Username");
-        String action = "newuser";
+        String action = "changeboard";
         String[] params = new String[] {};
         String message = CWPMessage.Encode(user, action, params);
     }
-
+    
     @Test
     public void validateTest_chatValid() {
         // Message format: uuid chat uuid username
@@ -299,7 +323,7 @@ public class CWPMessageTest {
 
     @Test
     public void getPaintAction_valid() {
-
+    	//tests making a CWPMessage and its getPaintAction method
         User user = new User("Nick");
         String action = "drawline";
         String[] params = new String[] { "10", "20", "30", "40", "50", "60" };

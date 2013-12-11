@@ -1,0 +1,21 @@
+//Documentation on GUI tests
+//These are tests relating to the WhiteboardGUI
+/**
+* The test cases for this class tests the basic layout 
+*	and for consistency between multiple users
+*	and a case when the user disconnects from the server
+*/
+
+//Basic layout
+--MenuWest is found on the left side of the display.
+--MenuNorth is found at the top of the display.
+--MenuEast is found at the right of the display.
+--a canvas is found in the center of the display.
+
+//Multiple users
+-- If two users are looking at the same board and draw things that overlap,
+	the overlapping patterns should look the same for each user
+-- If a user is editing the board, their username shows next to their cursor as they edit
+
+//Disconnecting
+-- The user disconnects and application stops running when the user closes the window

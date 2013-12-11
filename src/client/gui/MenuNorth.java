@@ -40,7 +40,6 @@ public class MenuNorth extends JMenuBar {
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
 		file.add(save);
 		this.gui = gui;
-
 		/*
 		 * When this menu item is activated, it opens a save dialog
 		 * that allows the user to save a file and the program would save
@@ -71,6 +70,7 @@ public class MenuNorth extends JMenuBar {
 				}
 			}
 		});
+		
 		this.add(file);
 	}
 

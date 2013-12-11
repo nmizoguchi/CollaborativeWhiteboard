@@ -16,7 +16,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -69,23 +68,18 @@ public class MenuWest extends JMenuBar{
         		.getScaledInstance(50, 50, 100));
         eraser = new JToggleButton(eraserIcon);
         eraser.setBackground(Color.WHITE);
-        eraser.setMnemonic(KeyEvent.VK_E);
         freehand = new JToggleButton(drawIcon);
         freehand.setBackground(Color.WHITE);
-        freehand.setMnemonic(KeyEvent.VK_B);
         drawLine = new JToggleButton(drawLineIcon);
         drawLine.setBackground(Color.WHITE);
-        drawLine.setMnemonic(KeyEvent.VK_L);
         drawRect = new JToggleButton(rectangleIcon);
         drawRect.setBackground(Color.WHITE);
-        drawRect.setMnemonic(KeyEvent.VK_R);
         enterSize = new JTextField();
         enterSize.setText(String.valueOf(canvas.getBrushSize()));
         sizeDec = new JButton("-");
         sizeInc = new JButton("+");
         colorButton = new JButton();
         colorButton.setBackground(Color.BLACK);
-        colorButton.setMnemonic(KeyEvent.VK_C);
         colorButton.setOpaque(true);
         fillColor = new JToggleButton();
         fillColor.setSelected(true);
@@ -93,14 +87,14 @@ public class MenuWest extends JMenuBar{
         fillColor.setBackground(Color.BLACK);
         
         //adding tool tip texts to each icon
-        eraser.setToolTipText("Erase tool. ALT+E");
-        freehand.setToolTipText("Free draw tool. ALT+B");
-        drawLine.setToolTipText("Draw line tool. ALT+L");
-        drawRect.setToolTipText("Draw rectangle tool. ALT+R");
-        colorButton.setToolTipText("Click to select color. ALT+C");
+        eraser.setToolTipText("Erase tool");
+        freehand.setToolTipText("Free draw tool");
+        drawLine.setToolTipText("Draw line tool");
+        drawRect.setToolTipText("Draw rectangle tool");
+        colorButton.setToolTipText("Click to select color");
         fillColor.setToolTipText("Right click to select fill color. Left click to toggle");
-        sizeDec.setToolTipText("Decreases the size by 1." + "\n\r" + "ALT+'['");
-        sizeInc.setToolTipText("Increases the size by 1. ALT + ']'");
+        sizeDec.setToolTipText("Decreases the size by 1");
+        sizeInc.setToolTipText("Increases the size by 1");
         
         /********** Initialize buttonGroup **********/
         // buttonGroup ensures that only one of the buttons is selected
@@ -156,13 +150,13 @@ public class MenuWest extends JMenuBar{
 				
 			}
 			private void fill(MouseEvent arg0){
-				if (SwingUtilities.isRightMouseButton(arg0)){
+				if (SwingUtilities.isLeftMouseButton(arg0)){
 					Color color = JColorChooser.showDialog(colorOptions, "Choose a color", colorOptions.getColor());
 					if (color != null){
 						canvas.setFillColor(color.getRGB());
 						fillColor.setBackground(color);
 					}
-				} else if (SwingUtilities.isLeftMouseButton(arg0)){
+				} else if (SwingUtilities.isRightMouseButton(arg0)){
 					
 					canvas.setHasFill(fillColor.isSelected()? false : true);
 				}
@@ -269,5 +263,6 @@ public class MenuWest extends JMenuBar{
         this.setLayout(layout);
         
 	}
+	
 
 }

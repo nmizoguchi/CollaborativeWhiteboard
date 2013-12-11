@@ -2,6 +2,12 @@ package client.gui.canvas.tools;
 
 import client.gui.canvas.Canvas;
 
+/**
+ * Implements Tool. This is used when the user selects the freehand tool.
+ * This is associated with the draw controller.
+ * @author rcha
+ *
+ */
 public class FreehandTool implements Tool {
 
     public final String name = "Freehand Drawing";

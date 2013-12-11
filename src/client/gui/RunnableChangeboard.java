@@ -1,5 +1,11 @@
 package client.gui;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 import client.gui.canvas.Canvas;
 
 /**
@@ -10,6 +16,7 @@ import client.gui.canvas.Canvas;
 public class RunnableChangeboard implements Runnable {
     
     private final Canvas canvas;
+    
     
     /**
      * Takes in a canvas that is associated to the user
@@ -24,6 +31,6 @@ public class RunnableChangeboard implements Runnable {
      */
     @Override
     public void run() {
-        canvas.clearScreen();
+    	canvas.clearScreen();
     }
 }

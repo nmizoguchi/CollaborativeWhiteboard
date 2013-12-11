@@ -69,11 +69,6 @@ public class User {
         this.name = username;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
     public synchronized boolean equals(Object o) {
         if (!(o instanceof User)) {
@@ -88,11 +83,6 @@ public class User {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public synchronized int hashCode() {
         return uid.hashCode();

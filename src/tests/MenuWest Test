@@ -70,7 +70,7 @@
 //Multiple users
 	//Selecting buttons
 --	This is all specific for each user. Meaning, if User A selects Eraser and B selects Draw Line,
-then the buttons selected would be Eraser for A, and Draw Line for B.
+	then the buttons selected would be Eraser for A, and Draw Line for B.
 	//Changing size
 -- 	If the brush size for both users A and B is 50 and A enters 26 in the text box, A's brush size would be 26 while at the same time B clicked the + button, B's brush size would be 51.
 	//Selecting colors

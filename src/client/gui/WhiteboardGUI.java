@@ -66,8 +66,8 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
         canvasPane.setBackground(Color.gray);
 
         menuEast = new MenuEast(this);
-        menuBar = new MenuNorth(this);
         buttonsMenu = new MenuWest(canvas);
+        menuBar = new MenuNorth(this);
 
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setBounds(new Rectangle(1000, 500));

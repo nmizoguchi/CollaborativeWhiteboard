@@ -59,16 +59,16 @@ public class CWPMessage {
      *         socket.
      */
     public static String Encode(User user, String action, String[] params) {
-        String message = user.getUid() + SEPARATOR + action;
+        StringBuilder message = new StringBuilder();
+        message.append(user.getUid() + SEPARATOR + action);
 
         for (int i = 0; i < params.length; i++) {
-            message = message + SEPARATOR + params[i];
+            message.append(SEPARATOR + params[i]);
         }
 
         // Check if it is a valid message
-        validate(message);
-
-        return message;
+        validate(message.toString());
+        return message.toString();
     }
 
     /**
@@ -140,7 +140,7 @@ public class CWPMessage {
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
                 + div + "-?\\d+)");
 
-        // uuid drawline 6 arguments
+        // uuid erase 6 arguments
         regexes.add("(" + uuid + div + "erase" + div + "-?\\d+" + div
                 + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+" + div + "-?\\d+"
                 + div + "-?\\d+)");
@@ -174,7 +174,6 @@ public class CWPMessage {
 
         if (!input.matches(regex)) {
             // invalid input
-            System.out.println("Unsupported operation: " + input);
             throw new UnsupportedOperationException();
         }
     }

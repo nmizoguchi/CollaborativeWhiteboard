@@ -176,9 +176,10 @@ public class MenuEast extends JPanel {
         this.setPreferredSize(new Dimension(200, 600));
     }
 
-    // TODO: not thread-safe
     public void addMessage(String message) {
-        chatArea.append(message + "\n");
+    	synchronized(chatArea){
+    		chatArea.append(message + "\n");
+    	}
     }
 
 }
