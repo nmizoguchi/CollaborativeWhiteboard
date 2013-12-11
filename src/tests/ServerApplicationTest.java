@@ -32,26 +32,12 @@ public class ServerApplicationTest {
      */
 
     ServerApplication server;
-    Thread newConnectionHandler;
-    User user;
-    Connection connection;
 
     @Before
-    public void initialize() throws UnknownHostException, IOException {
+    public void initialize() {
 
         server = new ServerApplication("Server Name");
-        user = new User("e760229d-885b-4dc2-8a1c-a707643eb910", "User");
-
-        int port = 4444; // default port
-
-        // Creates a new thread to listen to new connections.
-        try {
-            newConnectionHandler = new Thread(new ServerConnectionHandler(
-                    server, port));
-            newConnectionHandler.start();
-        } catch (IOException e) {
-
-        }
+        server.start(4444);
     }
 
     @Test
