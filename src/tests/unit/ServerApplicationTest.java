@@ -20,7 +20,7 @@ import shared.models.Whiteboard;
  * 	-Tests getWhiteboard method and also creating a 
  * 		whiteboard if the board name is not already existing
  * @author rcha
- *
+ * @category no_didit
  */
 public class ServerApplicationTest {
 

@@ -7,14 +7,20 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
-import client.ClientApplication;
-import client.ClientListener;
 import shared.models.User;
 import tests.integration.ClientIntegrationUtil;
 import Protocol.CWPMessage;
+import client.ClientApplication;
+import client.ClientListener;
 
+/**
+ * Performs unit testing over the ClientApplication class.
+ * 
+ * @author Nicholas M. Mizoguchi
+ * @category no_didit
+ */
 public class ClientApplicationTest {
-
+    
     private ClientApplication client;
 
     @Before

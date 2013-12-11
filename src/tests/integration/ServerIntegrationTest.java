@@ -15,6 +15,13 @@ import org.junit.Test;
 import shared.models.User;
 import Protocol.CWPMessage;
 
+/**
+ * Test the behavior of the ServerApplication by sending messages and seeing the
+ * effect of it over the server.
+ * 
+ * @author Nicholas M. Mizoguchi
+ * @category no_didit
+ */
 public class ServerIntegrationTest {
 
     private User user;

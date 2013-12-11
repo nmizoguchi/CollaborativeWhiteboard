@@ -13,6 +13,13 @@ import client.ClientApplication;
 import client.ClientListener;
 import Protocol.CWPMessage;
 
+/**
+ * Test the behavior of the ClientApplication by sending messages and seeing the
+ * effect of it over the client.
+ * 
+ * @author Nicholas M. Mizoguchi
+ * @category no_didit
+ */
 public class ClientIntegrationTest {
 
     private static ClientApplication client;
