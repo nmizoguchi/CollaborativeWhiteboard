@@ -309,6 +309,7 @@ public class CWPMessageTest {
 
         String[] params = new String[] { "This is a message to someone! Or not?" };
         String message = CWPMessage.Encode(user, action, params);
+        System.out.println(message);
     }
 
     @Test(expected = UnsupportedOperationException.class)

@@ -55,8 +55,8 @@ public class ClientApplication {
 
     /**
      * Listen to messages sent from the server. Also, routes the message to the
-     * right object depending on the action found in the message.
-     * Possible actions include "newuser", "disconnecteduser", "whiteboards", 
+     * right object depending on the action found in the message. Possible
+     * actions include "newuser", "disconnecteduser", "whiteboards",
      * "changeboard", and "chat".
      * 
      * @throws IOException
@@ -69,6 +69,7 @@ public class ClientApplication {
 
         while ((command = inputStream.readLine()) != null) {
 
+            try {
             CWPMessage message = new CWPMessage(command);
 
             String action = message.getAction();
@@ -104,7 +105,9 @@ public class ClientApplication {
                 whiteboard.update(command);
                 listener.onPaintMessageReceived(message);
             }
-            // TODO: error handling
+            } catch(UnsupportedOperationException e) {
+                listener.onInvalidMessageReceived(e.getMessage());
+            }
         }
     }
 
@@ -120,8 +123,9 @@ public class ClientApplication {
     }
 
     /**
-     * Checks if there is a message to be sent.
-     * If there is a message, then it sends it. If there isn't, it blocks the stream
+     * Checks if there is a message to be sent. If there is a message, then it
+     * sends it. If there isn't, it blocks the stream
+     * 
      * @throws IOException
      */
     public void send() throws IOException {
@@ -141,8 +145,10 @@ public class ClientApplication {
     }
 
     /**
-     * Sets this class's whiteboard to a new instance of Whiteboard 
-     * @param name is a non-null name of a board
+     * Sets this class's whiteboard to a new instance of Whiteboard
+     * 
+     * @param name
+     *            is a non-null name of a board
      */
     public void changeWhiteboard(String name) {
         this.whiteboard = new Whiteboard(name);
@@ -150,17 +156,21 @@ public class ClientApplication {
 
     /**
      * Returns this class's user
+     * 
      * @return user
      */
     public User getUser() {
         return user;
     }
+
     /**
      * Sets this class's user's name
-     * @param username is a non-null String for the username
+     * 
+     * @param username
+     *            is a non-null String for the username
      */
     public void setUserName(String username) {
-    	getUser().setName(username);
+        getUser().setName(username);
     }
 
     /**
@@ -171,12 +181,13 @@ public class ClientApplication {
      *            GUI on the client side
      */
     public void initialize(ClientListener listener, String username) {
-        
+
         // Defines the listener
         this.listener = listener;
         this.user.setName(username);
         // Sets the initial username
-        String[] args = new String[] { getUser().getUid().toString(), getUser().getName() };
+        String[] args = new String[] { getUser().getUid().toString(),
+                getUser().getName() };
         scheduleMessage(CWPMessage.Encode(getUser(), "initialize", args));
 
         // Creates the listening thread, that receives messages from updates of
@@ -192,7 +203,7 @@ public class ClientApplication {
                 }
             }
         });
-        
+
         // Creates the listening thread, that receives messages from updates of
         // the model
         Thread outgoingMessageHandler = new Thread(new Runnable() {

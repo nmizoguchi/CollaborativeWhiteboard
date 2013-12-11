@@ -13,6 +13,10 @@ import shared.models.User;
  * @author Nicholas M. Mizoguchi
  * 
  */
+/**
+ * @author rcha
+ *
+ */
 public class CWPMessage {
 
     public final static String SEPARATOR = String.valueOf('\0');
@@ -112,7 +116,8 @@ public class CWPMessage {
         // 7. uuid changeboard boardname
         // 8. uuid cleanboard boardname -> supported but not implemented yet
         // 9. uuid whiteboards arg n* (may our not have arguments)
-        // 10. uuid updateuser uuid username -> supported but not implemented yet
+        // 10. uuid updateuser uuid username -> supported but not implemented
+        // yet
         // 11. uuid chat message
 
         String div = "[" + SEPARATOR + "]";
@@ -133,7 +138,8 @@ public class CWPMessage {
         regexes.add("(" + uuid + div + "newuser" + div + uuid + div + any + ")");
 
         // uuid updateusers (uuid argument)+
-        regexes.add("(" + uuid + div + "updateusers(" + div + uuid + div + any + ")+)");
+        regexes.add("(" + uuid + div + "updateusers(" + div + uuid + div + any
+                + ")+)");
 
         // uuid drawline 6 arguments
         regexes.add("(" + uuid + div + "drawline" + div + "-?\\d+" + div
@@ -174,7 +180,7 @@ public class CWPMessage {
 
         if (!input.matches(regex)) {
             // invalid input
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(input);
         }
     }
 
@@ -232,5 +238,45 @@ public class CWPMessage {
      */
     public int getArgumentsSize() {
         return arguments.length;
+    }
+
+    /**
+     * @return the message as a string, that could be sent directly through a
+     *         stream, since it has the format necessary to be parsed back to a
+     *         CWPMessage object.
+     */
+    @Override
+    public String toString() {
+        String str = senderUID + SEPARATOR + action;
+        for (String arg : getArguments()) {
+            str = str + SEPARATOR + arg;
+        }
+        return str;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object o) {
+
+        if (!(o instanceof CWPMessage)) {
+            return false;
+        }
+
+        CWPMessage that = (CWPMessage) o;
+        if (!(this.toString().equals(that.toString()))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /* (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Integer.valueOf(this.toString());
     }
 }
