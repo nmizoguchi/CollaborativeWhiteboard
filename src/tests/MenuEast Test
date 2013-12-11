@@ -20,9 +20,11 @@
 -- Last, there is a "Chat Here: " followed by a text box.
 
 //Online Users list
--- Should update when a user enters the server, by adding the new username to the end of the list.
--- Should also update when a user disconnects, by removing the username and moving the rest 
-	of the list such that there is no gap (if the username was not at the end of the list).
+-- Shows the list of users that are looking at the same whiteboard 
+		(can test this by selecting different boards)
+-- When a user enters the server, the list of users 
+	(for the whiteboard that the new user looks at) is updated
+-- When a user disconnects from the server, the list that he was on updates so that his username is not shown anymore
 
 //Available Boards list
 -- Should update when a new board is created by adding a the new board name to the end of the list.

@@ -23,6 +23,10 @@ public class WhiteboardTest {
         // Name with spaces
         board = new Whiteboard("Home Board");
         assertEquals("Home Board", board.getName());
+        
+        //Name with special characters and numbers
+        board = new Whiteboard("abk52*?");
+        assertEquals("abk52*?", board.getName());
     }
 
     @Test
@@ -30,7 +34,7 @@ public class WhiteboardTest {
 
         /*
          * Tests if update adds the new action and update the version correctly.
-         * (For eacha action added, the version should go up one number). For
+         * (For each action added, the version should go up one number). For
          * this, also tests the getVersion and getAction methods.
          */
 

@@ -16,7 +16,6 @@ import javax.swing.JColorChooser;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.GroupLayout.ParallelGroup;
@@ -88,14 +87,14 @@ public class MenuWest extends JMenuBar{
         fillColor.setBackground(Color.BLACK);
         
         //adding tool tip texts to each icon
-        eraser.setToolTipText("Erase tool. ALT+E");
-        freehand.setToolTipText("Free draw tool. ALT+B");
-        drawLine.setToolTipText("Draw line tool. ALT+L");
-        drawRect.setToolTipText("Draw rectangle tool. ALT+R");
-        colorButton.setToolTipText("Click to select color. ALT+C");
+        eraser.setToolTipText("Erase tool");
+        freehand.setToolTipText("Free draw tool");
+        drawLine.setToolTipText("Draw line tool");
+        drawRect.setToolTipText("Draw rectangle tool");
+        colorButton.setToolTipText("Click to select color");
         fillColor.setToolTipText("Right click to select fill color. Left click to toggle");
-        sizeDec.setToolTipText("Decreases the size by 1." + "\n\r" + "ALT+'['");
-        sizeInc.setToolTipText("Increases the size by 1. ALT + ']'");
+        sizeDec.setToolTipText("Decreases the size by 1");
+        sizeInc.setToolTipText("Increases the size by 1");
         
         /********** Initialize buttonGroup **********/
         // buttonGroup ensures that only one of the buttons is selected
