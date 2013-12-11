@@ -3,8 +3,6 @@ package tests;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.junit.Before;
@@ -15,8 +13,15 @@ import server.ServerApplication;
 import server.ServerConnectionHandler;
 import shared.models.User;
 import shared.models.Whiteboard;
-import Protocol.CWPMessage;
 
+/**
+ * Tests the ServerApplication class.
+ * 	-Tests initializing a Thread
+ * 	-Tests getWhiteboard method and also creating a 
+ * 		whiteboard if the board name is not already existing
+ * @author rcha
+ *
+ */
 public class ServerApplicationTest {
 
     /*

@@ -1,13 +1,17 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
-
-import java.util.List;
-
 import org.junit.Test;
 
 import shared.models.Whiteboard;
 
+/**
+ * Tests the Whiteboard class.
+ * 	-Tests the constructor using board names that have whitespaces and special characters
+ * 	-Tests the update, getVersion and getAction methods
+ * @author rcha
+ *
+ */
 public class WhiteboardTest {
 
     @Test

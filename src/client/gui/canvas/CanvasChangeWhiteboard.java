@@ -2,6 +2,9 @@ package client.gui.canvas;
 
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
+import client.gui.WhiteboardGUI;
 import client.gui.WhiteboardListModel;
 
 /**
@@ -28,10 +31,10 @@ public class CanvasChangeWhiteboard implements Runnable {
      */
     @Override
     public void run() {
-        for(String name : names) {
-            if( !whiteboards.contains(name) ) {
-                whiteboards.addElement(name);
-            }
-        }
+    	for(String name : names) {
+    		if (!whiteboards.contains(name)){
+    			whiteboards.addElement(name);
+    		}
+    	}
     }
 }

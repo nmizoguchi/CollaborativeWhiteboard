@@ -9,15 +9,24 @@ import org.junit.Test;
 
 import shared.models.User;
 
+/**
+ * Tests the User class
+ * -Tests constructing a User with a UUID and a String username
+ * 		this also tests the getUuid method
+ * -Tests constructing a User with and without a whitespace in the username
+ * 		this also tests the getName and setName methods
+ * -Tests the equals method
+ * 
+ * @author rcha
+ *
+ */
 public class UserTest {
-
-    // equals(Object)
-    // hashCode()
 
     @Test
     public void getUidTest_nonRandomUUID() {
         /*
          * Tests the construction of a user with a specific UUID.
+         * Tests the getUuid method
          */
 
         User user = new User("4b1fabfa-13d9-4b47-a6d2-a64518e0c85b", "Nick");
@@ -28,8 +37,9 @@ public class UserTest {
     @Test
     public void getNameTest_valid() {
         /*
-         * Tests if it is possible to create users with single or composite
-         * names.
+         * Tests if it is possible to create users with white space in the usernames
+         * Tests the getName and setName methods
+         * 
          */
 
         User user = new User("Nick");
