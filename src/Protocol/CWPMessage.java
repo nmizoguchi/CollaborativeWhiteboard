@@ -103,17 +103,17 @@ public class CWPMessage {
     private static void validate(String input) {
 
         // Valid messages:
-        // uuid initialize uuid username
-        // uuid disconnecteduser uuid username
-        // uuid newuser uuid username
-        // uuid drawline arg0 ... arg5
-        // uuid erase arg0 ... arg5
-        // uuid drawrect arg0 ... arg5
-        // uuid changeboard boardname
-        // uuid cleanboard boardname -> supported but not implemented yet
-        // uuid whiteboards arg n* (may our not have arguments)
-        // uuid updateuser uuid username -> supported but not implemented yet
-        // uuid chat message
+        // 1. uuid initialize uuid username
+        // 2. uuid disconnecteduser uuid username
+        // 3. uuid newuser uuid username
+        // 4. uuid drawline arg0 ... arg5
+        // 5. uuid erase arg0 ... arg5
+        // 6. uuid drawrect arg0 ... arg5
+        // 7. uuid changeboard boardname
+        // 8. uuid cleanboard boardname -> supported but not implemented yet
+        // 9. uuid whiteboards arg n* (may our not have arguments)
+        // 10. uuid updateuser uuid username -> supported but not implemented yet
+        // 11. uuid chat message
 
         String div = "[" + SEPARATOR + "]";
         String any = "[^" + SEPARATOR + "]+";

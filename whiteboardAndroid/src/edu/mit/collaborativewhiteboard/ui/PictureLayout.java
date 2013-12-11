@@ -1,4 +1,4 @@
-package edu.mit.collaborativewhiteboard;
+package edu.mit.collaborativewhiteboard.ui;
 
 /*
  * Copyright (C) 2008 The Android Open Source Project

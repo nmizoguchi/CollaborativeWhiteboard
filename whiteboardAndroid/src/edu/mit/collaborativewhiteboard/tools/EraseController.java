@@ -6,9 +6,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Paint.Cap;
 import android.view.MotionEvent;
-import edu.mit.collaborativewhiteboard.CanvasView;
 import edu.mit.collaborativewhiteboard.EditorActivity;
 import edu.mit.collaborativewhiteboard.MainApplication;
+import edu.mit.collaborativewhiteboard.ui.CanvasView;
 
 public class EraseController implements ToolController {
 

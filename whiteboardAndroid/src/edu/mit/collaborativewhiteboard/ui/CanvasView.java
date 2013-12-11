@@ -1,4 +1,4 @@
-package edu.mit.collaborativewhiteboard;
+package edu.mit.collaborativewhiteboard.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import client.gui.canvas.Canvas.MODE;
+import edu.mit.collaborativewhiteboard.EditorActivity;
 import edu.mit.collaborativewhiteboard.tools.EraseController;
 import edu.mit.collaborativewhiteboard.tools.FreehandController;
 import edu.mit.collaborativewhiteboard.tools.LineController;

@@ -20,7 +20,21 @@ import Protocol.CWPMessage;
  * all connected clients and also all active whiteboards. The server's
  * whiteboards are the official ones, and all clients are always updating
  * themselves to keep consistency with the server's representation. It is also
- * the entry point of the Server application. It is mutable.
+ * the entry point of the Server application. It is a mutable class.
+ * 
+ * Expected interactions from commands coming from clients:
+ * // Valid messages:
+ * 1. initialize -> 
+ * 2. uuid disconnecteduser uuid username
+ * 3. uuid newuser uuid username
+ * 4. uuid drawline arg0 ... arg5
+ * 5. uuid erase arg0 ... arg5
+ * 6. uuid drawrect arg0 ... arg5
+ * 7. uuid changeboard boardname
+ * 8. uuid cleanboard boardname -> supported but not implemented yet
+ * 9. uuid whiteboards arg n* (may our not have arguments)
+ * 10. uuid updateuser uuid username -> supported but not implemented yet
+ * 11. uuid chat message
  * 
  * @author Nicholas M. Mizoguchi
  * 
@@ -61,6 +75,48 @@ public class ServerApplication implements ConnectionListener {
 
 		connectionMap = Collections
 				.synchronizedMap(new HashMap<ConnectionController, Connection>());
+	}
+
+	/**
+	 * Starts listening to client connections.
+	 */
+	public void start(int port) {
+		// Creates a new thread to listen to new connections.
+		Thread newConnectionHandler;
+		try {
+			newConnectionHandler = new Thread(new ServerConnectionHandler(this,
+					port));
+			newConnectionHandler.start();
+			System.out.println("Server started.");
+		} catch (IOException e) {
+			close("Problem opening the server. Check if the server isn't already running.");
+			return;
+		}
+
+		// Gives the server external IP
+		try {
+			URL whatismyip = new URL("http://checkip.amazonaws.com");
+			BufferedReader in = new BufferedReader(new InputStreamReader(
+					whatismyip.openStream()));
+			String ip = in.readLine(); // you get the IP as a String
+			System.out.println("Public IP: " + ip
+					+ " (Given by Amazon Web Services)");
+
+		} catch (IOException e) {
+			System.out.println("You may not be connected to the internet.");
+		}
+
+		// Gives the server local IP
+		String localIpAddress = "127.0.0.1";
+		try {
+			InetAddress thisIp = InetAddress.getLocalHost();
+			localIpAddress = thisIp.getHostAddress().toString();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("Public IP: " + localIpAddress
+				+ " Given by Java InetAddress library)");
 	}
 
 	/**
@@ -373,42 +429,6 @@ public class ServerApplication implements ConnectionListener {
 		int port = 4444; // default port
 
 		ServerApplication server = new ServerApplication("Server");
-
-		// Creates a new thread to listen to new connections.
-		Thread newConnectionHandler;
-		try {
-			newConnectionHandler = new Thread(new ServerConnectionHandler(
-					server, port));
-			newConnectionHandler.start();
-			System.out.println("Server started.");
-		} catch (IOException e) {
-			server.close("Problem opening the server. Check if the server isn't already running.");
-			return;
-		}
-
-		// Gives the server external IP
-		try {
-			URL whatismyip = new URL("http://checkip.amazonaws.com");
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					whatismyip.openStream()));
-			String ip = in.readLine(); // you get the IP as a String
-			System.out.println("Public IP: "+ ip + " (Given by Amazon Web Services)");
-			
-		} catch (IOException e) {
-			System.out.println("You may not be connected to the internet.");
-		}
-		
-		// Gives the server local IP
-		String localIpAddress = "127.0.0.1";
-		try
-	    {
-	       InetAddress thisIp = InetAddress.getLocalHost();
-	       localIpAddress = thisIp.getHostAddress().toString();
-	    }
-	    catch(Exception e){
-	    	e.printStackTrace();
-	    }
-		
-		System.out.println("Public IP: "+localIpAddress+ " Given by Java InetAddress library)");
+		server.start(port);
 	}
 }

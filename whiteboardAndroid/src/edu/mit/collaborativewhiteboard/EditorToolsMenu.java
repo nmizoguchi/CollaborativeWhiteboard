@@ -18,12 +18,12 @@ import com.larswerkman.holocolorpicker.ColorPicker.OnColorChangedListener;
 
 import edu.mit.collaborativewhiteboard.ui.ToolAdapter;
 
-public class ToolsMenu implements OnItemClickListener, OnItemLongClickListener {
+public class EditorToolsMenu implements OnItemClickListener, OnItemLongClickListener {
 
 	private ListView mDrawerList;
 	private final EditorActivity mContext;
 
-	public ToolsMenu(EditorActivity activity, int id) {
+	public EditorToolsMenu(EditorActivity activity, int id) {
 
 		mContext = activity;
 

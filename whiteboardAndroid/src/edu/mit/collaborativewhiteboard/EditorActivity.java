@@ -24,6 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RelativeLayout;
 import client.ClientListener;
+import edu.mit.collaborativewhiteboard.ui.CanvasView;
 
 //Need the following import to get access to the app resources, since this
 //class is in a sub-package.
@@ -39,7 +40,7 @@ public class EditorActivity extends GraphicsActivity implements ClientListener {
 
 	public MainApplication mApplication;
 	DrawerLayout mDrawerLayout;
-	ToolsMenu mMenu;
+	EditorToolsMenu mMenu;
 	private CanvasView mCanvasView;
 
 	@Override
@@ -58,7 +59,7 @@ public class EditorActivity extends GraphicsActivity implements ClientListener {
 
 		mMainLayout.addView(mCanvasView);
 
-		mMenu = new ToolsMenu(this, R.id.editor_tools);
+		mMenu = new EditorToolsMenu(this, R.id.editor_tools);
 
 		mApplication = (MainApplication) getApplication();
 		mApplication.getClient().initialize(this,
