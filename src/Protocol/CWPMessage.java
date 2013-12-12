@@ -8,14 +8,12 @@ import shared.models.User;
 
 /**
  * Represents messages of the custom protocol defined for this application. CWP
- * stands for Collaborative Whiteboard Protocol. It is an immutable class.
+ * stands for Collaborative Whiteboard Protocol. This class is used to create
+ * valid messages to be sent and received, having its own validation process. It
+ * is an immutable class.
  * 
  * @author Nicholas M. Mizoguchi
  * 
- */
-/**
- * @author rcha
- *
  */
 public class CWPMessage {
 
@@ -254,7 +252,9 @@ public class CWPMessage {
         return str;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
@@ -272,7 +272,9 @@ public class CWPMessage {
         return true;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     * 
      * @see java.lang.Object#hashCode()
      */
     @Override
