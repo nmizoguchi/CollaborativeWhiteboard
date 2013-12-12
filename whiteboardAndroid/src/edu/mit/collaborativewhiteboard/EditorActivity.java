@@ -134,7 +134,7 @@ public class EditorActivity extends GraphicsActivity implements ClientListener {
 	}
 
 	@Override
-	public void onInvalidMessageReceived(CWPMessage message) {
+	public void onInvalidMessageReceived(String message) {
 		// TODO Auto-generated method stub
 
 	}
