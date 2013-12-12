@@ -150,13 +150,13 @@ public class MenuWest extends JMenuBar{
 				
 			}
 			private void fill(MouseEvent arg0){
-				if (SwingUtilities.isLeftMouseButton(arg0)){
+				if (SwingUtilities.isRightMouseButton(arg0)){
 					Color color = JColorChooser.showDialog(colorOptions, "Choose a color", colorOptions.getColor());
 					if (color != null){
 						canvas.setFillColor(color.getRGB());
 						fillColor.setBackground(color);
 					}
-				} else if (SwingUtilities.isRightMouseButton(arg0)){
+				} else if (SwingUtilities.isLeftMouseButton(arg0)){
 					
 					canvas.setHasFill(fillColor.isSelected()? false : true);
 				}

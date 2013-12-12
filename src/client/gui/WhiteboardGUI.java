@@ -171,8 +171,6 @@ public class WhiteboardGUI extends JFrame implements ClientListener {
 
     @Override
     public void onInvalidMessageReceived(String message) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

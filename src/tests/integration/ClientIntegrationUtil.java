@@ -1,11 +1,8 @@
 package tests.integration;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,7 +26,6 @@ public class ClientIntegrationUtil {
                 try {
                     socket = serverSocket.accept();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
             }
@@ -46,7 +42,6 @@ public class ClientIntegrationUtil {
         try {
             listener.join();
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw new RuntimeException();
         }
@@ -56,7 +51,6 @@ public class ClientIntegrationUtil {
             outputStream = new PrintWriter(socket.getOutputStream(), true);
             outputStream.println(message);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             throw new RuntimeException();
         }

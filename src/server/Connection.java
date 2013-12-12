@@ -1,7 +1,5 @@
 package server;
 
-import java.util.UUID;
-
 import shared.models.User;
 import shared.models.Whiteboard;
 import Protocol.CWPMessage;

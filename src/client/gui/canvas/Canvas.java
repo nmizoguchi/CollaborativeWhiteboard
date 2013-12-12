@@ -7,8 +7,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
-import java.awt.image.ImageObserver;
-import java.rmi.NoSuchObjectException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
