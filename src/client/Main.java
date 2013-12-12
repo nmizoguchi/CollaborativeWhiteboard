@@ -17,7 +17,6 @@ public class Main {
 			IOException {
 
 		// Request for the server IP
-		// TODO: Check for invalid IP's and problems with the connection!
 		String server = JOptionPane.showInputDialog("Server IP:");
 		final ClientApplication client = new ClientApplication(server, 4444);
 

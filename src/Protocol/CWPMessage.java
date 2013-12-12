@@ -171,10 +171,11 @@ public class CWPMessage {
         regexes.add("(" + uuid + div + "chat" + div + any + ")");
 
         // Creates an or of all regexes
-        String regex = "";
+        StringBuilder regexBuilder = new StringBuilder();
         for (String x : regexes) {
-            regex = regex + x + "|";
+            regexBuilder.append(x + "|");
         }
+        String regex = regexBuilder.toString();
 
         if (!input.matches(regex)) {
             // invalid input
@@ -245,18 +246,15 @@ public class CWPMessage {
      */
     @Override
     public String toString() {
-        String str = senderUID + SEPARATOR + action;
+    	StringBuilder strBuilder = new StringBuilder();
+    	strBuilder.append(senderUID + SEPARATOR + action);
         for (String arg : getArguments()) {
-            str = str + SEPARATOR + arg;
+            strBuilder.append(SEPARATOR + arg);
         }
-        return str;
+        return strBuilder.toString();
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
+  
     @Override
     public boolean equals(Object o) {
 
@@ -272,11 +270,6 @@ public class CWPMessage {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
     public int hashCode() {
         return Integer.valueOf(this.toString());

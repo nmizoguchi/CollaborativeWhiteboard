@@ -1,10 +1,6 @@
 package client.gui.canvas;
 
 import java.util.List;
-
-import javax.swing.JOptionPane;
-
-import client.gui.WhiteboardGUI;
 import client.gui.WhiteboardListModel;
 
 /**
